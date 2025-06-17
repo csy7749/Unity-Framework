@@ -7,12 +7,12 @@ using UnityFramework;
 
 namespace GameLogic.Contexts
 {
-public class Context : IDisposable
+    public class Context : IDisposable
     {
         private static ApplicationContext context = null;
         private static Dictionary<string, Context> contexts = null;
 
-        
+
         public static void OnInitialize()
         {
             //For compatibility with the "Configurable Enter Play Mode" feature
@@ -29,7 +29,9 @@ public class Context : IDisposable
                     contexts.Clear();
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
 #endif
 
             context = new ApplicationContext();
@@ -201,6 +203,7 @@ public class Context : IDisposable
         }
 
         #region IDisposable Support
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -216,6 +219,7 @@ public class Context : IDisposable
                             dis.Dispose();
                     }
                 }
+
                 disposed = true;
             }
         }
@@ -230,6 +234,7 @@ public class Context : IDisposable
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

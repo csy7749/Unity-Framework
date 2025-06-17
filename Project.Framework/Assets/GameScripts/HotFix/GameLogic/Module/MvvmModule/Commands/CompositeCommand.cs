@@ -5,7 +5,7 @@ using UnityFramework;
 
 namespace GameLogic.Commands
 {
-public class CompositeCommand : CommandBase
+    public class CompositeCommand : CommandBase
     {
         private readonly List<ICommand> commands = new List<ICommand>();
         private readonly bool monitorCommandActivity;
@@ -48,7 +48,8 @@ public class CompositeCommand : CommandBase
             lock (this.commands)
             {
                 if (this.commands.Contains(command))
-                    throw new InvalidOperationException("Cannot register the same command twice in the same CompositeCommand.");
+                    throw new InvalidOperationException(
+                        "Cannot register the same command twice in the same CompositeCommand.");
 
                 this.commands.Add(command);
             }

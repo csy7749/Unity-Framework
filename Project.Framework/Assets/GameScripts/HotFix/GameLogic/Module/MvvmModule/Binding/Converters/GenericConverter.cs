@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 
 namespace GameLogic.Binding.Converters
-{    
+{
     public class GenericConverter<TFrom, TTo> : AbstractConverter<TFrom, TTo>
     {
         private Func<TFrom, TTo> handler;

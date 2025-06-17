@@ -7,10 +7,12 @@ using UnityFramework;
 
 namespace GameLogic.Execution
 {
-public class InterceptableEnumerator : IEnumerator
+    public class InterceptableEnumerator : IEnumerator
     {
         private const int CAPACITY = 100;
-        private static readonly ConcurrentQueue<InterceptableEnumerator> pools = new ConcurrentQueue<InterceptableEnumerator>();
+
+        private static readonly ConcurrentQueue<InterceptableEnumerator> pools =
+            new ConcurrentQueue<InterceptableEnumerator>();
 
         public static InterceptableEnumerator Create(IEnumerator routine)
         {
@@ -20,6 +22,7 @@ public class InterceptableEnumerator : IEnumerator
                 enumerator.stack.Push(routine);
                 return enumerator;
             }
+
             return new InterceptableEnumerator(routine);
         }
 
@@ -43,7 +46,10 @@ public class InterceptableEnumerator : IEnumerator
             this.stack.Push(routine);
         }
 
-        public object Current { get { return this.current; } }
+        public object Current
+        {
+            get { return this.current; }
+        }
 
         public bool MoveNext()
         {
@@ -77,7 +83,8 @@ public class InterceptableEnumerator : IEnumerator
                 }
 
                 if (this.current is Coroutine)
-                    Log.Warning("The Enumerator's results contains the 'UnityEngine.Coroutine' type,If occurs an exception,it can't be catched.It is recommended to use 'yield return routine',rather than 'yield return StartCoroutine(routine)'.");
+                    Log.Warning(
+                        "The Enumerator's results contains the 'UnityEngine.Coroutine' type,If occurs an exception,it can't be catched.It is recommended to use 'yield return routine',rather than 'yield return StartCoroutine(routine)'.");
 
                 return true;
             }
@@ -103,7 +110,9 @@ public class InterceptableEnumerator : IEnumerator
 
                 onException(e);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         private void OnFinally()
@@ -115,7 +124,9 @@ public class InterceptableEnumerator : IEnumerator
 
                 onFinally();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
             finally
             {
                 Free(this);
@@ -141,6 +152,7 @@ public class InterceptableEnumerator : IEnumerator
                         return false;
                 }
             }
+
             return true;
         }
 

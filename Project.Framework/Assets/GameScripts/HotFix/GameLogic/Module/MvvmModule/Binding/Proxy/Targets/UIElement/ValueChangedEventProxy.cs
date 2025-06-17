@@ -12,9 +12,9 @@ namespace GameLogic.Binding.Proxy.Targets.UIElement
 public class ValueChangedEventProxy<T> : EventTargetProxyBase
     {
         private bool disposed = false;
-        protected ICommand command;/* Command Binding */
-        protected IInvoker invoker;/* Method Binding or Lua Function Binding */
-        protected Delegate handler;/* Delegate Binding */
+        protected ICommand command;
+        protected IInvoker invoker;
+        protected Delegate handler;
         protected SendOrPostCallback updateTargetEnableAction;
         private INotifyValueChanged<T> target;
         public ValueChangedEventProxy(INotifyValueChanged<T> target) : base(target)

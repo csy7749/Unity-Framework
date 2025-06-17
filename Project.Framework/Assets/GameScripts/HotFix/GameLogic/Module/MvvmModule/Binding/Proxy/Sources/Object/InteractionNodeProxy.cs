@@ -8,13 +8,13 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class InteractionNodeProxy : SourceProxyBase, IModifiable
+    public class InteractionNodeProxy : SourceProxyBase, IModifiable
     {
         private readonly IInteractionRequest request;
 
         private bool disposed = false;
-        protected IInvoker invoker;/* Method Binding or  Script Function Binding*/
-        protected Delegate handler;/* Delegate Binding */
+        protected IInvoker invoker; 
+        protected Delegate handler; 
 
         public InteractionNodeProxy(IInteractionRequest request) : this(null, request)
         {
@@ -26,7 +26,10 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
             this.BindEvent();
         }
 
-        public override Type Type { get { return typeof(EventHandler<InteractionEventArgs>); } }
+        public override Type Type
+        {
+            get { return typeof(EventHandler<InteractionEventArgs>); }
+        }
 
         public virtual void SetValue<TValue>(TValue value)
         {
@@ -36,7 +39,8 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
         public virtual void SetValue(object value)
         {
             if (value != null && !(value is IInvoker || value is Delegate))
-                throw new ArgumentException("Binding object to InteractionRequest failed, unsupported object type", "value");
+                throw new ArgumentException("Binding object to InteractionRequest failed, unsupported object type",
+                    "value");
 
             if (this.invoker != null)
                 this.invoker = null;
@@ -56,7 +60,8 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
                     return;
                 }
 
-                throw new ArgumentException("Binding the IProxyInvoker to InteractionRequest failed, mismatched parameter type.");
+                throw new ArgumentException(
+                    "Binding the IProxyInvoker to InteractionRequest failed, mismatched parameter type.");
             }
             else if (value is IInvoker invoker)
             {
@@ -72,7 +77,8 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
                     return;
                 }
 
-                throw new ArgumentException("Binding the Delegate to InteractionRequest failed, mismatched parameter type.");
+                throw new ArgumentException(
+                    "Binding the Delegate to InteractionRequest failed, mismatched parameter type.");
             }
         }
 
@@ -92,7 +98,8 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
             if (parameterTypes.Count != 2)
                 return false;
 
-            return parameterTypes[0].IsAssignableFrom(typeof(object)) && parameterTypes[1].IsAssignableFrom(typeof(InteractionEventArgs));
+            return parameterTypes[0].IsAssignableFrom(typeof(object)) &&
+                   parameterTypes[1].IsAssignableFrom(typeof(InteractionEventArgs));
         }
 
         protected virtual bool IsValid(IProxyInvoker invoker)
@@ -105,7 +112,8 @@ public class InteractionNodeProxy : SourceProxyBase, IModifiable
             if (parameters == null || parameters.Length != 2)
                 return false;
 
-            return parameters[0].ParameterType.IsAssignableFrom(typeof(object)) && parameters[1].ParameterType.IsAssignableFrom(typeof(InteractionEventArgs));
+            return parameters[0].ParameterType.IsAssignableFrom(typeof(object)) &&
+                   parameters[1].ParameterType.IsAssignableFrom(typeof(InteractionEventArgs));
         }
 
         protected virtual void BindEvent()

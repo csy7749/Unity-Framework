@@ -84,7 +84,56 @@ public static class WeakDelegateExtensions
             };
         }
 
+        public static UnityAction<T> AsWeak<T>(this UnityAction<T> action)
+        {
+            if (!IsCanWeaken(action))
+                return action;
+
+            Type type = action.Target.GetType();
+            WeakReference targetRef = new WeakReference(action.Target);
+#if NETFX_CORE
+            MethodInfo method = action.GetMethodInfo();
+#else
+            MethodInfo method = action.Method;
+#endif
+            return (t) =>
+            {
+                object target = targetRef.Target;
+                if (target == null)
+                {
+                    Log.Error("You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.", type, method);
+                    return;
+                }
+
+                method.Invoke(target, new object[] { t });
+            };
+        }
+
         public static Action<T1, T2> AsWeak<T1, T2>(this Action<T1, T2> action)
+        {
+            if (!IsCanWeaken(action))
+                return action;
+
+            Type type = action.Target.GetType();
+            WeakReference targetRef = new WeakReference(action.Target);
+#if NETFX_CORE
+            MethodInfo method = action.GetMethodInfo();
+#else
+            MethodInfo method = action.Method;
+#endif
+            return (t1, t2) =>
+            {
+                object target = targetRef.Target;
+                if (target == null)
+                {
+                    Log.Error("You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.", type, method);
+                    return;
+                }
+
+                method.Invoke(target, new object[] { t1, t2 });
+            };
+        }
+        public static UnityAction<T1, T2> AsWeak<T1, T2>(this UnityAction<T1, T2> action)
         {
             if (!IsCanWeaken(action))
                 return action;
@@ -134,7 +183,56 @@ public static class WeakDelegateExtensions
             };
         }
 
+        public static UnityAction<T1, T2, T3> AsWeak<T1, T2, T3>(this UnityAction<T1, T2, T3> action)
+        {
+            if (!IsCanWeaken(action))
+                return action;
+
+            Type type = action.Target.GetType();
+            WeakReference targetRef = new WeakReference(action.Target);
+#if NETFX_CORE
+            MethodInfo method = action.GetMethodInfo();
+#else
+            MethodInfo method = action.Method;
+#endif
+            return (t1, t2, t3) =>
+            {
+                object target = targetRef.Target;
+                if (target == null)
+                {
+                    Log.Error("You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.", type, method);
+                    return;
+                }
+
+                method.Invoke(target, new object[] { t1, t2, t3 });
+            };
+        }
+
         public static Action<T1, T2, T3, T4> AsWeak<T1, T2, T3, T4>(this Action<T1, T2, T3, T4> action)
+        {
+            if (!IsCanWeaken(action))
+                return action;
+
+            Type type = action.Target.GetType();
+            WeakReference targetRef = new WeakReference(action.Target);
+#if NETFX_CORE
+            MethodInfo method = action.GetMethodInfo();
+#else
+            MethodInfo method = action.Method;
+#endif
+            return (t1, t2, t3, t4) =>
+            {
+                object target = targetRef.Target;
+                if (target == null)
+                {
+                    Log.Error("You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.", type, method);
+                    return;
+                }
+
+                method.Invoke(target, new object[] { t1, t2, t3, t4 });
+            };
+        }
+        public static UnityAction<T1, T2, T3, T4> AsWeak<T1, T2, T3, T4>(this UnityAction<T1, T2, T3, T4> action)
         {
             if (!IsCanWeaken(action))
                 return action;

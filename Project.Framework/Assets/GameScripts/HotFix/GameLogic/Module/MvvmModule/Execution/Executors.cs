@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace GameLogic.Execution
 {
-public class Executors
+    public class Executors
     {
         private static readonly object syncLock = new object();
         private static bool disposed = false;
@@ -43,8 +41,11 @@ public class Executors
                     {
                         thread.Abort();
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
+
                 threads.Clear();
             }
 #endif
@@ -114,7 +115,10 @@ public class Executors
         }
 
 #if NETFX_CORE || !NET_LEGACY
-        public static bool IsMainThread { get { return Environment.CurrentManagedThreadId == mainThreadId; } }
+        public static bool IsMainThread
+        {
+            get { return Environment.CurrentManagedThreadId == mainThreadId; }
+        }
 #else
         public static bool IsMainThread { get { return Thread.CurrentThread == mainThread; } }
 #endif
@@ -256,7 +260,9 @@ public class Executors
 
         protected static InterceptableEnumerator WrapEnumerator(IEnumerator routine, IPromise promise)
         {
-            InterceptableEnumerator enumerator = routine is InterceptableEnumerator ? (InterceptableEnumerator)routine : InterceptableEnumerator.Create(routine);
+            InterceptableEnumerator enumerator = routine is InterceptableEnumerator
+                ? (InterceptableEnumerator)routine
+                : InterceptableEnumerator.Create(routine);
             if (promise != null)
             {
                 enumerator.RegisterConditionBlock(() => !(promise.IsCancellationRequested));
@@ -278,6 +284,7 @@ public class Executors
                     }
                 });
             }
+
             return enumerator;
         }
 
@@ -394,12 +401,14 @@ public class Executors
             return null;
         }
 
-        public static IProgressResult<TProgress> RunOnCoroutine<TProgress>(Func<IProgressPromise<TProgress>, IEnumerator> func)
+        public static IProgressResult<TProgress> RunOnCoroutine<TProgress>(
+            Func<IProgressPromise<TProgress>, IEnumerator> func)
         {
             return null;
         }
 
-        public static IProgressResult<TProgress, TResult> RunOnCoroutine<TProgress, TResult>(Func<IProgressPromise<TProgress, TResult>, IEnumerator> func)
+        public static IProgressResult<TProgress, TResult> RunOnCoroutine<TProgress, TResult>(
+            Func<IProgressPromise<TProgress, TResult>, IEnumerator> func)
         {
             return null;
         }
@@ -442,6 +451,7 @@ public class Executors
                     {
                         threads[thread.ManagedThreadId] = thread;
                     }
+
                     action();
                 }
                 finally
@@ -554,7 +564,8 @@ public class Executors
             return result;
         }
 
-        public static IProgressResult<TProgress, TResult> RunAsync<TProgress, TResult>(Action<IProgressPromise<TProgress, TResult>> action)
+        public static IProgressResult<TProgress, TResult> RunAsync<TProgress, TResult>(
+            Action<IProgressPromise<TProgress, TResult>> action)
         {
             return null;
         }
@@ -590,7 +601,6 @@ public class Executors
                 this.DoStopingQueue();
 
                 this.DoPendingQueue();
-
             }
 
             void FixedUpdate()
@@ -640,8 +650,10 @@ public class Executors
                         Log.Error(e);
                     }
                 }
+
                 stopingTempQueue.Clear();
             }
+
             protected void DoPendingQueue()
             {
                 lock (pendingQueue)
@@ -677,6 +689,7 @@ public class Executors
                         Log.Error(e);
                     }
                 }
+
                 runningQueue.Clear();
 
                 float time = Time.realtimeSinceStartup - startTime;

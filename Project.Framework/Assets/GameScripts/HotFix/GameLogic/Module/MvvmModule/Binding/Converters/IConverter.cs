@@ -1,5 +1,4 @@
-﻿
-namespace GameLogic.Binding.Converters
+﻿namespace GameLogic.Binding.Converters
 {
     public interface IConverter
     {

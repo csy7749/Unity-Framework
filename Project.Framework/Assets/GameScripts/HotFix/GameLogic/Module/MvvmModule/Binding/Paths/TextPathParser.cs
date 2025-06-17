@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GameLogic.Binding.Paths
 {
-public struct TextPathParser
+    public struct TextPathParser
     {
         public static Path Parse(string text)
         {
@@ -74,7 +74,8 @@ public struct TextPathParser
                     //read member name
                     string memberName = this.ReadMemberName();
                     path.Append(new MemberNode(memberName));
-                    if (!this.IsEOF() && !this.Current.Equals('.') && !this.Current.Equals('[') && !char.IsWhiteSpace(this.Current))
+                    if (!this.IsEOF() && !this.Current.Equals('.') && !this.Current.Equals('[') &&
+                        !char.IsWhiteSpace(this.Current))
                         throw new BindingException("Error parsing path , unterminated in text {0}", this.text);
                 }
                 else
@@ -82,6 +83,7 @@ public struct TextPathParser
                     throw new BindingException("Error parsing path , unterminated in text {0}", this.text);
                 }
             } while (!this.IsEOF());
+
             return path;
         }
 
@@ -120,7 +122,6 @@ public struct TextPathParser
                     break;
 
                 buffer[i++] = ch;
-
             } while (this.MoveNext());
 
             if (i <= 0)
@@ -140,7 +141,6 @@ public struct TextPathParser
                     break;
 
                 buffer[i++] = ch;
-
             } while (this.MoveNext());
 
             uint index;
@@ -155,7 +155,7 @@ public struct TextPathParser
             char ch = this.Current;
             if (ch != '\'' && ch != '\"')
                 throw new BindingException("Error parsing string indexer , unexpected quote character {0} in text {1}",
-                                       ch, this.text);
+                    ch, this.text);
 
             if (!this.MoveNext())
                 throw new BindingException("Error parsing string indexer , unterminated in text {0}", this.text);
@@ -173,7 +173,7 @@ public struct TextPathParser
 
             if (i <= 0 || (ch != '\'' && ch != '\"'))
                 throw new BindingException("Error parsing string indexer , unexpected quote character {0} in text {1}",
-                                       ch, this.text);
+                    ch, this.text);
             return new string(buffer, 0, i);
         }
 

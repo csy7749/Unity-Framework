@@ -4,10 +4,8 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Reflection
 {
-public class ProxyPropertyInfo : IProxyPropertyInfo
+    public class ProxyPropertyInfo : IProxyPropertyInfo
     {
-        //private static readonly ILog log = LogManager.GetLogger(typeof(ProxyPropertyInfo));
-
         private readonly bool isValueType;
         private TypeCode typeCode;
         protected PropertyInfo propertyInfo;
@@ -30,9 +28,15 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
                 this.setMethod = propertyInfo.GetSetMethod();
         }
 
-        public virtual bool IsValueType { get { return isValueType; } }
+        public virtual bool IsValueType
+        {
+            get { return isValueType; }
+        }
 
-        public virtual Type ValueType { get { return this.propertyInfo.PropertyType; } }
+        public virtual Type ValueType
+        {
+            get { return this.propertyInfo.PropertyType; }
+        }
 
         public TypeCode ValueTypeCode
         {
@@ -46,15 +50,25 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
                     typeCode = Type.GetTypeCode(ValueType);
 #endif
                 }
+
                 return typeCode;
             }
         }
 
-        public virtual Type DeclaringType { get { return this.propertyInfo.DeclaringType; } }
+        public virtual Type DeclaringType
+        {
+            get { return this.propertyInfo.DeclaringType; }
+        }
 
-        public virtual string Name { get { return this.propertyInfo.Name; } }
+        public virtual string Name
+        {
+            get { return this.propertyInfo.Name; }
+        }
 
-        public virtual bool IsStatic { get { return this.propertyInfo.IsStatic(); } }
+        public virtual bool IsStatic
+        {
+            get { return this.propertyInfo.IsStatic(); }
+        }
 
         public virtual object GetValue(object target)
         {
@@ -70,7 +84,8 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
                 throw new MemberAccessException($"The property \"{propertyInfo.DeclaringType}.{Name}\" is read-only.");
 
             if (this.IsValueType)
-                throw new NotSupportedException($"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
+                throw new NotSupportedException(
+                    $"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
 
             if (this.setMethod == null)
                 throw new MemberAccessException($"The property \"{propertyInfo.DeclaringType}.{Name}\" is not public");
@@ -90,7 +105,8 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
 
         public ProxyPropertyInfo(PropertyInfo propertyInfo) : base(propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The property types do not match!");
 
             if (this.IsStatic)
@@ -100,13 +116,16 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
             this.setter = this.MakeSetter(propertyInfo);
         }
 
-        public ProxyPropertyInfo(string propertyName, Func<T, TValue> getter, Action<T, TValue> setter) : this(typeof(T).GetProperty(propertyName), getter, setter)
+        public ProxyPropertyInfo(string propertyName, Func<T, TValue> getter, Action<T, TValue> setter) : this(
+            typeof(T).GetProperty(propertyName), getter, setter)
         {
         }
 
-        public ProxyPropertyInfo(PropertyInfo propertyInfo, Func<T, TValue> getter, Action<T, TValue> setter) : base(propertyInfo)
+        public ProxyPropertyInfo(PropertyInfo propertyInfo, Func<T, TValue> getter, Action<T, TValue> setter) : base(
+            propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The property types do not match!");
 
             if (this.IsStatic)
@@ -116,7 +135,10 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
             this.setter = setter;
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Action<T, TValue> MakeSetter(PropertyInfo propertyInfo)
         {
@@ -156,6 +178,7 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -183,7 +206,8 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
         public void SetValue(T target, TValue value)
         {
             if (this.IsValueType)
-                throw new NotSupportedException($"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
+                throw new NotSupportedException(
+                    $"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
 
             if (setter != null)
             {
@@ -202,7 +226,8 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
         public override void SetValue(object target, object value)
         {
             if (this.IsValueType)
-                throw new NotSupportedException($"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
+                throw new NotSupportedException(
+                    $"The type \"{propertyInfo.DeclaringType}\" is a value type, and non-reference types cannot support assignment operations.");
 
             if (setter != null)
             {
@@ -212,6 +237,5 @@ public class ProxyPropertyInfo : IProxyPropertyInfo
 
             base.SetValue(target, value);
         }
-
     }
 }

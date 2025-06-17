@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace GameLogic.Binding.Paths
 {
-public class TypeFinderUtils
+    public class TypeFinderUtils
     {
 #if NETFX_CORE
         private static readonly ILog log = LogManager.GetLogger(typeof(TypeFinderUtils));
@@ -40,6 +40,7 @@ public class TypeFinderUtils
                         return type;
                 }
             }
+
             return null;
         }
 
@@ -85,6 +86,7 @@ public class TypeFinderUtils
 
                 assemblies.Add(assembly);
             }
+
             return assemblies;
         }
 #endif

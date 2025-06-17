@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameLogic.Prefs
 {
-public class DefaultSerializer : ISerializer
+    public class DefaultSerializer : ISerializer
     {
         private readonly object _lock = new object();
         private readonly static ComparerImpl<ITypeEncoder> comparer = new ComparerImpl<ITypeEncoder>();
@@ -54,11 +54,14 @@ public class DefaultSerializer : ISerializer
 
                         return encoder.Decode(type, input);
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
-
             }
-            throw new NotSupportedException(string.Format("This value \"{0}\" cannot be converted to the type \"{1}\"", input, type.Name));
+
+            throw new NotSupportedException(string.Format("This value \"{0}\" cannot be converted to the type \"{1}\"",
+                input, type.Name));
         }
 
         public virtual string Serialize(object value)
@@ -75,10 +78,14 @@ public class DefaultSerializer : ISerializer
 
                         return encoder.Encode(value);
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
-            throw new NotSupportedException(string.Format("Unsupported type, this value \"{0}\" cannot be serialized", value));
+
+            throw new NotSupportedException(string.Format("Unsupported type, this value \"{0}\" cannot be serialized",
+                value));
         }
 
         class ComparerImpl<T> : IComparer<T> where T : ITypeEncoder

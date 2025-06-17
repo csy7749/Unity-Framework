@@ -3,7 +3,7 @@ using GameLogic.Binding.Reflection;
 
 namespace GameLogic.Binding.Proxy.Targets.Universal
 {
-public class EventTargetProxy : EventTargetProxyBase
+    public class EventTargetProxy : EventTargetProxyBase
     {
         private bool disposed = false;
         protected readonly IProxyEventInfo eventInfo;
@@ -14,9 +14,15 @@ public class EventTargetProxy : EventTargetProxyBase
             this.eventInfo = eventInfo;
         }
 
-        public override Type Type { get { return this.eventInfo.HandlerType; } }
+        public override Type Type
+        {
+            get { return this.eventInfo.HandlerType; }
+        }
 
-        public override BindingMode DefaultMode { get { return BindingMode.OneWay; } }
+        public override BindingMode DefaultMode
+        {
+            get { return BindingMode.OneWay; }
+        }
 
         public override void SetValue(object value)
         {

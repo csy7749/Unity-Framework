@@ -4,10 +4,11 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Reflection
 {
-public class ProxyMethodInfo : IProxyMethodInfo
+    public class ProxyMethodInfo : IProxyMethodInfo
     {
         protected bool isValueType = false;
         protected MethodInfo methodInfo;
+
         public ProxyMethodInfo(MethodInfo methodInfo)
         {
             if (methodInfo == null)
@@ -18,17 +19,35 @@ public class ProxyMethodInfo : IProxyMethodInfo
             this.isValueType = methodInfo.DeclaringType.IsValueType;
         }
 
-        public virtual Type DeclaringType { get { return this.methodInfo.DeclaringType; } }
+        public virtual Type DeclaringType
+        {
+            get { return this.methodInfo.DeclaringType; }
+        }
 
-        public virtual string Name { get { return this.methodInfo.Name; } }
+        public virtual string Name
+        {
+            get { return this.methodInfo.Name; }
+        }
 
-        public virtual bool IsStatic { get { return this.methodInfo.IsStatic; } }
+        public virtual bool IsStatic
+        {
+            get { return this.methodInfo.IsStatic; }
+        }
 
-        public virtual Type ReturnType { get { return this.methodInfo.ReturnType; } }
+        public virtual Type ReturnType
+        {
+            get { return this.methodInfo.ReturnType; }
+        }
 
-        public virtual ParameterInfo[] Parameters { get { return this.methodInfo.GetParameters(); } }
+        public virtual ParameterInfo[] Parameters
+        {
+            get { return this.methodInfo.GetParameters(); }
+        }
 
-        public virtual ParameterInfo ReturnParameter { get { return this.methodInfo.ReturnParameter; } }
+        public virtual ParameterInfo ReturnParameter
+        {
+            get { return this.methodInfo.ReturnParameter; }
+        }
 
         public virtual object Invoke(object target, params object[] args)
         {
@@ -44,7 +63,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -52,11 +72,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Func<T, TResult> function) : this(typeof(T).GetMethod(methodName), function)
+        public ProxyFuncInfo(string methodName, Func<T, TResult> function) : this(typeof(T).GetMethod(methodName),
+            function)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, TResult> function) : this(typeof(T).GetMethod(methodName, parameterTypes), function)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, TResult> function) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), function)
         {
         }
 
@@ -65,7 +87,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             this.function = function;
@@ -73,7 +96,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.function = this.MakeFunc(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Func<T, TResult> MakeFunc(MethodInfo methodInfo)
         {
@@ -88,6 +114,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -108,11 +135,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
     public class ProxyFuncInfo<T, P1, TResult> : ProxyMethodInfo, IProxyFuncInfo<T, P1, TResult>
     {
         private Func<T, P1, TResult> function;
+
         public ProxyFuncInfo(string methodName) : this(typeof(T).GetMethod(methodName), null)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -120,11 +149,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, TResult> function) : this(typeof(T).GetMethod(methodName, parameterTypes), function)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, TResult> function) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), function)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Func<T, P1, TResult> function) : this(typeof(T).GetMethod(methodName), function)
+        public ProxyFuncInfo(string methodName, Func<T, P1, TResult> function) : this(typeof(T).GetMethod(methodName),
+            function)
         {
         }
 
@@ -134,7 +165,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
@@ -146,7 +178,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.function = this.MakeFunc(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Func<T, P1, TResult> MakeFunc(MethodInfo methodInfo)
         {
@@ -161,6 +196,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -186,7 +222,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -195,11 +232,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Func<T, P1, P2, TResult> function) : this(typeof(T).GetMethod(methodName), function)
+        public ProxyFuncInfo(string methodName, Func<T, P1, P2, TResult> function) : this(
+            typeof(T).GetMethod(methodName), function)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, P2, TResult> function) : this(typeof(T).GetMethod(methodName, parameterTypes), function)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, P2, TResult> function) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), function)
         {
         }
 
@@ -208,11 +247,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
-            if (parameters.Length != 2 || !typeof(P1).Equals(parameters[0].ParameterType) || !typeof(P2).Equals(parameters[1].ParameterType))
+            if (parameters.Length != 2 || !typeof(P1).Equals(parameters[0].ParameterType) ||
+                !typeof(P2).Equals(parameters[1].ParameterType))
                 throw new ArgumentException("The method types do not match!");
 
             this.function = function;
@@ -220,7 +261,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.function = this.MakeFunc(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Func<T, P1, P2, TResult> MakeFunc(MethodInfo methodInfo)
         {
@@ -235,6 +279,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -260,19 +305,22 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
-
         }
+
         public ProxyFuncInfo(MethodInfo info) : this(info, null)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Func<T, P1, P2, P3, TResult> function) : this(typeof(T).GetMethod(methodName), function)
+        public ProxyFuncInfo(string methodName, Func<T, P1, P2, P3, TResult> function) : this(
+            typeof(T).GetMethod(methodName), function)
         {
         }
 
-        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, P2, P3, TResult> function) : this(typeof(T).GetMethod(methodName, parameterTypes), function)
+        public ProxyFuncInfo(string methodName, Type[] parameterTypes, Func<T, P1, P2, P3, TResult> function) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), function)
         {
         }
 
@@ -281,11 +329,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TResult).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
-            if (parameters.Length != 3 || !typeof(P1).Equals(parameters[0].ParameterType) || !typeof(P2).Equals(parameters[1].ParameterType) || !typeof(P3).Equals(parameters[2].ParameterType))
+            if (parameters.Length != 3 || !typeof(P1).Equals(parameters[0].ParameterType) ||
+                !typeof(P2).Equals(parameters[1].ParameterType) || !typeof(P3).Equals(parameters[2].ParameterType))
                 throw new ArgumentException("The method types do not match!");
 
             this.function = function;
@@ -293,7 +343,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.function = this.MakeFunc(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Func<T, P1, P2, P3, TResult> MakeFunc(MethodInfo methodInfo)
         {
@@ -308,6 +361,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -333,7 +387,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -345,18 +400,23 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T> action) : this(typeof(T).GetMethod(methodName, parameterTypes), action)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T> action) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), action)
         {
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         public ProxyActionInfo(MethodInfo info, Action<T> action) : base(info)
         {
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(void).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(void).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             this.action = action;
@@ -377,6 +437,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -406,7 +467,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -418,7 +480,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1> action) : this(typeof(T).GetMethod(methodName, parameterTypes), action)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1> action) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), action)
         {
         }
 
@@ -427,7 +490,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(void).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(void).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
@@ -439,7 +503,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.action = this.MakeAction(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Action<T, P1> MakeAction(MethodInfo methodInfo)
         {
@@ -454,6 +521,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -483,7 +551,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -491,11 +560,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Action<T, P1, P2> action) : this(typeof(T).GetMethod(methodName), action)
+        public ProxyActionInfo(string methodName, Action<T, P1, P2> action) : this(typeof(T).GetMethod(methodName),
+            action)
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1, P2> action) : this(typeof(T).GetMethod(methodName, parameterTypes), action)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1, P2> action) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), action)
         {
         }
 
@@ -504,11 +575,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(void).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(void).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
-            if (parameters.Length != 2 || !typeof(P1).Equals(parameters[0].ParameterType) || !typeof(P2).Equals(parameters[1].ParameterType))
+            if (parameters.Length != 2 || !typeof(P1).Equals(parameters[0].ParameterType) ||
+                !typeof(P2).Equals(parameters[1].ParameterType))
                 throw new ArgumentException("The method types do not match!");
 
             this.action = action;
@@ -516,7 +589,10 @@ public class ProxyMethodInfo : IProxyMethodInfo
                 this.action = this.MakeAction(this.methodInfo);
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Action<T, P1, P2> MakeAction(MethodInfo methodInfo)
         {
@@ -531,6 +607,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -540,7 +617,6 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 this.action(target, p1, p2);
                 return;
-
             }
 
             this.methodInfo.Invoke(target, new object[] { p1, p2 });
@@ -561,7 +637,8 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(typeof(T).GetMethod(methodName, parameterTypes), null)
+        public ProxyActionInfo(string methodName, Type[] parameterTypes) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), null)
         {
         }
 
@@ -569,10 +646,13 @@ public class ProxyMethodInfo : IProxyMethodInfo
         {
         }
 
-        public ProxyActionInfo(string methodName, Action<T, P1, P2, P3> action) : this(typeof(T).GetMethod(methodName), action)
+        public ProxyActionInfo(string methodName, Action<T, P1, P2, P3> action) : this(typeof(T).GetMethod(methodName),
+            action)
         {
         }
-        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1, P2, P3> action) : this(typeof(T).GetMethod(methodName, parameterTypes), action)
+
+        public ProxyActionInfo(string methodName, Type[] parameterTypes, Action<T, P1, P2, P3> action) : this(
+            typeof(T).GetMethod(methodName, parameterTypes), action)
         {
         }
 
@@ -581,20 +661,24 @@ public class ProxyMethodInfo : IProxyMethodInfo
             if (this.IsStatic)
                 throw new ArgumentException("The method is static!");
 
-            if (!typeof(void).Equals(this.methodInfo.ReturnType) || !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(void).Equals(this.methodInfo.ReturnType) ||
+                !this.methodInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The method types do not match!");
 
             ParameterInfo[] parameters = this.methodInfo.GetParameters();
-            if (parameters.Length != 3 || !typeof(P1).Equals(parameters[0].ParameterType) || !typeof(P2).Equals(parameters[1].ParameterType) || !typeof(P3).Equals(parameters[2].ParameterType))
+            if (parameters.Length != 3 || !typeof(P1).Equals(parameters[0].ParameterType) ||
+                !typeof(P2).Equals(parameters[1].ParameterType) || !typeof(P3).Equals(parameters[2].ParameterType))
                 throw new ArgumentException("The method types do not match!");
 
             this.action = action;
             if (this.action == null)
                 this.action = this.MakeAction(this.methodInfo);
-
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Action<T, P1, P2, P3> MakeAction(MethodInfo methodInfo)
         {
@@ -609,6 +693,7 @@ public class ProxyMethodInfo : IProxyMethodInfo
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 

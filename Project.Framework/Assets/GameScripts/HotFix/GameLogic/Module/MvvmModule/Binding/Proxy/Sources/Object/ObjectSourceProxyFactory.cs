@@ -5,11 +5,13 @@ using GameLogic.Binding.Sources;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class ObjectSourceProxyFactory : TypedSourceProxyFactory<ObjectSourceDescription>, INodeProxyFactory, INodeProxyFactoryRegister
+    public class ObjectSourceProxyFactory : TypedSourceProxyFactory<ObjectSourceDescription>, INodeProxyFactory,
+        INodeProxyFactoryRegister
     {
         private List<PriorityFactoryPair> factories = new List<PriorityFactoryPair>();
 
-        protected override bool TryCreateProxy(object source, ObjectSourceDescription description, out ISourceProxy proxy)
+        protected override bool TryCreateProxy(object source, ObjectSourceDescription description,
+            out ISourceProxy proxy)
         {
             proxy = null;
             var path = description.Path;
@@ -44,6 +46,7 @@ public class ObjectSourceProxyFactory : TypedSourceProxyFactory<ObjectSourceDesc
                 if (proxy != null)
                     return proxy;
             }
+
             return proxy;
         }
 
@@ -71,6 +74,7 @@ public class ObjectSourceProxyFactory : TypedSourceProxyFactory<ObjectSourceDesc
                 this.factory = factory;
                 this.priority = priority;
             }
+
             public int priority;
             public INodeProxyFactory factory;
         }

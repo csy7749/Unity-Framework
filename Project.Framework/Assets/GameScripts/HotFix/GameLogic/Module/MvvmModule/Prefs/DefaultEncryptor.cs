@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GameLogic.Prefs
 {
-public class DefaultEncryptor : IEncryptor
+    public class DefaultEncryptor : IEncryptor
     {
         private const int IV_SIZE = 16;
         private static readonly byte[] DEFAULT_IV;
@@ -44,16 +44,17 @@ public class DefaultEncryptor : IEncryptor
             CheckKey(this.key);
 
 #if NETFX_CORE
-            SymmetricKeyAlgorithmProvider provider = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
+            SymmetricKeyAlgorithmProvider provider =
+ SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
             cryptographicKey = provider.CreateSymmetricKey(this.key.AsBuffer());
 #else
             cipher = new RijndaelManaged()
             {
-                Mode = CipherMode.CBC,//use CBC
-                Padding = PaddingMode.PKCS7,//default PKCS7
-                KeySize = 128,//default 256
-                BlockSize = 128,//default 128
-                FeedbackSize = 128      //default 128
+                Mode = CipherMode.CBC, //use CBC
+                Padding = PaddingMode.PKCS7, //default PKCS7
+                KeySize = 128, //default 256
+                BlockSize = 128, //default 128
+                FeedbackSize = 128 //default 128
             };
 #endif
         }

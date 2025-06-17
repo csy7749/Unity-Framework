@@ -2,7 +2,7 @@
 
 namespace GameLogic.Asynchronous
 {
-public interface IAsyncResult
+    public interface IAsyncResult
     {
         object Result { get; }
 
@@ -19,7 +19,6 @@ public interface IAsyncResult
         ISynchronizable Synchronized();
 
         object WaitForDone();
-
     }
 
     public interface IAsyncResult<TResult> : IAsyncResult

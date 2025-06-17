@@ -5,20 +5,27 @@ using UnityEngine;
 
 namespace GameLogic.Binding.Proxy.Targets.Universal
 {
-public class InteractionTargetProxy : TargetProxyBase, IObtainable
+    public class InteractionTargetProxy : TargetProxyBase, IObtainable
     {
         private readonly EventHandler<InteractionEventArgs> handler;
         private readonly IInteractionAction interactionAction;
         private SendOrPostCallback postCallback;
+
         public InteractionTargetProxy(object target, IInteractionAction interactionAction) : base(target)
         {
             this.interactionAction = interactionAction;
             this.handler = OnRequest;
         }
 
-        public override Type Type { get { return typeof(EventHandler<InteractionEventArgs>); } }
+        public override Type Type
+        {
+            get { return typeof(EventHandler<InteractionEventArgs>); }
+        }
 
-        public override BindingMode DefaultMode { get { return BindingMode.OneWayToSource; } }
+        public override BindingMode DefaultMode
+        {
+            get { return BindingMode.OneWayToSource; }
+        }
 
         public object GetValue()
         {
@@ -50,6 +57,7 @@ public class InteractionTargetProxy : TargetProxyBase, IObtainable
                         this.interactionAction.OnRequest(postArgs.sender, postArgs.args);
                     };
                 }
+
                 UISynchronizationContext.Post(postCallback, new PostArgs(sender, args));
             }
         }

@@ -4,7 +4,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Reflection
 {
-public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPropertyInfo<T, TValue>
+    public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPropertyInfo<T, TValue>
     {
         private Func<TValue> getter;
         private Action<TValue> setter;
@@ -15,7 +15,8 @@ public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPrope
 
         public StaticProxyPropertyInfo(PropertyInfo propertyInfo) : base(propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The property types do not match!");
 
             if (!this.IsStatic)
@@ -25,13 +26,16 @@ public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPrope
             this.setter = this.MakeSetter(propertyInfo);
         }
 
-        public StaticProxyPropertyInfo(string propertyName, Func<TValue> getter, Action<TValue> setter) : this(typeof(T).GetProperty(propertyName), getter, setter)
+        public StaticProxyPropertyInfo(string propertyName, Func<TValue> getter, Action<TValue> setter) : this(
+            typeof(T).GetProperty(propertyName), getter, setter)
         {
         }
 
-        public StaticProxyPropertyInfo(PropertyInfo propertyInfo, Func<TValue> getter, Action<TValue> setter) : base(propertyInfo)
+        public StaticProxyPropertyInfo(PropertyInfo propertyInfo, Func<TValue> getter, Action<TValue> setter) : base(
+            propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !propertyInfo.DeclaringType.IsAssignableFrom(typeof(T)))
                 throw new ArgumentException("The property types do not match!");
 
             if (!this.IsStatic)
@@ -41,7 +45,10 @@ public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPrope
             this.setter = setter;
         }
 
-        public override Type DeclaringType { get { return typeof(T); } }
+        public override Type DeclaringType
+        {
+            get { return typeof(T); }
+        }
 
         private Action<TValue> MakeSetter(PropertyInfo propertyInfo)
         {
@@ -79,6 +86,7 @@ public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPrope
             {
                 Log.Error("{0}", e);
             }
+
             return null;
         }
 
@@ -111,7 +119,7 @@ public class StaticProxyPropertyInfo<T, TValue> : ProxyPropertyInfo, IProxyPrope
                 return;
             }
 
-            base.SetValue(null,value);
+            base.SetValue(null, value);
         }
 
         public void SetValue(object target, TValue value)

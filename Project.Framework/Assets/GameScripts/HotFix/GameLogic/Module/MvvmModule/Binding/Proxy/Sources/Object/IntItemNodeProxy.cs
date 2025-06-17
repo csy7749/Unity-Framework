@@ -7,7 +7,7 @@ using GameLogic.Binding.Sources;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
+    public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
     {
         protected TKey key;
         protected IProxyItemInfo itemInfo;
@@ -33,9 +33,15 @@ public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainab
             }
         }
 
-        public override Type Type { get { return this.itemInfo.ValueType; } }
+        public override Type Type
+        {
+            get { return this.itemInfo.ValueType; }
+        }
 
-        public override TypeCode TypeCode { get { return itemInfo.ValueTypeCode; } }
+        public override TypeCode TypeCode
+        {
+            get { return itemInfo.ValueTypeCode; }
+        }
 
         protected abstract void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e);
 
@@ -73,7 +79,8 @@ public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainab
             this.itemInfo.SetValue(source, key, value);
         }
 
-        #region IDisposable Support    
+        #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected override void Dispose(bool disposing)
@@ -85,10 +92,12 @@ public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainab
                     var sourceCollection = this.source as INotifyCollectionChanged;
                     sourceCollection.CollectionChanged -= OnCollectionChanged;
                 }
+
                 disposedValue = true;
                 base.Dispose(disposing);
             }
         }
+
         #endregion
     }
 
@@ -118,7 +127,9 @@ public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainab
                             this.RaiseValueChanged();
                         break;
                     case NotifyCollectionChangedAction.Add:
-                        int endIndex = e.NewItems != null ? e.NewStartingIndex + e.NewItems.Count : e.NewStartingIndex + 1;
+                        int endIndex = e.NewItems != null
+                            ? e.NewStartingIndex + e.NewItems.Count
+                            : e.NewStartingIndex + 1;
                         if (this.key >= e.NewStartingIndex && this.key < endIndex)
                             this.RaiseValueChanged();
                         break;
@@ -160,13 +171,12 @@ public abstract class ItemNodeProxy<TKey> : NotifiableSourceProxyBase, IObtainab
                 }
             }
         }
-
-
     }
 
     public class StringItemNodeProxy : ItemNodeProxy<string>
     {
-        public StringItemNodeProxy(ICollection source, string key, IProxyItemInfo itemInfo) : base(source, key, itemInfo)
+        public StringItemNodeProxy(ICollection source, string key, IProxyItemInfo itemInfo) : base(source, key,
+            itemInfo)
         {
         }
 

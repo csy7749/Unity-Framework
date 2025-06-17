@@ -1,9 +1,10 @@
 ﻿namespace GameLogic.Prefs
 {
-public abstract class AbstractFactory : IFactory
+    public abstract class AbstractFactory : IFactory
     {
         private IEncryptor encryptor;
         private ISerializer serializer;
+
         /// <summary>
         /// 
         /// </summary>

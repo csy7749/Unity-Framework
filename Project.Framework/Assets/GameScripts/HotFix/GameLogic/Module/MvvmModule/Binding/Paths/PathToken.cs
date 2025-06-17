@@ -8,6 +8,7 @@ namespace GameLogic.Binding.Paths
     {
         private Path path;
         private int index;
+
         public PathToken(Path path, int index)
         {
             this.path = path;
@@ -19,7 +20,10 @@ namespace GameLogic.Binding.Paths
             get { return this.path; }
         }
 
-        public int Index { get { return this.index; } }
+        public int Index
+        {
+            get { return this.index; }
+        }
 
         public IPathNode Current
         {

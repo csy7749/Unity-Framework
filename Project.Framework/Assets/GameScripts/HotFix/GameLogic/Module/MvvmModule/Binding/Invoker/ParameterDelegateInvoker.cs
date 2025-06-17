@@ -51,6 +51,7 @@ namespace GameLogic.Binding
     {
         private readonly Action<T> handler;
         private readonly ICommandParameter<T> commandParameter;
+
         public ParameterActionInvoker(Action<T> handler, ICommandParameter<T> commandParameter)
         {
             if (handler == null)

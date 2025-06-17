@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace GameLogic.Binding.Reflection
 {
-public class ProxyItemInfo : IProxyItemInfo
+    public class ProxyItemInfo : IProxyItemInfo
     {
         private readonly bool isValueType;
         private TypeCode typeCode;
@@ -32,9 +32,15 @@ public class ProxyItemInfo : IProxyItemInfo
                 this.setMethod = propertyInfo.GetSetMethod();
         }
 
-        public bool IsValueType { get { return isValueType; } }
+        public bool IsValueType
+        {
+            get { return isValueType; }
+        }
 
-        public Type ValueType { get { return this.propertyInfo.PropertyType; } }
+        public Type ValueType
+        {
+            get { return this.propertyInfo.PropertyType; }
+        }
 
         public TypeCode ValueTypeCode
         {
@@ -48,15 +54,25 @@ public class ProxyItemInfo : IProxyItemInfo
                     typeCode = Type.GetTypeCode(ValueType);
 #endif
                 }
+
                 return typeCode;
             }
         }
 
-        public Type DeclaringType { get { return this.propertyInfo.DeclaringType; } }
+        public Type DeclaringType
+        {
+            get { return this.propertyInfo.DeclaringType; }
+        }
 
-        public string Name { get { return this.propertyInfo.Name; } }
+        public string Name
+        {
+            get { return this.propertyInfo.Name; }
+        }
 
-        public bool IsStatic { get { return this.propertyInfo.IsStatic(); } }
+        public bool IsStatic
+        {
+            get { return this.propertyInfo.IsStatic(); }
+        }
 
         public object GetValue(object target, object key)
         {
@@ -66,7 +82,9 @@ public class ProxyItemInfo : IProxyItemInfo
                 IList list = target as IList;
 
                 if (index < 0 || index >= list.Count)
-                    throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index, list.Count));
+                    throw new ArgumentOutOfRangeException("key",
+                        string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}",
+                            index, list.Count));
 
                 return list[index];
             }
@@ -94,7 +112,9 @@ public class ProxyItemInfo : IProxyItemInfo
                 IList list = target as IList;
 
                 if (index < 0 || index >= list.Count)
-                    throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index, list.Count));
+                    throw new ArgumentOutOfRangeException("key",
+                        string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}",
+                            index, list.Count));
 
                 list[index] = value;
                 return;
@@ -117,14 +137,17 @@ public class ProxyItemInfo : IProxyItemInfo
     {
         public ListProxyItemInfo(PropertyInfo propertyInfo) : base(propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !typeof(IList<TValue>).IsAssignableFrom(propertyInfo.DeclaringType))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !typeof(IList<TValue>).IsAssignableFrom(propertyInfo.DeclaringType))
                 throw new ArgumentException("The property types do not match!");
         }
 
         public TValue GetValue(T target, int key)
         {
             if (key < 0 || key >= target.Count)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key, target.Count));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key,
+                        target.Count));
 
             return target[key];
         }
@@ -137,7 +160,9 @@ public class ProxyItemInfo : IProxyItemInfo
         public void SetValue(T target, int key, TValue value)
         {
             if (key < 0 || key >= target.Count)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key, target.Count));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key,
+                        target.Count));
 
             target[key] = value;
         }
@@ -148,11 +173,13 @@ public class ProxyItemInfo : IProxyItemInfo
         }
     }
 
-    public class DictionaryProxyItemInfo<T, TKey, TValue> : ProxyItemInfo, IProxyItemInfo<T, TKey, TValue> where T : IDictionary<TKey, TValue>
+    public class DictionaryProxyItemInfo<T, TKey, TValue> : ProxyItemInfo, IProxyItemInfo<T, TKey, TValue>
+        where T : IDictionary<TKey, TValue>
     {
         public DictionaryProxyItemInfo(PropertyInfo propertyInfo) : base(propertyInfo)
         {
-            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) || !typeof(IDictionary<TKey, TValue>).IsAssignableFrom(propertyInfo.DeclaringType))
+            if (!typeof(TValue).Equals(this.propertyInfo.PropertyType) ||
+                !typeof(IDictionary<TKey, TValue>).IsAssignableFrom(propertyInfo.DeclaringType))
                 throw new ArgumentException("The property types do not match!");
         }
 
@@ -184,6 +211,7 @@ public class ProxyItemInfo : IProxyItemInfo
     {
         private TypeCode typeCode;
         protected readonly Type type;
+
         public ArrayProxyItemInfo(Type type)
         {
             this.type = type;
@@ -191,7 +219,10 @@ public class ProxyItemInfo : IProxyItemInfo
                 throw new ArgumentException();
         }
 
-        public Type ValueType { get { return type.HasElementType ? type.GetElementType() : typeof(object); } }
+        public Type ValueType
+        {
+            get { return type.HasElementType ? type.GetElementType() : typeof(object); }
+        }
 
         public TypeCode ValueTypeCode
         {
@@ -205,22 +236,34 @@ public class ProxyItemInfo : IProxyItemInfo
                     typeCode = Type.GetTypeCode(ValueType);
 #endif
                 }
+
                 return typeCode;
             }
         }
 
-        public Type DeclaringType { get { return this.type; } }
+        public Type DeclaringType
+        {
+            get { return this.type; }
+        }
 
-        public string Name { get { return "Item"; } }
+        public string Name
+        {
+            get { return "Item"; }
+        }
 
-        public bool IsStatic { get { return false; } }
+        public bool IsStatic
+        {
+            get { return false; }
+        }
 
         public virtual object GetValue(object target, object key)
         {
             int index = (int)key;
             Array array = target as Array;
             if (index < 0 || index >= array.Length)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index, array.Length));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index,
+                        array.Length));
 
             return array.GetValue(index);
         }
@@ -230,13 +273,16 @@ public class ProxyItemInfo : IProxyItemInfo
             int index = (int)key;
             Array array = target as Array;
             if (index < 0 || index >= array.Length)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index, array.Length));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", index,
+                        array.Length));
 
             array.SetValue(value, index);
         }
     }
 
-    public class ArrayProxyItemInfo<T, TValue> : ArrayProxyItemInfo, IProxyItemInfo<T, int, TValue> where T : IList<TValue>
+    public class ArrayProxyItemInfo<T, TValue> : ArrayProxyItemInfo, IProxyItemInfo<T, int, TValue>
+        where T : IList<TValue>
     {
         public ArrayProxyItemInfo() : base(typeof(T))
         {
@@ -245,7 +291,9 @@ public class ProxyItemInfo : IProxyItemInfo
         public TValue GetValue(T target, int key)
         {
             if (key < 0 || key >= target.Count)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key, target.Count));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key,
+                        target.Count));
 
             return target[key];
         }
@@ -258,7 +306,9 @@ public class ProxyItemInfo : IProxyItemInfo
         public void SetValue(T target, int key, TValue value)
         {
             if (key < 0 || key >= target.Count)
-                throw new ArgumentOutOfRangeException("key", string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key, target.Count));
+                throw new ArgumentOutOfRangeException("key",
+                    string.Format("The index is out of range, the key value is {0}, it is not between 0 and {1}", key,
+                        target.Count));
 
             target[key] = value;
         }

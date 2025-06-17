@@ -5,7 +5,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
+    public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
     {
         private INodeProxyFactory factory;
         private ProxyEntry[] proxies;
@@ -116,9 +116,12 @@ public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, 
                 {
                     var memberNode = node as MemberNode;
                     string typeName = source != null ? source.GetType().Name : memberNode.Type.Name;
-                    throw new ProxyException("Not found the member named '{0}' in the class '{1}'.", memberNode.Name, typeName);
+                    throw new ProxyException("Not found the member named '{0}' in the class '{1}'.", memberNode.Name,
+                        typeName);
                 }
-                throw new ProxyException("Failed to create proxy for \"{0}\".Not found available proxy factory.", token.ToString());
+
+                throw new ProxyException("Failed to create proxy for \"{0}\".Not found available proxy factory.",
+                    token.ToString());
             }
 
             ProxyEntry entry = new ProxyEntry(proxy, token);
@@ -207,7 +210,8 @@ public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, 
             }
         }
 
-        #region IDisposable Support    
+        #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected override void Dispose(bool disposing)
@@ -219,12 +223,14 @@ public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, 
                 base.Dispose(disposing);
             }
         }
+
         #endregion
 
         public class ProxyEntry : IDisposable
         {
             private ISourceProxy proxy;
             private EventHandler handler;
+
             public ProxyEntry(ISourceProxy proxy, PathToken token)
             {
                 this.Proxy = proxy;
@@ -279,6 +285,7 @@ public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, 
             }
 
             #region IDisposable Support
+
             private bool disposedValue = false;
 
             protected virtual void Dispose(bool disposing)
@@ -303,8 +310,8 @@ public class ChainedObjectSourceProxy : NotifiableSourceProxyBase, IObtainable, 
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
+
             #endregion
         }
-
     }
 }

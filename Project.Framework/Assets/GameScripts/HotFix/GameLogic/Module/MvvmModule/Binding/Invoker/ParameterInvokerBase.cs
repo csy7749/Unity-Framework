@@ -7,6 +7,7 @@ namespace GameLogic.Binding
     public class ParameterInvokerBase
     {
         protected readonly ICommandParameter commandParameter;
+
         public ParameterInvokerBase(ICommandParameter commandParameter)
         {
             if (commandParameter == null)

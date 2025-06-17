@@ -5,7 +5,7 @@ using GameLogic.Binding.Reflection;
 
 namespace GameLogic.Binding.Expressions
 {
-public static class ExpressionExtensions
+    public static class ExpressionExtensions
     {
         public static Func<object[], object> DynamicCompile(this LambdaExpression expr)
         {
@@ -58,8 +58,10 @@ public static class ExpressionExtensions
                 {
                     fieldInfo.SetValue(root, value);
                 }
+
                 return;
             }
+
             var propertyInfo = info as PropertyInfo;
             if (propertyInfo != null)
             {
@@ -74,8 +76,10 @@ public static class ExpressionExtensions
                     if (method != null)
                         method.Invoke(root, new object[] { value });
                 }
+
                 return;
             }
+
             throw new NotSupportedException("Bad MemberInfo type.");
         }
 
@@ -91,6 +95,7 @@ public static class ExpressionExtensions
                     continue;
                 return info;
             }
+
             return null;
         }
     }

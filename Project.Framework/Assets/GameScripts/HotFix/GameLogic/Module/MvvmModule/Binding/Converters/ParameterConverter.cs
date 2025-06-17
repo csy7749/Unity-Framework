@@ -5,10 +5,10 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Converters
 {
-    public class ParameterConverter: AbstractConverter
+    public class ParameterConverter : AbstractConverter
     {
-        
         private readonly ICommandParameter commandParameter;
+
         public ParameterConverter(ICommandParameter commandParameter)
         {
             if (commandParameter == null)
@@ -43,6 +43,7 @@ namespace GameLogic.Binding.Converters
     public class ParameterConverter<T> : AbstractConverter
     {
         private readonly ICommandParameter<T> commandParameter;
+
         public ParameterConverter(ICommandParameter<T> commandParameter)
         {
             if (commandParameter == null)

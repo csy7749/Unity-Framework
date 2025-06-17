@@ -3,7 +3,7 @@ using UnityFramework;
 
 namespace GameLogic.Asynchronous
 {
-public interface ICallbackable
+    public interface ICallbackable
     {
         void OnCallback(Action<IAsyncResult> callback);
     }
@@ -32,6 +32,7 @@ public interface ICallbackable
         private readonly IAsyncResult _result;
         private readonly object _lock = new object();
         private Action<IAsyncResult> _callback;
+
         public Callbackable(IAsyncResult result)
         {
             this._result = result;
@@ -86,6 +87,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 
@@ -99,6 +101,7 @@ public interface ICallbackable
         private readonly IAsyncResult<TResult> _result;
         private readonly object _lock = new object();
         private Action<IAsyncResult<TResult>> _callback;
+
         public Callbackable(IAsyncResult<TResult> result)
         {
             this._result = result;
@@ -153,6 +156,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 
@@ -167,6 +171,7 @@ public interface ICallbackable
         private readonly object _lock = new object();
         private Action<IProgressResult<TProgress>> _callback;
         private Action<TProgress> _progressCallback;
+
         public ProgressCallbackable(IProgressResult<TProgress> result)
         {
             this._result = result;
@@ -255,6 +260,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 
@@ -279,6 +285,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 
@@ -293,6 +300,7 @@ public interface ICallbackable
         private readonly object _lock = new object();
         private Action<IProgressResult<TProgress, TResult>> _callback;
         private Action<TProgress> _progressCallback;
+
         public ProgressCallbackable(IProgressResult<TProgress, TResult> result)
         {
             this._result = result;
@@ -381,6 +389,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 
@@ -405,6 +414,7 @@ public interface ICallbackable
                     {
                         Log.Error("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
                     }
+
                     return;
                 }
 

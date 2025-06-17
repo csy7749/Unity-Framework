@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace GameLogic.Binding.Reflection
 {
-public interface IProxyMethodInfo : IProxyMemberInfo
+    public interface IProxyMethodInfo : IProxyMemberInfo
     {
         Type ReturnType { get; }
 

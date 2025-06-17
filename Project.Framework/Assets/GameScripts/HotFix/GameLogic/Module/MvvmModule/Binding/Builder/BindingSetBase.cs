@@ -28,6 +28,7 @@ namespace GameLogic.Binding.Builder
                     Log.Error("{0}", e);
                 }
             }
+
             this.builders.Clear();
         }
     }
@@ -35,6 +36,7 @@ namespace GameLogic.Binding.Builder
     public class BindingSet<TTarget, TSource> : BindingSetBase where TTarget : class
     {
         private TTarget target;
+
         public BindingSet(IBindingContext context, TTarget target) : base(context)
         {
             this.target = target;
@@ -47,7 +49,8 @@ namespace GameLogic.Binding.Builder
             return builder;
         }
 
-        public virtual BindingBuilder<TChildTarget, TSource> Bind<TChildTarget>(TChildTarget target) where TChildTarget : class
+        public virtual BindingBuilder<TChildTarget, TSource> Bind<TChildTarget>(TChildTarget target)
+            where TChildTarget : class
         {
             var builder = new BindingBuilder<TChildTarget, TSource>(context, target);
             this.builders.Add(builder);
@@ -73,6 +76,7 @@ namespace GameLogic.Binding.Builder
     public class BindingSet<TTarget> : BindingSetBase where TTarget : class
     {
         private TTarget target;
+
         public BindingSet(IBindingContext context, TTarget target) : base(context)
         {
             this.target = target;
@@ -111,6 +115,7 @@ namespace GameLogic.Binding.Builder
     public class BindingSet : BindingSetBase
     {
         private object target;
+
         public BindingSet(IBindingContext context, object target) : base(context)
         {
             this.target = target;

@@ -7,6 +7,7 @@ namespace GameLogic.Binding
     {
         protected readonly IInvoker Invoker;
         protected readonly ICommandParameter CommandParameter;
+
         public ParameterWrapInvoker(IInvoker invoker, ICommandParameter commandParameter)
         {
             this.Invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
@@ -23,6 +24,7 @@ namespace GameLogic.Binding
     {
         protected readonly IInvoker<T> Invoker;
         protected readonly ICommandParameter<T> CommandParameter;
+
         public ParameterWrapInvoker(IInvoker<T> invoker, ICommandParameter<T> commandParameter)
         {
             this.Invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));

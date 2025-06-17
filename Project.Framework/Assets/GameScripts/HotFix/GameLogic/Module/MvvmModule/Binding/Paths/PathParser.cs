@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Text;
@@ -10,7 +9,7 @@ using GameLogic.Binding.Expressions;
 
 namespace GameLogic.Binding.Paths
 {
-public class PathParser : IPathParser
+    public class PathParser : IPathParser
     {
         public virtual Path Parse(string pathText)
         {
@@ -50,6 +49,7 @@ public class PathParser : IPathParser
                 this.Parse(binary, path);
                 return path;
             }
+
             return path;
             //throw new ArgumentException(string.Format("Invalid expression:{0}", expression));
         }
@@ -69,6 +69,7 @@ public class PathParser : IPathParser
                     if (value is MethodInfo)
                         return (MethodInfo)value;
                 }
+
                 return null;
             }
             else if (target is ConstantExpression)
@@ -77,12 +78,14 @@ public class PathParser : IPathParser
                 if (value is MethodInfo)
                     return (MethodInfo)value;
             }
+
             return null;
         }
 
         private void Parse(Expression expression, Path path)
         {
-            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression || expression is BinaryExpression))
+            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression ||
+                                        expression is BinaryExpression))
                 return;
 
             if (expression is MemberExpression memberExpression)
@@ -119,6 +122,7 @@ public class PathParser : IPathParser
                     {
                         path.PrependIndexed((int)value);
                     }
+
                     if (methodCallExpression.Object != null)
                         this.Parse(methodCallExpression.Object, path);
                     return;
@@ -296,7 +300,8 @@ public class PathParser : IPathParser
 
         protected string ParseMemberName0(Expression expression)
         {
-            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression || expression is UnaryExpression))
+            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression ||
+                                        expression is UnaryExpression))
                 return null;
 
             if (expression is MethodCallExpression methodCallExpression)
@@ -324,6 +329,7 @@ public class PathParser : IPathParser
 
                     return this.ParseMemberName0(memberExpression) + temp;
                 }
+
                 return methodCallExpression.Method.Name;
             }
 
@@ -331,7 +337,8 @@ public class PathParser : IPathParser
             //For<TTarget, TResult>(v => v.OnOpenLoginWindow); Support for method name parsing.
             if (expression is UnaryExpression unaryExpression && unaryExpression.NodeType == ExpressionType.Convert)
             {
-                if (unaryExpression.Operand is MethodCallExpression methodCall && methodCall.Method.Name.Equals("CreateDelegate"))
+                if (unaryExpression.Operand is MethodCallExpression methodCall &&
+                    methodCall.Method.Name.Equals("CreateDelegate"))
                 {
                     var info = this.GetDelegateMethodInfo(methodCall);
                     if (info != null)

@@ -4,7 +4,7 @@ using GameLogic.Binding.Reflection;
 
 namespace GameLogic.Binding.Proxy.Targets.Universal
 {
-public class PropertyTargetProxy : ValueTargetProxyBase
+    public class PropertyTargetProxy : ValueTargetProxyBase
     {
         protected readonly IProxyPropertyInfo propertyInfo;
 
@@ -13,11 +13,20 @@ public class PropertyTargetProxy : ValueTargetProxyBase
             this.propertyInfo = propertyInfo;
         }
 
-        public override Type Type { get { return this.propertyInfo.ValueType; } }
+        public override Type Type
+        {
+            get { return this.propertyInfo.ValueType; }
+        }
 
-        public override TypeCode TypeCode { get { return this.propertyInfo.ValueTypeCode; } }
+        public override TypeCode TypeCode
+        {
+            get { return this.propertyInfo.ValueTypeCode; }
+        }
 
-        public override BindingMode DefaultMode { get { return BindingMode.TwoWay; } }
+        public override BindingMode DefaultMode
+        {
+            get { return BindingMode.TwoWay; }
+        }
 
         public override object GetValue()
         {

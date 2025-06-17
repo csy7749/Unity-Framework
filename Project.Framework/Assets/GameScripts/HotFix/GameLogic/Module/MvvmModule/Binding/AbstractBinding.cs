@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace GameLogic.Binding
 {
-public abstract class AbstractBinding : IBinding
+    public abstract class AbstractBinding : IBinding
     {
         private IBindingContext _bindingContext;
         private WeakReference _target;
@@ -74,7 +74,7 @@ public abstract class AbstractBinding : IBinding
 
         protected abstract void OnDataContextChanged();
 
-        #region IDisposable Support     
+        #region IDisposable Support
 
         protected virtual void Dispose(bool disposing)
         {
@@ -93,6 +93,7 @@ public abstract class AbstractBinding : IBinding
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }
