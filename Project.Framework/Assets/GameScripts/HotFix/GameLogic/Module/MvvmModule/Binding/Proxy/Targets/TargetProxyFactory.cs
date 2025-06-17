@@ -4,7 +4,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Proxy.Targets
 {
-public class TargetProxyFactory : ITargetProxyFactory, ITargetProxyFactoryRegister
+    public class TargetProxyFactory : ITargetProxyFactory, ITargetProxyFactoryRegister
     {
         private List<PriorityFactoryPair> factories = new List<PriorityFactoryPair>();
 
@@ -20,7 +20,9 @@ public class TargetProxyFactory : ITargetProxyFactory, ITargetProxyFactoryRegist
             }
             catch (Exception e)
             {
-                throw new ProxyException(e, "Unable to bind the \"{0}\".An exception occurred while creating a proxy for the \"{1}\" property of class \"{2}\".", description.ToString(), description.TargetName, target.GetType().Name);
+                throw new ProxyException(e,
+                    "Unable to bind the \"{0}\".An exception occurred while creating a proxy for the \"{1}\" property of class \"{2}\".",
+                    description.ToString(), description.TargetName, target.GetType().Name);
             }
         }
 
@@ -38,7 +40,6 @@ public class TargetProxyFactory : ITargetProxyFactory, ITargetProxyFactoryRegist
                     proxy = factory.CreateProxy(target, description);
                     if (proxy != null)
                         return true;
-
                 }
                 catch (MissingMemberException e)
                 {
@@ -51,7 +52,9 @@ public class TargetProxyFactory : ITargetProxyFactory, ITargetProxyFactoryRegist
                 }
                 catch (Exception e)
                 {
-                    Log.Error("An exception occurred when using the \"{0}\" factory to create a proxy for the \"{1}\" property of class \"{2}\";exception:{3}", factory.GetType().Name, description.TargetName, target.GetType().Name, e);
+                    Log.Error(
+                        "An exception occurred when using the \"{0}\" factory to create a proxy for the \"{1}\" property of class \"{2}\";exception:{3}",
+                        factory.GetType().Name, description.TargetName, target.GetType().Name, e);
                 }
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace GameLogic.Binding.Services
 {
-public class ServiceContainer : IServiceContainer, IDisposable
+    public class ServiceContainer : IServiceContainer, IDisposable
     {
         private readonly object _lock = new object();
         private ConcurrentDictionary<string, Entry> nameServiceMappings = new ConcurrentDictionary<string, Entry>();
@@ -153,7 +153,8 @@ public class ServiceContainer : IServiceContainer, IDisposable
             lock (_lock)
             {
                 Entry entry;
-                if (!typeServiceMappings.TryRemove(type, out entry) || entry == null || string.IsNullOrEmpty(entry.Name))
+                if (!typeServiceMappings.TryRemove(type, out entry) || entry == null ||
+                    string.IsNullOrEmpty(entry.Name))
                     return;
 
                 Entry entry2;
@@ -165,6 +166,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
         }
 
         #region IDisposable Support
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -185,6 +187,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
                     this.typeServiceMappings.Clear();
                     this.typeServiceMappings = null;
                 }
+
                 disposed = true;
             }
         }
@@ -199,6 +202,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
 
         internal class Entry : IDisposable
@@ -213,6 +217,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
             public string Name { get; }
             public Type Type { get; }
             public IFactory Factory { get; }
+
             public void Dispose()
             {
                 Factory.Dispose();
@@ -258,6 +263,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
             }
 
             #region IDisposable Support
+
             private bool disposed = false;
 
             protected virtual void Dispose(bool disposing)
@@ -286,6 +292,7 @@ public class ServiceContainer : IServiceContainer, IDisposable
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
+
             #endregion
         }
     }

@@ -13,9 +13,9 @@ namespace GameLogic.Binding.Proxy.Targets.UIElement
 public class ClickableEventProxy : EventTargetProxyBase
     {
         private bool disposed = false;
-        protected ICommand command;/* Command Binding */
-        protected IInvoker invoker;/* Method Binding or Lua Function Binding */
-        protected Delegate handler;/* Delegate Binding */
+        protected ICommand command;
+        protected IInvoker invoker;
+        protected Delegate handler;
 
         protected readonly Clickable clickable;
         protected SendOrPostCallback updateTargetEnableAction;

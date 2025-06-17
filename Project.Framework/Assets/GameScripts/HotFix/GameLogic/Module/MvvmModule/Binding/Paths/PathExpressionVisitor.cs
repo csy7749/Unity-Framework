@@ -9,13 +9,14 @@ using GameLogic.Binding.Expressions;
 
 namespace GameLogic.Binding.Paths
 {
-public class PathExpressionVisitor
+    public class PathExpressionVisitor
     {
-        //private static readonly ILog log = LogManager.GetLogger(typeof(PathExpressionVisitor));
-
         private readonly List<Path> list = new List<Path>();
 
-        public List<Path> Paths { get { return list; } }
+        public List<Path> Paths
+        {
+            get { return list; }
+        }
 
         public virtual Expression Visit(Expression expression)
         {
@@ -108,6 +109,7 @@ public class PathExpressionVisitor
                 List<Expression> list = new List<Expression>() { node.Left, node.Right, node.Conversion };
                 this.Visit(list);
             }
+
             return null;
         }
 
@@ -140,6 +142,7 @@ public class PathExpressionVisitor
                     VisitElementInit(init);
                 }
             }
+
             return Visit(node.NewExpression);
         }
 
@@ -223,13 +226,16 @@ public class PathExpressionVisitor
 
         private IList<Expression> ParseMemberPath(Expression expression, Path path, IList<Path> list)
         {
-            if (expression.NodeType != ExpressionType.MemberAccess && expression.NodeType != ExpressionType.Call && expression.NodeType != ExpressionType.ArrayIndex)
+            if (expression.NodeType != ExpressionType.MemberAccess && expression.NodeType != ExpressionType.Call &&
+                expression.NodeType != ExpressionType.ArrayIndex)
                 throw new Exception();
 
             List<Expression> result = new List<Expression>();
 
             Expression current = expression;
-            while (current != null && (current is MemberExpression || current is MethodCallExpression || current is BinaryExpression || current is ParameterExpression || current is ConstantExpression))
+            while (current != null && (current is MemberExpression || current is MethodCallExpression ||
+                                       current is BinaryExpression || current is ParameterExpression ||
+                                       current is ConstantExpression))
             {
                 if (current is MemberExpression)
                 {

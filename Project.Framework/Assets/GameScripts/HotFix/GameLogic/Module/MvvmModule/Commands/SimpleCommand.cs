@@ -45,9 +45,9 @@ public class SimpleCommand : CommandBase
     public class SimpleCommand<T> : CommandBase, ICommand<T>
     {
         private bool enabled = true;
-        private readonly Action<T> execute;
+        private readonly UnityAction<T> execute;
 
-        public SimpleCommand(Action<T> execute, bool keepStrongRef = false)
+        public SimpleCommand(UnityAction<T> execute, bool keepStrongRef = false)
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");

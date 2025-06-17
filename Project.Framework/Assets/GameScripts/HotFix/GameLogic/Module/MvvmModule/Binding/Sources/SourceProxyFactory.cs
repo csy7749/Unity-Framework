@@ -6,7 +6,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Sources
 {
-public class SourceProxyFactory : ISourceProxyFactory, ISourceProxyFactoryRegistry
+    public class SourceProxyFactory : ISourceProxyFactory, ISourceProxyFactoryRegistry
     {
         private List<PriorityFactoryPair> factories = new List<PriorityFactoryPair>();
 
@@ -25,7 +25,8 @@ public class SourceProxyFactory : ISourceProxyFactory, ISourceProxyFactoryRegist
             }
             catch (Exception e)
             {
-                throw new ProxyException(e, "An exception occurred while creating a proxy for the \"{0}\".", description.ToString());
+                throw new ProxyException(e, "An exception occurred while creating a proxy for the \"{0}\".",
+                    description.ToString());
             }
         }
 
@@ -54,7 +55,9 @@ public class SourceProxyFactory : ISourceProxyFactory, ISourceProxyFactoryRegist
                 }
                 catch (Exception e)
                 {
-                    Log.Error("An exception occurred when using the \"{0}\" factory to create a proxy for the \"{1}\";exception:{2}", factory.GetType().Name, description.ToString(), e);
+                    Log.Error(
+                        "An exception occurred when using the \"{0}\" factory to create a proxy for the \"{1}\";exception:{2}",
+                        factory.GetType().Name, description.ToString(), e);
                 }
             }
 
@@ -86,6 +89,7 @@ public class SourceProxyFactory : ISourceProxyFactory, ISourceProxyFactoryRegist
                 this.factory = factory;
                 this.priority = priority;
             }
+
             public int priority;
             public ISourceProxyFactory factory;
         }

@@ -4,7 +4,7 @@ using GameLogic.Binding.Sources;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class EventNodeProxy : SourceProxyBase, ISourceProxy, IModifiable
+    public class EventNodeProxy : SourceProxyBase, ISourceProxy, IModifiable
     {
         protected readonly IProxyEventInfo eventInfo;
         private bool disposed = false;
@@ -21,7 +21,10 @@ public class EventNodeProxy : SourceProxyBase, ISourceProxy, IModifiable
             this.isStatic = this.eventInfo.IsStatic;
         }
 
-        public override Type Type { get { return this.eventInfo.HandlerType; } }
+        public override Type Type
+        {
+            get { return this.eventInfo.HandlerType; }
+        }
 
         public virtual void SetValue<TValue>(TValue value)
         {

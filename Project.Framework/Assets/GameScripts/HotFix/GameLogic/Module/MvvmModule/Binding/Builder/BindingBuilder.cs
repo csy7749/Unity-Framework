@@ -20,6 +20,7 @@ namespace GameLogic.Binding.Builder
         {
             this.description.TargetType = typeof(TTarget);
         }
+
         public BindingBuilder<TTarget, TSource> From(string targetName)
         {
             this.description.TargetName = targetName;
@@ -42,7 +43,8 @@ namespace GameLogic.Binding.Builder
             return this;
         }
 
-        public BindingBuilder<TTarget, TSource> From<TResult>(Expression<Func<TTarget, TResult>> memberExpression, string updateTrigger)
+        public BindingBuilder<TTarget, TSource> From<TResult>(Expression<Func<TTarget, TResult>> memberExpression,
+            string updateTrigger)
         {
             string targetName = this.ParseMemberName(memberExpression);
             this.description.TargetName = targetName;
@@ -50,7 +52,9 @@ namespace GameLogic.Binding.Builder
             return this;
         }
 
-        public BindingBuilder<TTarget, TSource> From<TResult, TEvent>(Expression<Func<TTarget, TResult>> memberExpression, Expression<Func<TTarget, TEvent>> updateTriggerExpression)
+        public BindingBuilder<TTarget, TSource> From<TResult, TEvent>(
+            Expression<Func<TTarget, TResult>> memberExpression,
+            Expression<Func<TTarget, TEvent>> updateTriggerExpression)
         {
             string targetName = this.ParseMemberName(memberExpression);
             string updateTrigger = this.ParseMemberName(updateTriggerExpression);
@@ -59,7 +63,8 @@ namespace GameLogic.Binding.Builder
             return this;
         }
 
-        public BindingBuilder<TTarget, TSource> From(Expression<Func<TTarget, EventHandler<InteractionEventArgs>>> memberExpression)
+        public BindingBuilder<TTarget, TSource> From(
+            Expression<Func<TTarget, EventHandler<InteractionEventArgs>>> memberExpression)
         {
             string targetName = this.ParseMemberName(memberExpression);
             this.description.TargetName = targetName;
@@ -69,7 +74,8 @@ namespace GameLogic.Binding.Builder
         }
 
 #if UNITY_2019_1_OR_NEWER
-        public BindingBuilder<TTarget, TSource> From<TResult>(Expression<Func<TTarget, TResult>> memberExpression, Expression<Func<TTarget, Func<EventCallback<ChangeEvent<TResult>>, bool>>> updateTriggerExpression)
+        public BindingBuilder<TTarget, TSource> From<TResult>(Expression<Func<TTarget, TResult>> memberExpression,
+            Expression<Func<TTarget, Func<EventCallback<ChangeEvent<TResult>>, bool>>> updateTriggerExpression)
         {
             string targetName = this.ParseMemberName(memberExpression);
             string updateTrigger = this.ParseMemberName(updateTriggerExpression);
@@ -78,7 +84,8 @@ namespace GameLogic.Binding.Builder
             return this;
         }
 
-        public BindingBuilder<TTarget, TSource> From<TResult>(Expression<Func<TTarget, Func<EventCallback<ChangeEvent<TResult>>, bool>>> memberExpression)
+        public BindingBuilder<TTarget, TSource> From<TResult>(
+            Expression<Func<TTarget, Func<EventCallback<ChangeEvent<TResult>>, bool>>> memberExpression)
         {
             string targetName = this.ParseMemberName(memberExpression);
             this.description.TargetName = targetName;
@@ -166,6 +173,7 @@ namespace GameLogic.Binding.Builder
                     if (value is MethodInfo)
                         return (MethodInfo)value;
                 }
+
                 return null;
             }
             else if (target is ConstantExpression)
@@ -174,6 +182,7 @@ namespace GameLogic.Binding.Builder
                 if (value is MethodInfo)
                     return (MethodInfo)value;
             }
+
             return null;
         }
 
@@ -252,13 +261,15 @@ namespace GameLogic.Binding.Builder
                 this.Parse(binary, path);
                 return path;
             }
+
             return path;
             //throw new ArgumentException(string.Format("Invalid expression:{0}", expression));
         }
 
         private void Parse(Expression expression, Path path)
         {
-            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression || expression is BinaryExpression))
+            if (expression == null || !(expression is MemberExpression || expression is MethodCallExpression ||
+                                        expression is BinaryExpression))
                 return;
 
             if (expression is MemberExpression memberExpression)
@@ -295,6 +306,7 @@ namespace GameLogic.Binding.Builder
                     {
                         path.PrependIndexed((int)value);
                     }
+
                     if (methodCallExpression.Object != null)
                         this.Parse(methodCallExpression.Object, path);
                     return;
@@ -588,9 +600,6 @@ namespace GameLogic.Binding.Builder
             this.SetScopeKey(scopeKey);
             return this;
         }
-        
-        
-        
     }
 
     public class BindingBuilder : BindingBuilderBase
@@ -671,7 +680,5 @@ namespace GameLogic.Binding.Builder
             this.SetScopeKey(scopeKey);
             return this;
         }
-
-
     }
 }

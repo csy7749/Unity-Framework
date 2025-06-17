@@ -11,9 +11,10 @@ using UnityFramework;
 
 namespace GameLogic
 {
-public static class UIWindowBindingExtension
+    public static class UIWindowBindingExtension
     {
         private static IBinder binder;
+
         public static IBinder Binder
         {
             get
@@ -22,7 +23,8 @@ public static class UIWindowBindingExtension
                     binder = Context.GetApplicationContext().GetService<IBinder>();
 
                 if (binder == null)
-                    throw new Exception("Data binding service is not initialized,please create a BindingServiceBundle service before using it.");
+                    throw new Exception(
+                        "Data binding service is not initialized,please create a BindingServiceBundle service before using it.");
 
                 return binder;
             }
@@ -37,7 +39,9 @@ public static class UIWindowBindingExtension
             {
                 uiWindow.gameObject.AddComponent<BindingContextLifecycle>();
             }
-            BindingContextLifecycle bindingContextLifecycle = uiWindow.transform.GetComponent<BindingContextLifecycle>();
+
+            BindingContextLifecycle bindingContextLifecycle =
+                uiWindow.transform.GetComponent<BindingContextLifecycle>();
             if (bindingContextLifecycle == null)
                 bindingContextLifecycle = uiWindow.gameObject.AddComponent<BindingContextLifecycle>();
 
@@ -47,23 +51,27 @@ public static class UIWindowBindingExtension
                 bindingContext = new BindingContext(uiWindow, Binder);
                 bindingContextLifecycle.BindingContext = bindingContext;
             }
+
             return bindingContext;
         }
 
-        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow) where TUIWindow : UIWindow
+        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow)
+            where TUIWindow : UIWindow
         {
             IBindingContext context = UIWindow.BindingContext();
             return new BindingSet<TUIWindow, TSource>(context, UIWindow);
         }
 
-        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow, TSource dataContext) where TUIWindow : UIWindow
+        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow,
+            TSource dataContext) where TUIWindow : UIWindow
         {
             IBindingContext context = UIWindow.BindingContext();
             context.DataContext = dataContext;
             return new BindingSet<TUIWindow, TSource>(context, UIWindow);
         }
 
-        public static BindingSet<TUIWindow> CreateBindingSet<TUIWindow>(this TUIWindow UIWindow) where TUIWindow : UIWindow
+        public static BindingSet<TUIWindow> CreateBindingSet<TUIWindow>(this TUIWindow UIWindow)
+            where TUIWindow : UIWindow
         {
             IBindingContext context = UIWindow.BindingContext();
             return new BindingSet<TUIWindow>(context, UIWindow);
@@ -113,17 +121,20 @@ public static class UIWindowBindingExtension
             UIWindow.BindingContext().Add(bindings, key);
         }
 
-        public static void AddBinding(this UIWindow UIWindow, object target, BindingDescription bindingDescription, object key = null)
+        public static void AddBinding(this UIWindow UIWindow, object target, BindingDescription bindingDescription,
+            object key = null)
         {
             UIWindow.BindingContext().Add(target, bindingDescription, key);
         }
 
-        public static void AddBindings(this UIWindow UIWindow, object target, IEnumerable<BindingDescription> bindingDescriptions, object key = null)
+        public static void AddBindings(this UIWindow UIWindow, object target,
+            IEnumerable<BindingDescription> bindingDescriptions, object key = null)
         {
             UIWindow.BindingContext().Add(target, bindingDescriptions, key);
         }
 
-        public static void AddBindings(this UIWindow UIWindow, IDictionary<object, IEnumerable<BindingDescription>> bindingMap, object key = null)
+        public static void AddBindings(this UIWindow UIWindow,
+            IDictionary<object, IEnumerable<BindingDescription>> bindingMap, object key = null)
         {
             if (bindingMap == null)
                 return;

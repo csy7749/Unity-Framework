@@ -1,6 +1,4 @@
-﻿
-
-using GameLogic.Binding.Binders;
+﻿using GameLogic.Binding.Binders;
 using GameLogic.Binding.Converters;
 using GameLogic.Binding.Paths;
 using GameLogic.Binding.Proxy.Sources.Expressions;
@@ -16,11 +14,10 @@ using UnityFramework;
 
 namespace GameLogic.Binding
 {
-public class BindingServiceBundle : AbstractServiceBundle
+    public class BindingServiceBundle : AbstractServiceBundle
     {
         public BindingServiceBundle(IServiceContainer container) : base(container)
         {
-            
         }
 
         protected override void OnStart(IServiceContainer container)
@@ -29,15 +26,15 @@ public class BindingServiceBundle : AbstractServiceBundle
             ExpressionPathFinder expressionPathFinder = new ExpressionPathFinder();
             ConverterRegistry converterRegistry = new ConverterRegistry();
 
-             ObjectSourceProxyFactory objectSourceProxyFactory = new ObjectSourceProxyFactory();
-             objectSourceProxyFactory.Register(new UniversalNodeProxyFactory(), 0);
+            ObjectSourceProxyFactory objectSourceProxyFactory = new ObjectSourceProxyFactory();
+            objectSourceProxyFactory.Register(new UniversalNodeProxyFactory(), 0);
 
-             SourceProxyFactory sourceFactory = new SourceProxyFactory();
+            SourceProxyFactory sourceFactory = new SourceProxyFactory();
             sourceFactory.Register(new LiteralSourceProxyFactory(), 0);
             sourceFactory.Register(new ExpressionSourceProxyFactory(sourceFactory, expressionPathFinder), 1);
             sourceFactory.Register(objectSourceProxyFactory, 2);
 
-          TargetProxyFactory targetFactory = new TargetProxyFactory();
+            TargetProxyFactory targetFactory = new TargetProxyFactory();
             targetFactory.Register(new UniversalTargetProxyFactory(pathParser), 0);
             targetFactory.Register(new UnityTargetProxyFactory(), 10);
 #if UNITY_2019_1_OR_NEWER

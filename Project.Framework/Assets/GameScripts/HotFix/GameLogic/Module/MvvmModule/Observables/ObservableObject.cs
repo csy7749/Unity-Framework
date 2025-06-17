@@ -9,11 +9,13 @@ using UnityFramework;
 
 namespace GameLogic.Observables
 {
-[Serializable]
+    [Serializable]
     public abstract class ObservableObject : INotifyPropertyChanged
     {
         private static readonly PropertyChangedEventArgs NULL_EVENT_ARGS = new PropertyChangedEventArgs(null);
-        private static readonly Dictionary<string, PropertyChangedEventArgs> PROPERTY_EVENT_ARGS = new Dictionary<string, PropertyChangedEventArgs>();
+
+        private static readonly Dictionary<string, PropertyChangedEventArgs> PROPERTY_EVENT_ARGS =
+            new Dictionary<string, PropertyChangedEventArgs>();
 
         private static PropertyChangedEventArgs GetPropertyChangedEventArgs(string propertyName)
         {
@@ -31,10 +33,23 @@ namespace GameLogic.Observables
 
         private readonly object _lock = new object();
         private PropertyChangedEventHandler propertyChanged;
+
         public event PropertyChangedEventHandler PropertyChanged
         {
-            add { lock (_lock) { this.propertyChanged += value; } }
-            remove { lock (_lock) { this.propertyChanged -= value; } }
+            add
+            {
+                lock (_lock)
+                {
+                    this.propertyChanged += value;
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    this.propertyChanged -= value;
+                }
+            }
         }
 
         //[Conditional("DEBUG")]
@@ -116,7 +131,8 @@ namespace GameLogic.Observables
         protected void VerifyPropertyType(Type type)
         {
             if (type.IsValueType)
-                Log.Debug("Please use Set(field,newValue) instead of Set<T>(field,newValue) to avoid value types being boxed.");
+                Log.Debug(
+                    "Please use Set(field,newValue) instead of Set<T>(field,newValue) to avoid value types being boxed.");
         }
 
         /// <summary>
@@ -186,7 +202,8 @@ namespace GameLogic.Observables
         /// <param name="propertyName"></param>
         /// <returns></returns>
         [Obsolete]
-        protected bool SetValue<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null) where T : IEquatable<T>
+        protected bool SetValue<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+            where T : IEquatable<T>
         {
             if ((field != null && field.Equals(newValue)) || (field == null && newValue == null))
                 return false;

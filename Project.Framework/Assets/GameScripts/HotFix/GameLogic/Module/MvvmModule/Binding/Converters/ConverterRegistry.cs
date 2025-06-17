@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using GameLogic.Binding.Registry;
 
 namespace GameLogic.Binding.Converters
@@ -24,7 +23,10 @@ namespace GameLogic.Binding.Converters
                     if (lookups[key] is IDisposable disposable)
                         disposable.Dispose();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
+
                 this.lookups.Remove(key);
             }
         }

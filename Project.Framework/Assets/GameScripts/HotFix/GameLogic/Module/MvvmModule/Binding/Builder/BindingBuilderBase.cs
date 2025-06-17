@@ -11,10 +11,8 @@ using GameLogic.Binding.Proxy.Text;
 
 namespace GameLogic.Binding.Builder
 {
-public class BindingBuilderBase : IBindingBuilder
+    public class BindingBuilderBase : IBindingBuilder
     {
-        //private static readonly ILog log = LogManager.GetLogger(typeof(BindingBuilderBase));
-
         private bool builded = false;
         private object scopeKey;
         private object target;
@@ -23,16 +21,12 @@ public class BindingBuilderBase : IBindingBuilder
 
         private IPathParser pathParser;
         private IConverterRegistry converterRegistry;
-
-        // protected IPathParser PathParser { get { return this.pathParser ?? (this.pathParser = Context.GetApplicationContext().GetService<IPathParser>()); } }
-
-        // protected IConverterRegistry ConverterRegistry { get { return this.converterRegistry ?? (this.converterRegistry = Context.GetApplicationContext().GetService<IConverterRegistry>()); } }
-
-
+        
         public BindingBuilderBase(IBindingContext context, object target)
         {
             if (target == null)
-                throw new ArgumentNullException("target", "Failed to create data binding, the bound UI control cannot be null.");
+                throw new ArgumentNullException("target",
+                    "Failed to create data binding, the bound UI control cannot be null.");
             if (context == null)
                 throw new ArgumentNullException("context");
 
@@ -66,6 +60,7 @@ public class BindingBuilderBase : IBindingBuilder
 
         protected void SetMemberPath(string pathText)
         {
+            //暂时关闭
             // Path path = this.PathParser.Parse(pathText);
             // this.SetMemberPath(path);
         }
@@ -89,6 +84,7 @@ public class BindingBuilderBase : IBindingBuilder
 
         protected void SetStaticMemberPath(string pathText)
         {
+            //暂时关闭
             // Path path = this.PathParser.ParseStaticPath(pathText);
             // this.SetStaticMemberPath(path);
         }
@@ -146,19 +142,20 @@ public class BindingBuilderBase : IBindingBuilder
         protected void SetCommandParameter(object parameter)
         {
             this.description.CommandParameter = parameter;
-            // this.description.Converter = new ParameterWrapConverter(new ConstantCommandParameter(parameter));
+            this.description.Converter = new ParameterConverter(new ConstantCommandParameter(parameter));
         }
 
         protected void SetCommandParameter<T>(T parameter)
         {
             this.description.CommandParameter = parameter;
-            // this.description.Converter = new ParameterWrapConverter<T>(new ConstantCommandParameter<T>(parameter));
+            this.description.Converter = new ParameterConverter<T>(new ConstantCommandParameter<T>(parameter));
         }
 
         protected void SetCommandParameter<TParam>(Func<TParam> parameter)
         {
             this.description.CommandParameter = parameter;
-            // this.description.Converter = new ParameterWrapConverter<TParam>(new ExpressionCommandParameter<TParam>(parameter));
+            this.description.Converter =
+                new ParameterConverter<TParam>(new ExpressionCommandParameter<TParam>(parameter));
         }
 
         protected void SetSourceDescription(SourceDescription source)
@@ -210,7 +207,8 @@ public class BindingBuilderBase : IBindingBuilder
             }
             catch (Exception e)
             {
-                throw new BindingException(e, "An exception occurred while building the data binding for {0}.", this.description.ToString());
+                throw new BindingException(e, "An exception occurred while building the data binding for {0}.",
+                    this.description.ToString());
             }
         }
     }

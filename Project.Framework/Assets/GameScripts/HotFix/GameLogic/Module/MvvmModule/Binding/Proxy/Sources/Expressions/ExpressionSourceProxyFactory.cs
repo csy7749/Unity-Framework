@@ -7,17 +7,19 @@ using GameLogic.Binding.Sources;
 
 namespace GameLogic.Binding.Proxy.Sources.Expressions
 {
-public class ExpressionSourceProxyFactory : TypedSourceProxyFactory<ExpressionSourceDescription>
+    public class ExpressionSourceProxyFactory : TypedSourceProxyFactory<ExpressionSourceDescription>
     {
         private ISourceProxyFactory factory;
         private IExpressionPathFinder pathFinder;
+
         public ExpressionSourceProxyFactory(ISourceProxyFactory factory, IExpressionPathFinder pathFinder)
         {
             this.factory = factory;
             this.pathFinder = pathFinder;
         }
 
-        protected override bool TryCreateProxy(object source, ExpressionSourceDescription description, out ISourceProxy proxy)
+        protected override bool TryCreateProxy(object source, ExpressionSourceDescription description,
+            out ISourceProxy proxy)
         {
             proxy = null;
             var expression = description.Expression;
@@ -28,14 +30,16 @@ public class ExpressionSourceProxyFactory : TypedSourceProxyFactory<ExpressionSo
                 if (!path.IsStatic)
                 {
                     if (source == null)
-                        continue;//ignore the path
+                        continue; //ignore the path
 
                     MemberNode memberNode = path[0] as MemberNode;
-                    if (memberNode != null && memberNode.MemberInfo != null && !memberNode.MemberInfo.DeclaringType.IsAssignableFrom(source.GetType()))
-                        continue;//ignore the path
+                    if (memberNode != null && memberNode.MemberInfo != null &&
+                        !memberNode.MemberInfo.DeclaringType.IsAssignableFrom(source.GetType()))
+                        continue; //ignore the path
                 }
 
-                ISourceProxy innerProxy = this.factory.CreateProxy(source, new ObjectSourceDescription() { Path = path });
+                ISourceProxy innerProxy =
+                    this.factory.CreateProxy(source, new ObjectSourceDescription() { Path = path });
                 if (innerProxy != null)
                     list.Add(innerProxy);
             }
@@ -51,18 +55,21 @@ public class ExpressionSourceProxyFactory : TypedSourceProxyFactory<ExpressionSo
                 Type parameterType = del.ParameterType();
                 if (parameterType != null)
                 {
-                    proxy = (ISourceProxy)Activator.CreateInstance(typeof(ExpressionSourceProxy<,>).MakeGenericType(parameterType, returnType), source, del, list);
+                    proxy = (ISourceProxy)Activator.CreateInstance(
+                        typeof(ExpressionSourceProxy<,>).MakeGenericType(parameterType, returnType), source, del, list);
                 }
                 else
                 {
-                    proxy = (ISourceProxy)Activator.CreateInstance(typeof(ExpressionSourceProxy<>).MakeGenericType(returnType), del, list);
+                    proxy = (ISourceProxy)Activator.CreateInstance(
+                        typeof(ExpressionSourceProxy<>).MakeGenericType(returnType), del, list);
                 }
             }
             catch (Exception)
             {
                 //JIT Exception
                 Func<object[], object> del = expression.DynamicCompile();
-                proxy = new ExpressionSourceProxy(description.IsStatic ? null : source, del, description.ReturnType, list);
+                proxy = new ExpressionSourceProxy(description.IsStatic ? null : source, del, description.ReturnType,
+                    list);
             }
 #endif
             if (proxy != null)

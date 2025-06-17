@@ -7,9 +7,10 @@ using GameLogic.Observables;
 
 namespace GameLogic.Binding.Proxy.Targets.Universal
 {
-public class UniversalTargetProxyFactory : ITargetProxyFactory
+    public class UniversalTargetProxyFactory : ITargetProxyFactory
     {
         private IPathParser pathParser;
+
         public UniversalTargetProxyFactory(IPathParser pathParser)
         {
             this.pathParser = pathParser;
@@ -17,7 +18,9 @@ public class UniversalTargetProxyFactory : ITargetProxyFactory
 
         public ITargetProxy CreateProxy(object target, BindingDescription description)
         {
-            IProxyType type = description.TargetType != null ? description.TargetType.AsProxy() : target.GetType().AsProxy();
+            IProxyType type = description.TargetType != null
+                ? description.TargetType.AsProxy()
+                : target.GetType().AsProxy();
             if (TargetNameUtil.IsCollection(description.TargetName))
                 return CreateItemProxy(target, type, description);
 
@@ -36,7 +39,8 @@ public class UniversalTargetProxyFactory : ITargetProxyFactory
                 {
                     object observableValue = propertyInfo.GetValue(target);
                     if (observableValue == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".", propertyInfo.Name, propertyInfo.DeclaringType.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".",
+                            propertyInfo.Name, propertyInfo.DeclaringType.Name));
 
                     return new ObservableTargetProxy(target, (IObservableProperty)observableValue);
                 }
@@ -61,7 +65,8 @@ public class UniversalTargetProxyFactory : ITargetProxyFactory
                 {
                     object observableValue = fieldInfo.GetValue(target);
                     if (observableValue == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" field is null in class \"{1}\".", fieldInfo.Name, fieldInfo.DeclaringType.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" field is null in class \"{1}\".",
+                            fieldInfo.Name, fieldInfo.DeclaringType.Name));
 
                     return new ObservableTargetProxy(target, (IObservableProperty)observableValue);
                 }
@@ -102,13 +107,16 @@ public class UniversalTargetProxyFactory : ITargetProxyFactory
                 indexNode = (IndexedNode)path[0];
                 collectionTarget = target;
             }
+
             if (path.Count == 2)
             {
                 indexNode = (IndexedNode)path[1];
                 MemberNode memberNode = (MemberNode)path[0];
                 collectionTarget = GetCollectionTarget(type, target, memberNode.Name);
                 if (collectionTarget == null)
-                    throw new NullReferenceException(string.Format("Unable to bind the \"{0}\". The value of the Property or Field named \"{1}\" cannot be null.", description, memberNode.Name));
+                    throw new NullReferenceException(string.Format(
+                        "Unable to bind the \"{0}\". The value of the Property or Field named \"{1}\" cannot be null.",
+                        description, memberNode.Name));
             }
 
             IProxyType proxyType = collectionTarget.GetType().AsProxy();
@@ -124,16 +132,19 @@ public class UniversalTargetProxyFactory : ITargetProxyFactory
             {
                 return new ItemTargetProxy<string>(collectionTarget, stringNode.Value, itemInfo);
             }
+
             return null;
         }
 
         private static object GetCollectionTarget(IProxyType type, object target, string name)
         {
-            IProxyPropertyInfo propertyInfo = type.GetProperty(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            IProxyPropertyInfo propertyInfo = type.GetProperty(name,
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (propertyInfo != null)
                 return propertyInfo.GetValue(target);
 
-            IProxyFieldInfo fieldInfo = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            IProxyFieldInfo fieldInfo =
+                type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (fieldInfo != null)
                 return fieldInfo.GetValue(target);
 

@@ -5,7 +5,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Contexts
 {
-public class BindingContext : IBindingContext
+    public class BindingContext : IBindingContext
     {
         private readonly string DEFAULT_KEY = "_KEY_";
         private readonly Dictionary<object, List<IBinding>> bindings = new Dictionary<object, List<IBinding>>();
@@ -18,8 +18,20 @@ public class BindingContext : IBindingContext
 
         public event EventHandler DataContextChanged
         {
-            add { lock (_lock) { this.dataContextChanged += value; } }
-            remove { lock (_lock) { this.dataContextChanged -= value; } }
+            add
+            {
+                lock (_lock)
+                {
+                    this.dataContextChanged += value;
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    this.dataContextChanged -= value;
+                }
+            }
         }
 
         public BindingContext(IBinder binder) : this(null, binder, (object)null)
@@ -37,11 +49,14 @@ public class BindingContext : IBindingContext
             this.DataContext = dataContext;
         }
 
-        public BindingContext(object owner, IBinder binder, IDictionary<object, IEnumerable<BindingDescription>> firstBindings) : this(owner, binder, null, firstBindings)
+        public BindingContext(object owner, IBinder binder,
+            IDictionary<object, IEnumerable<BindingDescription>> firstBindings) : this(owner, binder, null,
+            firstBindings)
         {
         }
 
-        public BindingContext(object owner, IBinder binder, object dataContext, IDictionary<object, IEnumerable<BindingDescription>> firstBindings)
+        public BindingContext(object owner, IBinder binder, object dataContext,
+            IDictionary<object, IEnumerable<BindingDescription>> firstBindings)
         {
             this.owner = owner;
             this.binder = binder;
@@ -61,7 +76,10 @@ public class BindingContext : IBindingContext
             get { return this.binder; }
         }
 
-        public object Owner { get { return this.owner; } }
+        public object Owner
+        {
+            get { return this.owner; }
+        }
 
         public object DataContext
         {
@@ -197,6 +215,7 @@ public class BindingContext : IBindingContext
         }
 
         #region IDisposable Support
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -209,6 +228,7 @@ public class BindingContext : IBindingContext
                     this.owner = null;
                     this.binder = null;
                 }
+
                 disposed = true;
             }
         }
@@ -223,6 +243,7 @@ public class BindingContext : IBindingContext
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

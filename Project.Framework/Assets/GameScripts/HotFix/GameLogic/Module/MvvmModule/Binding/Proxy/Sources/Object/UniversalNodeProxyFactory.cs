@@ -9,7 +9,7 @@ using GameLogic.Interactivity;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class UniversalNodeProxyFactory : INodeProxyFactory
+    public class UniversalNodeProxyFactory : INodeProxyFactory
     {
         public ISourceProxy Create(object source, PathToken token)
         {
@@ -30,7 +30,9 @@ public class UniversalNodeProxyFactory : INodeProxyFactory
             {
                 IProxyType proxyType = type.AsProxy();
                 if (!(source is ICollection))
-                    throw new ProxyException("Type \"{0}\" is not a collection and cannot be accessed by index \"{1}\".", type.Name, node.ToString());
+                    throw new ProxyException(
+                        "Type \"{0}\" is not a collection and cannot be accessed by index \"{1}\".", type.Name,
+                        node.ToString());
 
                 var itemInfo = proxyType.GetItem();
                 if (itemInfo == null)
@@ -149,7 +151,8 @@ public class UniversalNodeProxyFactory : INodeProxyFactory
                 {
                     object observableValue = proxyPropertyInfo.GetValue(null);
                     if (observableValue == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".", propertyInfo.Name, type.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".",
+                            propertyInfo.Name, type.Name));
 
                     return new ObservableNodeProxy((IObservableProperty)observableValue);
                 }
@@ -157,7 +160,8 @@ public class UniversalNodeProxyFactory : INodeProxyFactory
                 {
                     object request = proxyPropertyInfo.GetValue(null);
                     if (request == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".", propertyInfo.Name, type.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".",
+                            propertyInfo.Name, type.Name));
 
                     return new InteractionNodeProxy((IInteractionRequest)request);
                 }
@@ -176,7 +180,8 @@ public class UniversalNodeProxyFactory : INodeProxyFactory
                 {
                     object observableValue = proxyFieldInfo.GetValue(null);
                     if (observableValue == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".", fieldInfo.Name, type.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".",
+                            fieldInfo.Name, type.Name));
 
                     return new ObservableNodeProxy((IObservableProperty)observableValue);
                 }
@@ -184,7 +189,8 @@ public class UniversalNodeProxyFactory : INodeProxyFactory
                 {
                     object request = proxyFieldInfo.GetValue(null);
                     if (request == null)
-                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".", fieldInfo.Name, type.Name));
+                        throw new NullReferenceException(string.Format("The \"{0}\" property is null in class \"{1}\".",
+                            fieldInfo.Name, type.Name));
 
                     return new InteractionNodeProxy((IInteractionRequest)request);
                 }

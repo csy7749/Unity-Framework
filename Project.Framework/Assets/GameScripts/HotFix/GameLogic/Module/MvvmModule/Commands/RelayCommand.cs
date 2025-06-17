@@ -2,7 +2,7 @@
 
 namespace GameLogic.Commands
 {
-public class RelayCommand : CommandBase
+    public class RelayCommand : CommandBase
     {
         private readonly Action execute;
         private readonly Func<bool> canExecute;

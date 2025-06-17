@@ -17,9 +17,15 @@ namespace GameLogic.Binding.Proxy.Sources.Object
             this.fieldInfo = fieldInfo;
         }
 
-        public override Type Type { get { return fieldInfo.ValueType; } }
+        public override Type Type
+        {
+            get { return fieldInfo.ValueType; }
+        }
 
-        public override TypeCode TypeCode { get { return fieldInfo.ValueTypeCode; } }
+        public override TypeCode TypeCode
+        {
+            get { return fieldInfo.ValueTypeCode; }
+        }
 
         public virtual object GetValue()
         {

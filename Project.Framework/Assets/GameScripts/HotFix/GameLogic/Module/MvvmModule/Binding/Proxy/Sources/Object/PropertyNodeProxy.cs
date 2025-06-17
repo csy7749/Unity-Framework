@@ -6,7 +6,7 @@ using UnityFramework;
 
 namespace GameLogic.Binding.Proxy.Sources.Object
 {
-public class PropertyNodeProxy : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
+    public class PropertyNodeProxy : NotifiableSourceProxyBase, IObtainable, IModifiable, INotifiable
     {
         protected IProxyPropertyInfo propertyInfo;
 
@@ -28,13 +28,21 @@ public class PropertyNodeProxy : NotifiableSourceProxyBase, IObtainable, IModifi
             }
             else
             {
-                Log.Error("The type {0} does not inherit the INotifyPropertyChanged interface and does not support the PropertyChanged event.", propertyInfo.DeclaringType.Name);
+                Log.Error(
+                    "The type {0} does not inherit the INotifyPropertyChanged interface and does not support the PropertyChanged event.",
+                    propertyInfo.DeclaringType.Name);
             }
         }
 
-        public override Type Type { get { return propertyInfo.ValueType; } }
+        public override Type Type
+        {
+            get { return propertyInfo.ValueType; }
+        }
 
-        public override TypeCode TypeCode { get { return propertyInfo.ValueTypeCode; } }
+        public override TypeCode TypeCode
+        {
+            get { return propertyInfo.ValueTypeCode; }
+        }
 
         protected virtual void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -74,7 +82,8 @@ public class PropertyNodeProxy : NotifiableSourceProxyBase, IObtainable, IModifi
             this.propertyInfo.SetValue(source, value);
         }
 
-        #region IDisposable Support    
+        #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected override void Dispose(bool disposing)
@@ -86,10 +95,12 @@ public class PropertyNodeProxy : NotifiableSourceProxyBase, IObtainable, IModifi
                     var sourceNotify = this.source as INotifyPropertyChanged;
                     sourceNotify.PropertyChanged -= OnPropertyChanged;
                 }
+
                 disposedValue = true;
                 base.Dispose(disposing);
             }
         }
+
         #endregion
     }
 }

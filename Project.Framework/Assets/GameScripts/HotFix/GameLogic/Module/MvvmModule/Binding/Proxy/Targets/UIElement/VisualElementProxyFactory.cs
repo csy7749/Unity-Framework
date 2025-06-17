@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Reflection;
 using GameLogic.Binding.Reflection;
 using GameLogic.Observables;
@@ -8,9 +7,10 @@ using UnityEngine.UIElements;
 #if UNITY_2019_1_OR_NEWER
 namespace GameLogic.Binding.Proxy.Targets.UIElement
 {
-public class VisualElementProxyFactory : ITargetProxyFactory
+    public class VisualElementProxyFactory : ITargetProxyFactory
     {
         private static readonly string REGISTER_VALUE_CHANGED_CALLBACK = "RegisterValueChangedCallback";
+
         public ITargetProxy CreateProxy(object target, BindingDescription description)
         {
             if (TargetNameUtil.IsCollection(description.TargetName))
@@ -22,7 +22,9 @@ public class VisualElementProxyFactory : ITargetProxyFactory
             if (REGISTER_VALUE_CHANGED_CALLBACK.Equals(description.TargetName))
                 return this.CreateValueChangedEventProxy(target);
 
-            IProxyType type = description.TargetType != null ? description.TargetType.AsProxy() : target.GetType().AsProxy();
+            IProxyType type = description.TargetType != null
+                ? description.TargetType.AsProxy()
+                : target.GetType().AsProxy();
             IProxyMemberInfo memberInfo = type.GetMember(description.TargetName);
             if (memberInfo == null)
                 memberInfo = type.GetMember(description.TargetName, BindingFlags.Instance | BindingFlags.NonPublic);
@@ -47,7 +49,8 @@ public class VisualElementProxyFactory : ITargetProxyFactory
                 }
 
                 //Other Property Type
-                if (!REGISTER_VALUE_CHANGED_CALLBACK.Equals(description.UpdateTrigger))/* by UniversalTargetProxyFactory */
+                if (!REGISTER_VALUE_CHANGED_CALLBACK.Equals(description
+                        .UpdateTrigger)) /* by UniversalTargetProxyFactory */
                     return null;
 
                 return CreateVisualElementPropertyProxy(target, propertyInfo);
@@ -70,7 +73,8 @@ public class VisualElementProxyFactory : ITargetProxyFactory
                 }
 
                 //Other Property Type
-                if (!REGISTER_VALUE_CHANGED_CALLBACK.Equals(description.UpdateTrigger))/* by UniversalTargetProxyFactory */
+                if (!REGISTER_VALUE_CHANGED_CALLBACK.Equals(description
+                        .UpdateTrigger)) /* by UniversalTargetProxyFactory */
                     return null;
 
                 return CreateVisualElementFieldProxy(target, fieldInfo);
@@ -105,9 +109,12 @@ public class VisualElementProxyFactory : ITargetProxyFactory
                 case TypeCode.Single: return new ValueChangedEventProxy<float>((INotifyValueChanged<float>)target);
                 case TypeCode.Double: return new ValueChangedEventProxy<double>((INotifyValueChanged<double>)target);
                 case TypeCode.Decimal: return new ValueChangedEventProxy<decimal>((INotifyValueChanged<decimal>)target);
-                case TypeCode.DateTime: return new ValueChangedEventProxy<DateTime>((INotifyValueChanged<DateTime>)target);
+                case TypeCode.DateTime:
+                    return new ValueChangedEventProxy<DateTime>((INotifyValueChanged<DateTime>)target);
                 case TypeCode.Object:
-                default: return (ITargetProxy)Activator.CreateInstance(typeof(ValueChangedEventProxy<>).MakeGenericType(type), target);
+                default:
+                    return (ITargetProxy)Activator.CreateInstance(
+                        typeof(ValueChangedEventProxy<>).MakeGenericType(type), target);
             }
         }
 
@@ -132,7 +139,10 @@ public class VisualElementProxyFactory : ITargetProxyFactory
                 case TypeCode.Decimal: return new VisualElementPropertyProxy<decimal>(target, propertyInfo);
                 case TypeCode.DateTime: return new VisualElementPropertyProxy<DateTime>(target, propertyInfo);
                 case TypeCode.Object:
-                default: return (ITargetProxy)Activator.CreateInstance(typeof(VisualElementPropertyProxy<>).MakeGenericType(propertyInfo.ValueType), target, propertyInfo);
+                default:
+                    return (ITargetProxy)Activator.CreateInstance(
+                        typeof(VisualElementPropertyProxy<>).MakeGenericType(propertyInfo.ValueType), target,
+                        propertyInfo);
             }
         }
 
@@ -157,7 +167,9 @@ public class VisualElementProxyFactory : ITargetProxyFactory
                 case TypeCode.Decimal: return new VisualElementFieldProxy<decimal>(target, fieldInfo);
                 case TypeCode.DateTime: return new VisualElementFieldProxy<DateTime>(target, fieldInfo);
                 case TypeCode.Object:
-                default: return (ITargetProxy)Activator.CreateInstance(typeof(VisualElementFieldProxy<>).MakeGenericType(fieldInfo.ValueType), target, fieldInfo);
+                default:
+                    return (ITargetProxy)Activator.CreateInstance(
+                        typeof(VisualElementFieldProxy<>).MakeGenericType(fieldInfo.ValueType), target, fieldInfo);
             }
         }
     }

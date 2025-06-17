@@ -5,6 +5,7 @@ namespace GameLogic.Binding.Contexts
     public class BindingContextLifecycle : MonoBehaviour
     {
         private IBindingContext bindingContext;
+
         public IBindingContext BindingContext
         {
             get { return this.bindingContext; }

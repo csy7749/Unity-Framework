@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace GameLogic.Binding.Expressions
 {
- abstract class ExpressionVisitor
+    abstract class ExpressionVisitor
     {
         public virtual Expression Visit(Expression expr)
         {
@@ -87,7 +87,8 @@ namespace GameLogic.Binding.Expressions
             }
         }
 
-        protected virtual ReadOnlyCollection<T> VisitExpressionList<T>(ReadOnlyCollection<T> original) where T : Expression
+        protected virtual ReadOnlyCollection<T> VisitExpressionList<T>(ReadOnlyCollection<T> original)
+            where T : Expression
         {
             List<T> list = null;
             for (int i = 0, n = original.Count; i < n; i++)
@@ -104,6 +105,7 @@ namespace GameLogic.Binding.Expressions
                     {
                         list.Add(original[j]);
                     }
+
                     list.Add((T)p);
                 }
             }
@@ -126,6 +128,7 @@ namespace GameLogic.Binding.Expressions
                 else
                     return Expression.MakeBinary(expr.NodeType, left, right, expr.IsLiftedToNull, expr.Method);
             }
+
             return expr;
         }
 

@@ -6,17 +6,20 @@ using UnityEngine;
 
 namespace GameLogic.Binding.Reflection
 {
-public class ProxyType : IProxyType
+    public class ProxyType : IProxyType
     {
-        private static readonly BindingFlags DEFAULT_LOOKUP = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+        private static readonly BindingFlags DEFAULT_LOOKUP =
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
         private readonly Dictionary<string, IProxyEventInfo> events = new Dictionary<string, IProxyEventInfo>();
 
         private readonly Dictionary<string, IProxyFieldInfo> fields = new Dictionary<string, IProxyFieldInfo>();
 
-        private readonly Dictionary<string, IProxyPropertyInfo> properties = new Dictionary<string, IProxyPropertyInfo>();
+        private readonly Dictionary<string, IProxyPropertyInfo> properties =
+            new Dictionary<string, IProxyPropertyInfo>();
 
-        private readonly Dictionary<string, List<IProxyMethodInfo>> methods = new Dictionary<string, List<IProxyMethodInfo>>();
+        private readonly Dictionary<string, List<IProxyMethodInfo>> methods =
+            new Dictionary<string, List<IProxyMethodInfo>>();
 
         private IProxyItemInfo itemInfo;
 
@@ -31,7 +34,10 @@ public class ProxyType : IProxyType
             this.type = type;
         }
 
-        public Type Type { get { return this.type; } }
+        public Type Type
+        {
+            get { return this.type; }
+        }
 
         protected void AddMethodInfo(IProxyMethodInfo methodInfo)
         {
@@ -44,6 +50,7 @@ public class ProxyType : IProxyType
                     list = new List<IProxyMethodInfo>();
                     this.methods.Add(name, list);
                 }
+
                 list.Add(methodInfo);
             }
         }
@@ -74,6 +81,7 @@ public class ProxyType : IProxyType
                     if (IsParameterMatch(info, parameterTypes))
                         return info;
                 }
+
                 return null;
             }
         }
@@ -81,7 +89,8 @@ public class ProxyType : IProxyType
         protected bool IsParameterMatch(IProxyMethodInfo proxyMethodInfo, Type[] parameterTypes)
         {
             ParameterInfo[] parameters = proxyMethodInfo.Parameters;
-            if ((parameters == null || parameters.Length == 0) && (parameterTypes == null || parameterTypes.Length == 0))
+            if ((parameters == null || parameters.Length == 0) &&
+                (parameterTypes == null || parameterTypes.Length == 0))
                 return true;
 
             if (parameters != null && parameterTypes != null && parameters.Length == parameterTypes.Length)
@@ -91,8 +100,10 @@ public class ProxyType : IProxyType
                     if (parameters[i].ParameterType != parameterTypes[i])
                         return false;
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -165,6 +176,7 @@ public class ProxyType : IProxyType
             this.baseType = factory.GetType(_baseType, true);
             return this.baseType;
         }
+
         public IProxyMemberInfo GetMember(string name)
         {
             if (name.Equals("Item") && typeof(ICollection).IsAssignableFrom(type))
@@ -246,6 +258,7 @@ public class ProxyType : IProxyType
                     baseType = factory.GetType(type.BaseType, true);
                     info = baseType.FindEventInfo(name, flags, false);
                 }
+
                 if (info != null)
                     return info;
             }
@@ -267,6 +280,7 @@ public class ProxyType : IProxyType
                         return info;
                 }
             }
+
             return null;
         }
 
@@ -278,6 +292,7 @@ public class ProxyType : IProxyType
 
             return FindFieldInfo(name, DEFAULT_LOOKUP, true);
         }
+
         public IProxyFieldInfo GetField(string name, BindingFlags flags)
         {
             return FindFieldInfo(name, flags, true);
@@ -305,6 +320,7 @@ public class ProxyType : IProxyType
                     baseType = factory.GetType(type.BaseType, true);
                     info = baseType.FindFieldInfo(name, flags, false);
                 }
+
                 if (info != null)
                     return info;
             }
@@ -326,6 +342,7 @@ public class ProxyType : IProxyType
                         return info;
                 }
             }
+
             return null;
         }
 
@@ -366,6 +383,7 @@ public class ProxyType : IProxyType
                     baseType = factory.GetType(type.BaseType, true);
                     info = baseType.FindPropertyInfo(name, flags, false);
                 }
+
                 if (info != null)
                     return info;
             }
@@ -387,6 +405,7 @@ public class ProxyType : IProxyType
                         return info;
                 }
             }
+
             return null;
         }
 
@@ -401,7 +420,8 @@ public class ProxyType : IProxyType
             }
             else
             {
-                PropertyInfo propertyInfo = this.type.GetProperty("Item", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                PropertyInfo propertyInfo = this.type.GetProperty("Item",
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
                 if (propertyInfo != null)
                     return this.CreateProxyItemInfo(propertyInfo);
 
@@ -445,10 +465,12 @@ public class ProxyType : IProxyType
             return FindMethodInfo(name, parameterTypes, flags, true);
         }
 
-        private IProxyMethodInfo FindMethodInfo(string name, Type[] parameterTypes, BindingFlags flags, bool includeInterface)
+        private IProxyMethodInfo FindMethodInfo(string name, Type[] parameterTypes, BindingFlags flags,
+            bool includeInterface)
         {
             IProxyMethodInfo info = null;
-            MethodInfo methodInfo = this.type.GetMethod(name, flags | BindingFlags.DeclaredOnly, null, parameterTypes, null);
+            MethodInfo methodInfo =
+                this.type.GetMethod(name, flags | BindingFlags.DeclaredOnly, null, parameterTypes, null);
             if (methodInfo != null)
             {
                 info = this.GetMethodInfo(name, parameterTypes);
@@ -468,6 +490,7 @@ public class ProxyType : IProxyType
                     baseType = factory.GetType(type.BaseType, true);
                     info = baseType.FindMethodInfo(name, parameterTypes, flags, false);
                 }
+
                 if (info != null)
                     return info;
             }
@@ -478,7 +501,9 @@ public class ProxyType : IProxyType
                 foreach (Type interfaceType in types)
                 {
                     ProxyType proxyType = factory.GetType(interfaceType, false);
-                    if (proxyType == null && interfaceType.GetMethod(name, flags | BindingFlags.DeclaredOnly, null, parameterTypes, null) != null)
+                    if (proxyType == null &&
+                        interfaceType.GetMethod(name, flags | BindingFlags.DeclaredOnly, null, parameterTypes, null) !=
+                        null)
                         proxyType = factory.GetType(interfaceType, true);
 
                     if (proxyType == null)
@@ -489,6 +514,7 @@ public class ProxyType : IProxyType
                         return info;
                 }
             }
+
             return null;
         }
 
@@ -504,12 +530,14 @@ public class ProxyType : IProxyType
             IProxyFieldInfo info = null;
             try
             {
-                info = (IProxyFieldInfo)Activator.CreateInstance(typeof(ProxyFieldInfo<,>).MakeGenericType(fieldInfo.DeclaringType, fieldInfo.FieldType), fieldInfo);
+                info = (IProxyFieldInfo)Activator.CreateInstance(
+                    typeof(ProxyFieldInfo<,>).MakeGenericType(fieldInfo.DeclaringType, fieldInfo.FieldType), fieldInfo);
             }
             catch (Exception)
             {
                 info = new ProxyFieldInfo(fieldInfo);
             }
+
             if (info != null)
                 this.fields.Add(info.Name, info);
             return info;
@@ -527,7 +555,9 @@ public class ProxyType : IProxyType
                     if (parameters != null && parameters.Length > 0)
                         throw new ParameterMismatchException();
 
-                    info = (IProxyPropertyInfo)Activator.CreateInstance(typeof(StaticProxyPropertyInfo<,>).MakeGenericType(type, propertyInfo.PropertyType), propertyInfo);
+                    info = (IProxyPropertyInfo)Activator.CreateInstance(
+                        typeof(StaticProxyPropertyInfo<,>).MakeGenericType(type, propertyInfo.PropertyType),
+                        propertyInfo);
                 }
                 else
                 {
@@ -535,7 +565,8 @@ public class ProxyType : IProxyType
                     if (parameters != null && parameters.Length == 1)
                         throw new ParameterMismatchException();
 
-                    info = (IProxyPropertyInfo)Activator.CreateInstance(typeof(ProxyPropertyInfo<,>).MakeGenericType(type, propertyInfo.PropertyType), propertyInfo);
+                    info = (IProxyPropertyInfo)Activator.CreateInstance(
+                        typeof(ProxyPropertyInfo<,>).MakeGenericType(type, propertyInfo.PropertyType), propertyInfo);
                 }
             }
             catch (ParameterMismatchException e)
@@ -546,6 +577,7 @@ public class ProxyType : IProxyType
             {
                 info = new ProxyPropertyInfo(propertyInfo);
             }
+
             if (info != null)
                 this.properties.Add(info.Name, info);
             return info;
@@ -565,19 +597,26 @@ public class ProxyType : IProxyType
                     {
                         if (parameters == null || parameters.Length == 0)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyActionInfo<>).MakeGenericType(type), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyActionInfo<>).MakeGenericType(type), methodInfo);
                         }
                         else if (parameters.Length == 1)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyActionInfo<,>).MakeGenericType(type, parameters[0].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyActionInfo<,>).MakeGenericType(type, parameters[0].ParameterType),
+                                methodInfo);
                         }
                         else if (parameters.Length == 2)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyActionInfo<,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyActionInfo<,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType), methodInfo);
                         }
                         else if (parameters.Length == 3)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyActionInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, parameters[2].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyActionInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, parameters[2].ParameterType), methodInfo);
                         }
                         else
                         {
@@ -588,19 +627,26 @@ public class ProxyType : IProxyType
                     {
                         if (parameters == null || parameters.Length == 0)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyActionInfo<>).MakeGenericType(type), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyActionInfo<>).MakeGenericType(type), methodInfo);
                         }
                         else if (parameters.Length == 1)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyActionInfo<,>).MakeGenericType(type, parameters[0].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyActionInfo<,>).MakeGenericType(type, parameters[0].ParameterType),
+                                methodInfo);
                         }
                         else if (parameters.Length == 2)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyActionInfo<,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyActionInfo<,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType), methodInfo);
                         }
                         else if (parameters.Length == 3)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyActionInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, parameters[2].ParameterType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyActionInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, parameters[2].ParameterType), methodInfo);
                         }
                         else
                         {
@@ -614,19 +660,26 @@ public class ProxyType : IProxyType
                     {
                         if (parameters == null || parameters.Length == 0)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyFuncInfo<,>).MakeGenericType(type, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyFuncInfo<,>).MakeGenericType(type, returnType), methodInfo);
                         }
                         else if (parameters.Length == 1)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyFuncInfo<,,>).MakeGenericType(type, parameters[0].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyFuncInfo<,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    returnType), methodInfo);
                         }
                         else if (parameters.Length == 2)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyFuncInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyFuncInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, returnType), methodInfo);
                         }
                         else if (parameters.Length == 3)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(StaticProxyFuncInfo<,,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, parameters[2].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(StaticProxyFuncInfo<,,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, parameters[2].ParameterType, returnType), methodInfo);
                         }
                         else
                         {
@@ -637,19 +690,26 @@ public class ProxyType : IProxyType
                     {
                         if (parameters == null || parameters.Length == 0)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyFuncInfo<,>).MakeGenericType(type, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyFuncInfo<,>).MakeGenericType(type, returnType), methodInfo);
                         }
                         else if (parameters.Length == 1)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyFuncInfo<,,>).MakeGenericType(type, parameters[0].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyFuncInfo<,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    returnType), methodInfo);
                         }
                         else if (parameters.Length == 2)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyFuncInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyFuncInfo<,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, returnType), methodInfo);
                         }
                         else if (parameters.Length == 3)
                         {
-                            info = (IProxyMethodInfo)Activator.CreateInstance(typeof(ProxyFuncInfo<,,,,>).MakeGenericType(type, parameters[0].ParameterType, parameters[1].ParameterType, parameters[2].ParameterType, returnType), methodInfo);
+                            info = (IProxyMethodInfo)Activator.CreateInstance(
+                                typeof(ProxyFuncInfo<,,,,>).MakeGenericType(type, parameters[0].ParameterType,
+                                    parameters[1].ParameterType, parameters[2].ParameterType, returnType), methodInfo);
                         }
                         else
                         {
@@ -662,6 +722,7 @@ public class ProxyType : IProxyType
             {
                 info = new ProxyMethodInfo(methodInfo);
             }
+
             if (info != null)
                 this.AddMethodInfo(info);
 
@@ -675,7 +736,8 @@ public class ProxyType : IProxyType
             IProxyItemInfo info = null;
             try
             {
-                info = (IProxyItemInfo)Activator.CreateInstance(typeof(ArrayProxyItemInfo<,>).MakeGenericType(type, elementType));
+                info = (IProxyItemInfo)Activator.CreateInstance(
+                    typeof(ArrayProxyItemInfo<,>).MakeGenericType(type, elementType));
             }
             catch (Exception)
             {
@@ -728,25 +790,25 @@ public class ProxyType : IProxyType
                         info = new ArrayProxyItemInfo<UInt64[], UInt64>();
                         break;
                     case TypeCode.Object:
-                        {
-                            if (type.Equals(typeof(Vector2)))
-                                info = new ArrayProxyItemInfo<Vector2[], Vector2>();
-                            else if (type.Equals(typeof(Vector3)))
-                                info = new ArrayProxyItemInfo<Vector3[], Vector3>();
-                            else if (type.Equals(typeof(Vector4)))
-                                info = new ArrayProxyItemInfo<Vector4[], Vector4>();
-                            else if (type.Equals(typeof(Color)))
-                                info = new ArrayProxyItemInfo<Color[], Color>();
-                            else if (type.Equals(typeof(Rect)))
-                                info = new ArrayProxyItemInfo<Rect[], Rect>();
-                            else if (type.Equals(typeof(Quaternion)))
-                                info = new ArrayProxyItemInfo<Quaternion[], Quaternion>();
-                            else if (type.Equals(typeof(Version)))
-                                info = new ArrayProxyItemInfo<Version[], Version>();
-                            else
-                                info = new ArrayProxyItemInfo(type);
-                            break;
-                        }
+                    {
+                        if (type.Equals(typeof(Vector2)))
+                            info = new ArrayProxyItemInfo<Vector2[], Vector2>();
+                        else if (type.Equals(typeof(Vector3)))
+                            info = new ArrayProxyItemInfo<Vector3[], Vector3>();
+                        else if (type.Equals(typeof(Vector4)))
+                            info = new ArrayProxyItemInfo<Vector4[], Vector4>();
+                        else if (type.Equals(typeof(Color)))
+                            info = new ArrayProxyItemInfo<Color[], Color>();
+                        else if (type.Equals(typeof(Rect)))
+                            info = new ArrayProxyItemInfo<Rect[], Rect>();
+                        else if (type.Equals(typeof(Quaternion)))
+                            info = new ArrayProxyItemInfo<Quaternion[], Quaternion>();
+                        else if (type.Equals(typeof(Version)))
+                            info = new ArrayProxyItemInfo<Version[], Version>();
+                        else
+                            info = new ArrayProxyItemInfo(type);
+                        break;
+                    }
                     default:
                         info = new ArrayProxyItemInfo(type);
                         break;
@@ -774,17 +836,18 @@ public class ProxyType : IProxyType
             {
                 if (typeFlag == 1)
                 {
-                    info = (IProxyItemInfo)Activator.CreateInstance(typeof(DictionaryProxyItemInfo<,,>).MakeGenericType(type, keyType, valueType), propertyInfo);
+                    info = (IProxyItemInfo)Activator.CreateInstance(
+                        typeof(DictionaryProxyItemInfo<,,>).MakeGenericType(type, keyType, valueType), propertyInfo);
                 }
                 else if (typeFlag == 2)
                 {
-                    info = (IProxyItemInfo)Activator.CreateInstance(typeof(ListProxyItemInfo<,>).MakeGenericType(type, valueType), propertyInfo);
+                    info = (IProxyItemInfo)Activator.CreateInstance(
+                        typeof(ListProxyItemInfo<,>).MakeGenericType(type, valueType), propertyInfo);
                 }
                 else
                 {
                     info = new ProxyItemInfo(propertyInfo);
                 }
-
             }
             catch (Exception)
             {
@@ -864,24 +927,24 @@ public class ProxyType : IProxyType
                 case TypeCode.UInt64:
                     return new ListProxyItemInfo<IList<UInt64>, UInt64>(propertyInfo);
                 case TypeCode.Object:
-                    {
-                        if (type.Equals(typeof(Vector2)))
-                            return new ListProxyItemInfo<IList<Vector2>, Vector2>(propertyInfo);
-                        if (type.Equals(typeof(Vector3)))
-                            return new ListProxyItemInfo<IList<Vector3>, Vector3>(propertyInfo);
-                        if (type.Equals(typeof(Vector4)))
-                            return new ListProxyItemInfo<IList<Vector4>, Vector4>(propertyInfo);
-                        if (type.Equals(typeof(Color)))
-                            return new ListProxyItemInfo<IList<Color>, Color>(propertyInfo);
-                        if (type.Equals(typeof(Rect)))
-                            return new ListProxyItemInfo<IList<Rect>, Rect>(propertyInfo);
-                        if (type.Equals(typeof(Quaternion)))
-                            return new ListProxyItemInfo<IList<Quaternion>, Quaternion>(propertyInfo);
-                        if (type.Equals(typeof(Version)))
-                            return new ListProxyItemInfo<IList<Version>, Version>(propertyInfo);
+                {
+                    if (type.Equals(typeof(Vector2)))
+                        return new ListProxyItemInfo<IList<Vector2>, Vector2>(propertyInfo);
+                    if (type.Equals(typeof(Vector3)))
+                        return new ListProxyItemInfo<IList<Vector3>, Vector3>(propertyInfo);
+                    if (type.Equals(typeof(Vector4)))
+                        return new ListProxyItemInfo<IList<Vector4>, Vector4>(propertyInfo);
+                    if (type.Equals(typeof(Color)))
+                        return new ListProxyItemInfo<IList<Color>, Color>(propertyInfo);
+                    if (type.Equals(typeof(Rect)))
+                        return new ListProxyItemInfo<IList<Rect>, Rect>(propertyInfo);
+                    if (type.Equals(typeof(Quaternion)))
+                        return new ListProxyItemInfo<IList<Quaternion>, Quaternion>(propertyInfo);
+                    if (type.Equals(typeof(Version)))
+                        return new ListProxyItemInfo<IList<Version>, Version>(propertyInfo);
 
-                        return new ProxyItemInfo(propertyInfo);
-                    }
+                    return new ProxyItemInfo(propertyInfo);
+                }
                 default:
                     return new ProxyItemInfo(propertyInfo);
             }
@@ -908,7 +971,8 @@ public class ProxyType : IProxyType
                     case TypeCode.Char:
                         return new DictionaryProxyItemInfo<IDictionary<string, char>, string, char>(propertyInfo);
                     case TypeCode.DateTime:
-                        return new DictionaryProxyItemInfo<IDictionary<string, DateTime>, string, DateTime>(propertyInfo);
+                        return new DictionaryProxyItemInfo<IDictionary<string, DateTime>, string, DateTime>(
+                            propertyInfo);
                     case TypeCode.Decimal:
                         return new DictionaryProxyItemInfo<IDictionary<string, Decimal>, string, Decimal>(propertyInfo);
                     case TypeCode.Double:
@@ -932,24 +996,29 @@ public class ProxyType : IProxyType
                     case TypeCode.UInt64:
                         return new DictionaryProxyItemInfo<IDictionary<string, UInt64>, string, UInt64>(propertyInfo);
                     case TypeCode.Object:
-                        {
-                            if (type.Equals(typeof(Vector2)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Vector2>, string, Vector2>(propertyInfo);
-                            if (type.Equals(typeof(Vector3)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Vector3>, string, Vector3>(propertyInfo);
-                            if (type.Equals(typeof(Vector4)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Vector4>, string, Vector4>(propertyInfo);
-                            if (type.Equals(typeof(Color)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Color>, string, Color>(propertyInfo);
-                            if (type.Equals(typeof(Rect)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Rect>, string, Rect>(propertyInfo);
-                            if (type.Equals(typeof(Quaternion)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Quaternion>, string, Quaternion>(propertyInfo);
-                            if (type.Equals(typeof(Version)))
-                                return new DictionaryProxyItemInfo<IDictionary<string, Version>, string, Version>(propertyInfo);
+                    {
+                        if (type.Equals(typeof(Vector2)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Vector2>, string, Vector2>(
+                                propertyInfo);
+                        if (type.Equals(typeof(Vector3)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Vector3>, string, Vector3>(
+                                propertyInfo);
+                        if (type.Equals(typeof(Vector4)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Vector4>, string, Vector4>(
+                                propertyInfo);
+                        if (type.Equals(typeof(Color)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Color>, string, Color>(propertyInfo);
+                        if (type.Equals(typeof(Rect)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Rect>, string, Rect>(propertyInfo);
+                        if (type.Equals(typeof(Quaternion)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Quaternion>, string, Quaternion>(
+                                propertyInfo);
+                        if (type.Equals(typeof(Version)))
+                            return new DictionaryProxyItemInfo<IDictionary<string, Version>, string, Version>(
+                                propertyInfo);
 
-                            return new ProxyItemInfo(propertyInfo);
-                        }
+                        return new ProxyItemInfo(propertyInfo);
+                    }
                     default:
                         return new ProxyItemInfo(propertyInfo);
                 }
@@ -989,24 +1058,25 @@ public class ProxyType : IProxyType
                     case TypeCode.UInt64:
                         return new DictionaryProxyItemInfo<IDictionary<int, UInt64>, int, UInt64>(propertyInfo);
                     case TypeCode.Object:
-                        {
-                            if (type.Equals(typeof(Vector2)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Vector2>, int, Vector2>(propertyInfo);
-                            if (type.Equals(typeof(Vector3)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Vector3>, int, Vector3>(propertyInfo);
-                            if (type.Equals(typeof(Vector4)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Vector4>, int, Vector4>(propertyInfo);
-                            if (type.Equals(typeof(Color)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Color>, int, Color>(propertyInfo);
-                            if (type.Equals(typeof(Rect)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Rect>, int, Rect>(propertyInfo);
-                            if (type.Equals(typeof(Quaternion)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Quaternion>, int, Quaternion>(propertyInfo);
-                            if (type.Equals(typeof(Version)))
-                                return new DictionaryProxyItemInfo<IDictionary<int, Version>, int, Version>(propertyInfo);
+                    {
+                        if (type.Equals(typeof(Vector2)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Vector2>, int, Vector2>(propertyInfo);
+                        if (type.Equals(typeof(Vector3)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Vector3>, int, Vector3>(propertyInfo);
+                        if (type.Equals(typeof(Vector4)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Vector4>, int, Vector4>(propertyInfo);
+                        if (type.Equals(typeof(Color)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Color>, int, Color>(propertyInfo);
+                        if (type.Equals(typeof(Rect)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Rect>, int, Rect>(propertyInfo);
+                        if (type.Equals(typeof(Quaternion)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Quaternion>, int, Quaternion>(
+                                propertyInfo);
+                        if (type.Equals(typeof(Version)))
+                            return new DictionaryProxyItemInfo<IDictionary<int, Version>, int, Version>(propertyInfo);
 
-                            return new ProxyItemInfo(propertyInfo);
-                        }
+                        return new ProxyItemInfo(propertyInfo);
+                    }
                     default:
                         return new ProxyItemInfo(propertyInfo);
                 }

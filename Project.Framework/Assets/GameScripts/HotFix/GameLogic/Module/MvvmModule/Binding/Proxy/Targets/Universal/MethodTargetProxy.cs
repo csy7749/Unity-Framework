@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace GameLogic.Binding.Proxy.Targets.Universal
 {
-public class MethodTargetProxy : TargetProxyBase, IObtainable, IProxyInvoker
+    public class MethodTargetProxy : TargetProxyBase, IObtainable, IProxyInvoker
     {
         protected readonly IProxyMethodInfo methodInfo;
         protected SendOrPostCallback postCallback;
+
         public MethodTargetProxy(object target, IProxyMethodInfo methodInfo) : base(target)
         {
             this.methodInfo = methodInfo;
@@ -16,11 +17,20 @@ public class MethodTargetProxy : TargetProxyBase, IObtainable, IProxyInvoker
                 throw new ArgumentException("methodInfo");
         }
 
-        public override BindingMode DefaultMode { get { return BindingMode.OneWayToSource; } }
+        public override BindingMode DefaultMode
+        {
+            get { return BindingMode.OneWayToSource; }
+        }
 
-        public override Type Type { get { return typeof(IProxyInvoker); } }
+        public override Type Type
+        {
+            get { return typeof(IProxyInvoker); }
+        }
 
-        public IProxyMethodInfo ProxyMethodInfo { get { return this.methodInfo; } }
+        public IProxyMethodInfo ProxyMethodInfo
+        {
+            get { return this.methodInfo; }
+        }
 
         public object GetValue()
         {
@@ -67,6 +77,7 @@ public class MethodTargetProxy : TargetProxyBase, IObtainable, IProxyInvoker
                         this.methodInfo.Invoke(target, (object[])state);
                     };
                 }
+
                 UISynchronizationContext.Post(postCallback, args);
                 return null;
             }

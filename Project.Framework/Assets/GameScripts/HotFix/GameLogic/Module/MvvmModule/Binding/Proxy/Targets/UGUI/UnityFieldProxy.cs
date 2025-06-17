@@ -6,8 +6,6 @@ namespace GameLogic.Binding.Proxy.Targets.UGUI
 {
     public class UnityFieldProxy<TValue> : FieldTargetProxy
     {
-        //private static readonly ILog log = LogManager.GetLogger(typeof(UnityPropertyProxy<TValue>));
-
         private UnityEvent<TValue> unityEvent;
         public UnityFieldProxy(object target, IProxyFieldInfo fieldInfo, UnityEvent<TValue> unityEvent) : base(target, fieldInfo)
         {

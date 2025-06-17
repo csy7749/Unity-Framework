@@ -4,7 +4,7 @@ using GameLogic.Execution;
 
 namespace GameLogic.Asynchronous
 {
-public class AsyncResult : IAsyncResult, IPromise
+    public class AsyncResult : IAsyncResult, IPromise
     {
         private bool _done = false;
         private object _result = null;
