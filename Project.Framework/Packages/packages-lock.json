@@ -7,18 +7,6 @@
       "dependencies": {},
       "hash": "fca130bbfaa58fab93b09a57ec83704c2aab4d4f"
     },
-    "com.code-philosophy.obfuz": {
-      "version": "file:obfuz-main",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.code-philosophy.obfuz4hybridclr": {
-      "version": "file:obfuz4hybridclr-main",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.crashkonijn.goap": {
       "version": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.34",
       "depth": 0,
