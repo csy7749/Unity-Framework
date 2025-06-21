@@ -13,20 +13,20 @@ namespace GameLogic
 {
     public static class UIWindowBindingExtension
     {
-        private static IBinder binder;
+        private static IBinder _binder;
 
         public static IBinder Binder
         {
             get
             {
-                if (binder == null)
-                    binder = Context.GetApplicationContext().GetService<IBinder>();
+                if (_binder == null)
+                    _binder = Context.GetApplicationContext().GetService<IBinder>();
 
-                if (binder == null)
+                if (_binder == null)
                     throw new Exception(
                         "Data binding service is not initialized,please create a BindingServiceBundle service before using it.");
 
-                return binder;
+                return _binder;
             }
         }
 
@@ -55,105 +55,105 @@ namespace GameLogic
             return bindingContext;
         }
 
-        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow)
+        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow uiWindow)
             where TUIWindow : UIWindow
         {
-            IBindingContext context = UIWindow.BindingContext();
-            return new BindingSet<TUIWindow, TSource>(context, UIWindow);
+            IBindingContext context = uiWindow.BindingContext();
+            return new BindingSet<TUIWindow, TSource>(context, uiWindow);
         }
 
-        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow UIWindow,
+        public static BindingSet<TUIWindow, TSource> CreateBindingSet<TUIWindow, TSource>(this TUIWindow uiWindow,
             TSource dataContext) where TUIWindow : UIWindow
         {
-            IBindingContext context = UIWindow.BindingContext();
+            IBindingContext context = uiWindow.BindingContext();
             context.DataContext = dataContext;
-            return new BindingSet<TUIWindow, TSource>(context, UIWindow);
+            return new BindingSet<TUIWindow, TSource>(context, uiWindow);
         }
 
-        public static BindingSet<TUIWindow> CreateBindingSet<TUIWindow>(this TUIWindow UIWindow)
+        public static BindingSet<TUIWindow> CreateBindingSet<TUIWindow>(this TUIWindow uiWindow)
             where TUIWindow : UIWindow
         {
-            IBindingContext context = UIWindow.BindingContext();
-            return new BindingSet<TUIWindow>(context, UIWindow);
+            IBindingContext context = uiWindow.BindingContext();
+            return new BindingSet<TUIWindow>(context, uiWindow);
         }
 
-        public static BindingSet CreateSimpleBindingSet(this UIWindow UIWindow)
+        public static BindingSet CreateSimpleBindingSet(this UIWindow uiWindow)
         {
-            IBindingContext context = UIWindow.BindingContext();
-            return new BindingSet(context, UIWindow);
+            IBindingContext context = uiWindow.BindingContext();
+            return new BindingSet(context, uiWindow);
         }
 
-        public static void SetDataContext(this UIWindow UIWindow, object dataContext)
+        public static void SetDataContext(this UIWindow uiWindow, object dataContext)
         {
-            UIWindow.BindingContext().DataContext = dataContext;
+            uiWindow.BindingContext().DataContext = dataContext;
         }
 
-        public static object GetDataContext(this UIWindow UIWindow)
+        public static object GetDataContext(this UIWindow uiWindow)
         {
-            return UIWindow.BindingContext().DataContext;
+            return uiWindow.BindingContext().DataContext;
         }
 
-        public static void AddBinding(this UIWindow UIWindow, BindingDescription bindingDescription)
+        public static void AddBinding(this UIWindow uiWindow, BindingDescription bindingDescription)
         {
-            UIWindow.BindingContext().Add(UIWindow, bindingDescription);
+            uiWindow.BindingContext().Add(uiWindow, bindingDescription);
         }
 
-        public static void AddBindings(this UIWindow UIWindow, IEnumerable<BindingDescription> bindingDescriptions)
+        public static void AddBindings(this UIWindow uiWindow, IEnumerable<BindingDescription> bindingDescriptions)
         {
-            UIWindow.BindingContext().Add(UIWindow, bindingDescriptions);
+            uiWindow.BindingContext().Add(uiWindow, bindingDescriptions);
         }
 
-        public static void AddBinding(this UIWindow UIWindow, IBinding binding)
+        public static void AddBinding(this UIWindow uiWindow, IBinding binding)
         {
-            UIWindow.BindingContext().Add(binding);
+            uiWindow.BindingContext().Add(binding);
         }
 
-        public static void AddBinding(this UIWindow UIWindow, IBinding binding, object key = null)
+        public static void AddBinding(this UIWindow uiWindow, IBinding binding, object key = null)
         {
-            UIWindow.BindingContext().Add(binding, key);
+            uiWindow.BindingContext().Add(binding, key);
         }
 
-        public static void AddBindings(this UIWindow UIWindow, IEnumerable<IBinding> bindings, object key = null)
+        public static void AddBindings(this UIWindow uiWindow, IEnumerable<IBinding> bindings, object key = null)
         {
             if (bindings == null)
                 return;
 
-            UIWindow.BindingContext().Add(bindings, key);
+            uiWindow.BindingContext().Add(bindings, key);
         }
 
-        public static void AddBinding(this UIWindow UIWindow, object target, BindingDescription bindingDescription,
+        public static void AddBinding(this UIWindow uiWindow, object target, BindingDescription bindingDescription,
             object key = null)
         {
-            UIWindow.BindingContext().Add(target, bindingDescription, key);
+            uiWindow.BindingContext().Add(target, bindingDescription, key);
         }
 
-        public static void AddBindings(this UIWindow UIWindow, object target,
+        public static void AddBindings(this UIWindow uiWindow, object target,
             IEnumerable<BindingDescription> bindingDescriptions, object key = null)
         {
-            UIWindow.BindingContext().Add(target, bindingDescriptions, key);
+            uiWindow.BindingContext().Add(target, bindingDescriptions, key);
         }
 
-        public static void AddBindings(this UIWindow UIWindow,
+        public static void AddBindings(this UIWindow uiWindow,
             IDictionary<object, IEnumerable<BindingDescription>> bindingMap, object key = null)
         {
             if (bindingMap == null)
                 return;
 
-            IBindingContext context = UIWindow.BindingContext();
+            IBindingContext context = uiWindow.BindingContext();
             foreach (var kvp in bindingMap)
             {
                 context.Add(kvp.Key, kvp.Value, key);
             }
         }
 
-        public static void ClearBindings(this UIWindow UIWindow, object key)
+        public static void ClearBindings(this UIWindow uiWindow, object key)
         {
-            UIWindow.BindingContext().Clear(key);
+            uiWindow.BindingContext().Clear(key);
         }
 
-        public static void ClearAllBindings(this UIWindow UIWindow)
+        public static void ClearAllBindings(this UIWindow uiWindow)
         {
-            UIWindow.BindingContext().Clear();
+            uiWindow.BindingContext().Clear();
         }
     }
 }

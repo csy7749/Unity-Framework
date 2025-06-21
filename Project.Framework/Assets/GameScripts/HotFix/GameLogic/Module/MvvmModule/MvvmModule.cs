@@ -9,8 +9,6 @@ namespace GameLogic
     public class MvvmModule : Singleton<MvvmModule>
     {
         public ApplicationContext ApplicationContext;
-        // private static ISubscription<BattleEventArgs> _battleSubscription;
-
         public void Init()
         {
             Context.OnInitialize();

@@ -42,6 +42,7 @@ public partial class GameApp
     /// </summary>
     private static void StartGameLogic()
     {
+        //游戏逻辑开始前初始化mvvm
         MvvmModule.Instance.Init();
         UIModule.Instance.Active();
         StartBattleRoom().Forget();
