@@ -20,7 +20,9 @@
 
 ##### mvvm数据绑定已完整实现，TimeModule逻辑调整，事件模块增加mvvm模式的消息发布
 
-##### 目前资源模块、对象池模块、UI模块的使用可参考<a href="https://github.com/Alex-Rachel/TEngine/blob/main/Books/99-%E5%90%84%E5%B9%B3%E5%8F%B0%E8%BF%90%E8%A1%8CRunAble.md"><strong>TEngine使用文档</strong></a>
+##### 资源模块、对象池模块、UI模块的使用可参考<a href="https://github.com/Alex-Rachel/TEngine/blob/main/Books/99-%E5%90%84%E5%B9%B3%E5%8F%B0%E8%BF%90%E8%A1%8CRunAble.md"><strong>TEngine使用文档</strong></a>
+
+##### main分支集成了从雷火工具中拆出的红点和引导系统
 
 ##### 已实现View模块和ViewModel模块的代码生成器，Hierarchy页面右键预制体选择Script Generator→GeneratorView/GeneratorViewModel（遵循自定义组件命名）
 
