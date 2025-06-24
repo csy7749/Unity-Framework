@@ -851,12 +851,12 @@ namespace UnityFramework
                         return;
 
                     _disposed = 1;
-                    if (subject != null)
-                        subject.Remove(this);
+                    if (_subject != null)
+                        _subject.Remove(this);
 
-                    context = null;
-                    action = null;
-                    subject = null;
+                    _context = null;
+                    _action = null;
+                    _subject = null;
 #else
                     if (Interlocked.CompareExchange(ref this._disposed, 1, 0) == 0)
                     {
