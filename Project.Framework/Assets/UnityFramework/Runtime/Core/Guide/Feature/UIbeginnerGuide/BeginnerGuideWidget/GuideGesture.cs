@@ -45,12 +45,6 @@ namespace UnityFramework
         private Vector3 dragEndPos;
 
         private IEnumerator dragTween;
-        // void Update(){
-        //     if(gestureData.selectedObject!=null){
-        //         transform.SetPositionAndRotation(gestureData.selectedObject.transform.position, gestureData.selectedObject.transform.rotation);
-        //     }
-        // }
-
         public override void Init(GuideWidgetData data)
         {
             gestureData = data as GuideGestureData;
@@ -242,8 +236,6 @@ namespace UnityFramework
                     StartCoroutine(dragTween = DOMoveLoops(dragEndPos, dragduration, dragCurve));
                 else
                     StartCoroutine(dragTween = DOMoveLoops(dragEndPos, 3, dragCurve));
-                //Debug.Log("dragEndPos" + dragEndPos.ToString());
-                // dragTween = transform.DOLocalMove(dragEndPos, 3).SetEase(dragCurve).SetLoops(-1);
             }
         }
 

@@ -466,28 +466,16 @@ namespace UnityFramework.Editor
             ContextMenu.AddItem(EditorLocalization.GetLocalization("UIBeginnerGuide", "SetAsHighLight"), false, () =>
             {
                 guideData.highLightTarget = Selection.activeGameObject;
-                beginnerGuide.HighLightAreaPreview(guideData.highLightTarget.GetComponent<RectTransform>());
+                // beginnerGuide.HighLightAreaPreview(guideData.highLightTarget.GetComponent<RectTransform>());
             });
         }
         private void OnHierarchyGUI(int instanceID, Rect selectionRect)
         {
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
-            //Debug.Log(go.transform);
-            //子节点(也就是各个面板根节点)有特殊显示样式
             if (sons.Contains(go.transform))
             {
-
                 Utils.DrawGreenRect(instanceID, selectionRect, GuideRootInfos[instanceID].displayName);
-                // EditorGUI.DrawRect(selectionRect, new Color(0.157f, 0.157f, 0.157f, 1f));
-                // var icon = EditorGUIUtility.ObjectContent(null, typeof(GameObject)).image;
-                // GUI.Label(selectionRect, icon);
-                // GUIStyle style = LabelStyle(Color.green);
-
-                // var rect = new Rect(selectionRect);
-                // rect.x += 20;
-
-                // GUI.Label(rect, GuideRootInfos[instanceID].displayName, style);
             }
             else
             {
@@ -507,29 +495,11 @@ namespace UnityFramework.Editor
                         if (go.activeInHierarchy == true)
                         {
                             Utils.DrawGreenRect(instanceID, selectionRect, go.name);
-                            // EditorGUI.DrawRect(selectionRect, new Color(0.157f, 0.157f, 0.157f, 1f));
-                            // var icon = EditorGUIUtility.ObjectContent(null, typeof(GameObject)).image;
-                            // GUI.Label(selectionRect, icon);
-                            // GUIStyle style = LabelStyle(Color.green);
-
-                            // var rect = new Rect(selectionRect);
-                            // rect.x += 20;
-
-                            // GUI.Label(rect, go.name, style);
                         }
                     }
                     else if (par.GetComponent<GuideGesture>() != null && go.transform.childCount == 0)
                     {
                         Utils.DrawGreenRect(instanceID, selectionRect, go.name);
-                        // EditorGUI.DrawRect(selectionRect, new Color(0.157f, 0.157f, 0.157f, 1f));
-                        // var icon = EditorGUIUtility.ObjectContent(null, typeof(GameObject)).image;
-                        // GUI.Label(selectionRect, icon);
-                        // GUIStyle style = LabelStyle(Color.green);
-
-                        // var rect = new Rect(selectionRect);
-                        // rect.x += 20;
-
-                        // GUI.Label(rect, go.name, style);
                     }
                 }
 
@@ -640,12 +610,10 @@ namespace UnityFramework.Editor
             }
 
             var guideDataList = guideRoot.GetComponent<UIBeginnerGuideDataList>();
-            //int index = guideDataList.guideDataList.IndexOf(guideData);
+            
             var index = guideDataList.guideDataList.Where(data => data.guideID == guideData.guideID).ToList().First();
 
             var so = new SerializedObject(guideDataList);
-            //SerializedProperty guideDataListSp = so.FindProperty("guideDataList");
-            //SerializedProperty guideDataSp = guideDataListSp.GetArrayElementAtIndex(index);
 
             index.CustomTransformDatas = JsonUtilityEx.ToJson(transformDatas);
             index.CustomTextDatas = JsonUtilityEx.ToJson(textDatas);
@@ -671,8 +639,6 @@ namespace UnityFramework.Editor
             {
                 list = list.Union(ids.GetControlledInstanceIds()).ToList<int>();
             }
-            // list.Add(_gameObjectForDiff.transform.GetInstanceID());
-
             guideData.GuideSelfDefinedData.Clear();
             foreach (Transform child in allChild)
             {

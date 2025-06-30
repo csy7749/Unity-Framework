@@ -101,24 +101,26 @@ namespace UnityFramework
 
         private string GetCustomKeyNameByActionName(string actionName)
         {
-            string joystickKey = null, joystickCtrlKey = null;
 #if USE_InputSystem
-        InputAction action = inputActionAsset.FindAction(actionName);
-
-        foreach (var binding in action.bindings)
-        {
-            var lowerName = "button";
-            if ((binding.name?.ToLower() == lowerName && binding.isPartOfComposite) || !binding.isPartOfComposite)
+            string joystickKey = null;
+            string joystickCtrlKey = null;
+            InputAction action = inputActionAsset.FindAction(actionName);
+    
+            foreach (var binding in action.bindings)
             {
-                joystickKey = binding.effectivePath;
+                var lowerName = "button";
+                if ((binding.name?.ToLower() == lowerName && binding.isPartOfComposite) || !binding.isPartOfComposite)
+                {
+                    joystickKey = binding.effectivePath;
+                }
+                if (binding.name?.ToLower() != lowerName && binding.isPartOfComposite)
+                {
+                    joystickCtrlKey = binding.effectivePath;
+                }
             }
-            if (binding.name?.ToLower() != lowerName && binding.isPartOfComposite)
-            {
-                joystickCtrlKey = binding.effectivePath;
-            }
-        }
-#endif
             return joystickKey;
+#endif
+            return null;
         }
 
         private Dictionary<InputDeviceType, GameObject> joystickTypeDic;

@@ -30,7 +30,6 @@ namespace UnityFramework
             UpdateTransformData();
             string data = JsonUtility.ToJson(this);
             return data;
-            //throw new System.NotImplementedException();
         }
 
         public void SetTarget(GameObject go)
