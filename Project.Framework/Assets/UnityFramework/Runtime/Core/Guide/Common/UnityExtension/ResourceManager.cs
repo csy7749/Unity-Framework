@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace UnityFramework
 {
@@ -14,14 +16,14 @@ namespace UnityFramework
         public static T Load<T>(string path) where T : Object
         {
             if (path == null) return null;
-            int index = path.IndexOf("/Resources/");
+            int index = path.IndexOf("/Resources/", StringComparison.Ordinal);
             return Resources.Load<T>(Path.ChangeExtension(index == -1 ? path : path.Substring(index + 11), null));
         }
 
         public static void Load<T>(string path, System.Action<T> onLoadFinish) where T : Object
         {
             if (path == null) return;
-            int index = path.IndexOf("/Resources/");
+            int index = path.IndexOf("/Resources/", StringComparison.Ordinal);
             T go = Resources.Load<T>(Path.ChangeExtension(index == -1 ? path : path.Substring(index + 11), null));
             onLoadFinish?.Invoke(go);
         }
@@ -29,7 +31,7 @@ namespace UnityFramework
         public static void AsyncLoad<T>(string path, System.Action<T> onLoadFinish) where T : Object
         {
             if (path == null) return;
-            int index = path.IndexOf("/Resources/");
+            int index = path.IndexOf("/Resources/", StringComparison.Ordinal);
             T go = Resources.Load<T>(Path.ChangeExtension(index == -1 ? path : path.Substring(index + 11), null));
             onLoadFinish?.Invoke(go);
         }

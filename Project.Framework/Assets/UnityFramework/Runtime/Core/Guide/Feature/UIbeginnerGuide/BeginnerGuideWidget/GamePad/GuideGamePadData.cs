@@ -11,8 +11,6 @@ namespace UnityFramework
     [System.Serializable]
     public class GuideGamePadData : GuideWidgetData
     {
-        //GuideDescAnim = "1,{Action3}|1,{Action4}|1,{Action3}|1,{Action4}|1,{Action3}|1,{Action4}| 1 |2, {JoystickMenu} | 1";
-        //GuideDescAnim = "2,{Action3}{Action4}| 1 | 2,{Action3}| 1";
         public string GamePadAnimStr;
 
         public List<TimeAndKeys> guideList = new List<TimeAndKeys>();
