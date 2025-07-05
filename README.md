@@ -14,7 +14,7 @@
 
 ### UnityFramework
 
-##### UnityFramework内核基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[loxodon-framework](https://github.com/vovgou/loxodon-framework)和[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm模式的架构优化调整
+##### UnityFramework内核基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm模式的架构优化调整
 
 ##### 使用起来方便易懂的unity-mvvm框架
 
@@ -37,8 +37,6 @@
 ##### <strong><a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a> - TEngine是一个简单(新手友好开箱即用)且强大的Unity框架全平台解决方案,对于需要一套上手快、文档清晰、高性能且可拓展性极强的商业级解决方案的开发者或者团队来说是一个很好的选择。</strong>
 
 ##### <a href="https://github.com/dotnet/wpf"><strong>WPF</strong></a> - 是一个用于构建 Windows 桌面应用程序的 UI 框架，WPF 支持广泛的应用程序开发功能，包括应用程序模型、资源、控件、图形、布局、数据绑定和文档。WPF 使用可扩展应用程序标记语言 (XAML) 为应用程序编程提供声明性模型。
-
-##### <strong><a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a></strong> - LoxodonFramework是一个轻量级的MVVM(Model-View-ViewModel)框架，它是专门为Unity3D游戏开发设计的，参考了WPF和Android的MVVM设计。
 
 ##### <a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a> - 特性完整、零成本、高性能、低内存的近乎完美的Unity全平台原生c#热更方案
 
