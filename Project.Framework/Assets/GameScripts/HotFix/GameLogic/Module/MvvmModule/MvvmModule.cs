@@ -9,6 +9,7 @@ namespace GameLogic
     public class MvvmModule : Singleton<MvvmModule>
     {
         public ApplicationContext ApplicationContext;
+
         public void Init()
         {
             Context.OnInitialize();

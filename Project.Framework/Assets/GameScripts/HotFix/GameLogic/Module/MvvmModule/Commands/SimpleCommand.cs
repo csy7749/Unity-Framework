@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace GameLogic.Commands
 {
-public class SimpleCommand : CommandBase
+    public class SimpleCommand : CommandBase
     {
         private bool enabled = true;
         private readonly UnityAction execute;

@@ -12,8 +12,7 @@ namespace GameLogic.ViewModel
         public ViewModelBase()
         {
         }
-
-
+        
         protected void Broadcast<T>(T oldValue, T newValue, string propertyName)
         {
             try

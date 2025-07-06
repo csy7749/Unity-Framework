@@ -51,35 +51,16 @@ namespace GameLogic.Observables
                 }
             }
         }
-
-        //[Conditional("DEBUG")]
-        //protected void VerifyPropertyName(string propertyName)
-        //{
-        //    var type = this.GetType();
-        //    if (!string.IsNullOrEmpty(propertyName) && type.GetProperty(propertyName) == null)
-        //        throw new ArgumentException("Property not found", propertyName);
-        //}
-
-        /// <summary>
-        /// Raises the PropertyChanging event.
-        /// </summary>
-        /// <param name="propertyName">Property name.</param>
+        
         protected virtual void RaisePropertyChanged(string propertyName = null)
         {
-            //RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
             RaisePropertyChanged(GetPropertyChangedEventArgs(propertyName));
         }
 
-        /// <summary>
-        /// Raises the PropertyChanging event.
-        /// </summary>
-        /// <param name="eventArgs">Property changed event.</param>
         protected virtual void RaisePropertyChanged(PropertyChangedEventArgs eventArgs)
         {
             try
             {
-                //VerifyPropertyName(eventArgs.PropertyName);
-
                 if (propertyChanged != null)
                     propertyChanged(this, eventArgs);
             }
@@ -89,10 +70,6 @@ namespace GameLogic.Observables
             }
         }
 
-        /// <summary>
-        /// Raises the PropertyChanging event.
-        /// </summary>
-        /// <param name="eventArgs"></param>
         protected virtual void RaisePropertyChanged(params PropertyChangedEventArgs[] eventArgs)
         {
             foreach (var args in eventArgs)
@@ -135,17 +112,8 @@ namespace GameLogic.Observables
                     "Please use Set(field,newValue) instead of Set<T>(field,newValue) to avoid value types being boxed.");
         }
 
-        /// <summary>
-        /// Set the specified propertyExpression, field and newValue.
-        /// </summary>
-        /// <param name="propertyExpression">Property expression.</param>
-        /// <param name="field">Field.</param>
-        /// <param name="newValue">New value.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
         protected bool Set<T>(ref T field, T newValue, Expression<Func<T>> propertyExpression)
         {
-            //VerifyPropertyType(typeof(T));
-            //if (object.Equals(field, newValue))
             if (EqualityComparer<T>.Default.Equals(field, newValue))
                 return false;
 
@@ -155,18 +123,8 @@ namespace GameLogic.Observables
             return true;
         }
 
-        /// <summary>
-        ///  Set the specified propertyName, field, newValue.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field"></param>
-        /// <param name="newValue"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
         protected bool Set<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
-            //VerifyPropertyType(typeof(T));
-            //if (object.Equals(field, newValue))
             if (EqualityComparer<T>.Default.Equals(field, newValue))
                 return false;
 
@@ -175,14 +133,6 @@ namespace GameLogic.Observables
             return true;
         }
 
-        /// <summary>
-        ///  Set the specified propertyName, field, newValue.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field"></param>
-        /// <param name="newValue"></param>
-        /// <param name="eventArgs"></param>
-        /// <returns></returns>
         protected bool Set<T>(ref T field, T newValue, PropertyChangedEventArgs eventArgs)
         {
             if (EqualityComparer<T>.Default.Equals(field, newValue))
@@ -193,14 +143,6 @@ namespace GameLogic.Observables
             return true;
         }
 
-        /// <summary>
-        ///  Set the specified propertyName, field, newValue.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field"></param>
-        /// <param name="newValue"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
         [Obsolete]
         protected bool SetValue<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
             where T : IEquatable<T>
@@ -213,14 +155,6 @@ namespace GameLogic.Observables
             return true;
         }
 
-        /// <summary>
-        ///  Set the specified propertyName, field, newValue.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field"></param>
-        /// <param name="newValue"></param>
-        /// <param name="eventArgs"></param>
-        /// <returns></returns>
         [Obsolete]
         protected bool SetValue<T>(ref T field, T newValue, PropertyChangedEventArgs eventArgs) where T : IEquatable<T>
         {

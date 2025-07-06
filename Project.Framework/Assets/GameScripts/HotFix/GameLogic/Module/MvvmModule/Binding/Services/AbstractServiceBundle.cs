@@ -4,22 +4,22 @@ namespace GameLogic.Binding.Services
 {
     public abstract class AbstractServiceBundle : IServiceBundle
     {
-        private IServiceContainer _container;
+        private IServiceContainer container;
         public AbstractServiceBundle(IServiceContainer container)
         {
-            this._container = container;
+            this.container = container;
         }
 
         public void Start()
         {
-            this.OnStart(_container);
+            this.OnStart(container);
         }
 
         protected abstract void OnStart(IServiceContainer container);
 
         public void Stop()
         {
-            this.OnStop(_container);
+            this.OnStop(container);
         }
 
         protected abstract void OnStop(IServiceContainer container);

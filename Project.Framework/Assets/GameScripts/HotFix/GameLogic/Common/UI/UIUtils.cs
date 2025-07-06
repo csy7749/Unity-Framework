@@ -4,7 +4,7 @@ namespace GameLogic
 {
     public static class UIUtils
     {
-        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
+        public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
         {
             if (go == null)
             {

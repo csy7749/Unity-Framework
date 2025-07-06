@@ -208,12 +208,12 @@ namespace GameLogic
             return FindChildImp(trans, path);
         }
 
-        public T FindChildComponent<T>(string path) where T : Component
+        public T FindChildComponent<T>(string path) where T : UnityEngine.Component
         {
             return FindChildComponentImp<T>(rectTransform, path);
         }
 
-        public T FindChildComponent<T>(Transform trans, string path) where T : Component
+        public T FindChildComponent<T>(Transform trans, string path) where T : UnityEngine.Component
         {
             return FindChildComponentImp<T>(trans, path);
         }
@@ -224,7 +224,7 @@ namespace GameLogic
             return findTrans != null ? findTrans : null;
         }
 
-        private static T FindChildComponentImp<T>(Transform transform, string path) where T : Component
+        private static T FindChildComponentImp<T>(Transform transform, string path) where T : UnityEngine.Component
         {
             var findTrans = transform.Find(path);
             if (findTrans != null)

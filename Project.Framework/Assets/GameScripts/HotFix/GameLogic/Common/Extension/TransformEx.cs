@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using Component = UnityEngine.Component;
 namespace GameLogic
 {
     public static class TransformEx
@@ -72,7 +72,7 @@ namespace GameLogic
             }
         }
 
-        public static T GetOrAddComponent<T>(this GameObject obj) where T : Component
+        public static T GetOrAddComponent<T>(this GameObject obj) where T : UnityEngine.Component
         {
             var com = obj.GetComponent<T>();
             if (com == null)
@@ -83,7 +83,7 @@ namespace GameLogic
         }
 
 
-        public static Component GetOrAddComponent(this GameObject obj, System.Type type)
+        public static UnityEngine.Component GetOrAddComponent(this GameObject obj, System.Type type)
         {
             var com = obj.GetComponent(type);
             if (com == null)
@@ -94,7 +94,7 @@ namespace GameLogic
         }
 
 
-        public static T GetOrAddComponent<T>(this Component behaviour) where T : Component
+        public static T GetOrAddComponent<T>(this UnityEngine.Component behaviour) where T : UnityEngine.Component
         {
             var com = behaviour.GetComponent<T>();
             if (com == null)
@@ -105,7 +105,7 @@ namespace GameLogic
         }
 
 
-        public static Component GetOrAddComponent(this Component behaviour, System.Type type)
+        public static UnityEngine.Component GetOrAddComponent(this UnityEngine.Component behaviour, System.Type type)
         {
             var com = behaviour.GetComponent(type);
             if (com == null)
@@ -176,7 +176,7 @@ namespace GameLogic
             return worldToLocalMatrix.MultiplyPoint3x4(point);
         }
 
-        public static T TryAddComponent<T>(this GameObject target) where T : Component
+        public static T TryAddComponent<T>(this GameObject target) where T : UnityEngine.Component
         {
             T[] components = target.GetComponents<T>();
 
@@ -201,7 +201,7 @@ namespace GameLogic
         }
 
         /// <returns></returns>
-        public static T TryGetComponent<T>(this GameObject target) where T : Component
+        public static T TryGetComponent<T>(this GameObject target) where T : UnityEngine.Component
         {
             T[] components = target.GetComponents<T>();
 
@@ -215,7 +215,7 @@ namespace GameLogic
             return null;
         }
 
-        public static bool HasComponent<T>(this GameObject target) where T : Component
+        public static bool HasComponent<T>(this GameObject target) where T : UnityEngine.Component
         {
             T[] components = target.GetComponents<T>();
 

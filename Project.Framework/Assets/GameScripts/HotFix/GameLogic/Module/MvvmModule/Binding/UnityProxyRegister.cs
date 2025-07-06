@@ -42,7 +42,7 @@ namespace GameLogic.Binding
             Register<Behaviour, bool>("enabled", t => t.enabled, (t, v) => t.enabled = v);
             Register<Behaviour, bool>("isActiveAndEnabled", t => t.isActiveAndEnabled, null);
 
-            Register<Component, string>("tag", t => t.tag, (t, v) => t.tag = v);
+            Register<UnityEngine.Component, string>("tag", t => t.tag, (t, v) => t.tag = v);
 
             Register<Canvas, float>("planeDistance", t => t.planeDistance, (t, v) => t.planeDistance = v);
             Register<Canvas, string>("sortingLayerName", t => t.sortingLayerName, (t, v) => t.sortingLayerName = v);

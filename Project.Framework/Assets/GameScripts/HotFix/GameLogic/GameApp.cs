@@ -42,7 +42,6 @@ public partial class GameApp
     /// </summary>
     private static void StartGameLogic()
     {
-        //游戏逻辑开始前初始化mvvm
         MvvmModule.Instance.Init();
         UIModule.Instance.Active();
         StartBattleRoom().Forget();
@@ -50,8 +49,8 @@ public partial class GameApp
 
     private static async UniTaskVoid StartBattleRoom()
     {
-        await GameModule.Scene.LoadSceneAsync("scene_battle");
-        BattleSystem.Instance.LoadRoom().Forget();
+        await GameModule.Scene.LoadSceneAsync("scene_home");
+        HomeSystem.Instance.LoadHome().Forget();
     }
     
     private static void Release()
