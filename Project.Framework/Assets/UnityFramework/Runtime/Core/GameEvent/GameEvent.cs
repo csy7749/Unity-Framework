@@ -768,10 +768,10 @@ namespace UnityFramework
 
         public override void Publish(object message)
         {
-            Publish((T)message);
+            this.Publish((T)message);
         }
 
-        private void Publish(T message)
+        public void Publish(T message)
         {
             if (_subscriptions.Count <= 0)
                 return;
@@ -842,7 +842,7 @@ namespace UnityFramework
             #region IDisposable Support
             private int _disposed = 0;
 
-            private void Dispose(bool disposing)
+            protected virtual void Dispose(bool disposing)
             {
                 try
                 {

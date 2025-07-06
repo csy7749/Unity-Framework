@@ -37,7 +37,7 @@ public static class BuildDLLCommand
 #endif
     }
 
-    [MenuItem("HybridCLR/Build/BuildAssets And CopyTo AssemblyTextAssetPath")]
+    [MenuItem("HybridCLR/BuildDefault/BuildAssets And CopyTo AssemblyTextAssetPath")]
     public static void BuildAndCopyDlls()
     {
 #if ENABLE_HYBRIDCLR
@@ -46,6 +46,16 @@ public static class BuildDLLCommand
         CopyAOTHotUpdateDlls(target);
 #endif
     }
+
+//     [MenuItem("HybridCLR/BuildOther/BuildAssets And CopyTo AssemblyTextAssetPath")]
+//     public static void BuildAndCopyOtherDlls()
+//     {
+// #if ENABLE_HYBRIDCLR
+//         BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
+//         CompileDllCommand.CompileDll(target);
+//         CopyAOTHotUpdateDlls(target);
+// #endif
+//     }
 
     public static void BuildAndCopyDlls(BuildTarget target)
     {
@@ -83,6 +93,28 @@ public static class BuildDLLCommand
         }
 #endif
     }
+//
+//     public static void CopyOtherAOTAssembliesToAssetPath()
+//     {
+// #if ENABLE_HYBRIDCLR
+//         var target = EditorUserBuildSettings.activeBuildTarget;
+//         string aotAssembliesSrcDir = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
+//         string aotAssembliesDstDir = Application.dataPath +"/"+ UnityFramework.Settings.UpdateSetting.AssemblyTextAssetPath;
+//
+//         foreach (var dll in UnityFramework.Settings.UpdateSetting.AOTMetaAssemblies)
+//         {
+//             string srcDllPath = $"{aotAssembliesSrcDir}/{dll}";
+//             if (!System.IO.File.Exists(srcDllPath))
+//             {
+//                 Debug.LogError($"ab中添加AOT补充元数据dll:{srcDllPath} 时发生错误,文件不存在。裁剪后的AOT dll在BuildPlayer时才能生成，因此需要你先构建一次游戏App后再打包。");
+//                 continue;
+//             }
+//             string dllBytesPath = $"{aotAssembliesDstDir}/{dll}.bytes";
+//             System.IO.File.Copy(srcDllPath, dllBytesPath, true);
+//             Debug.Log($"[CopyAOTAssembliesToStreamingAssets] copy AOT dll {srcDllPath} -> {dllBytesPath}");
+//         }
+// #endif
+//     }
 
     public static void CopyHotUpdateAssembliesToAssetPath()
     {

@@ -107,6 +107,10 @@ namespace UnityFramework
                 return true;
             } //点击不了
 
+            // if (RectTransformUtility.RectangleContainsScreenPoint(target, sp))
+            // {
+            //     return false;
+            // }
             return true;
         }
 
@@ -140,6 +144,7 @@ namespace UnityFramework
                 }
             }
 
+            //Debug.Log(target.position);
             InitTarget();
             if (isCircle)
             {
@@ -199,6 +204,33 @@ namespace UnityFramework
             {
                 UIBeginnerGuideManager.Instance.FinishGuide(guideID);
             }
+            // else if (guideFinishType == GuideFinishType.Strong)
+            // {
+            //     // Vector2 sp = Input.mousePosition;
+            //     // Debug.Log(sp);
+            //     // //Debug.Log(target.)
+            //     // if (RectTransformUtility.RectangleContainsScreenPoint(target, sp))
+            //     // {
+            //     //     UIBeginnerGuideManager.Instance.FinishGuide(guideID);
+            //     // }
+            //     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //     RaycastHit hit;
+            //     if (Physics.Raycast(ray, out hit))
+            //     {
+            //         Debug.Log(hit.collider.gameObject.name);
+            //         // obj = hit.collider.gameObject;
+            //         // //通过名字
+            //         // if (obj.name.Equals("BeiJiChuan"))
+            //         // {
+            //         //     Debug.Log("点中" + obj.name);
+            //         // }
+            //         // //通过标签
+            //         // if (obj.tag == "ClicObj")
+            //         // {
+            //         //     Debug.Log("点中" + obj.name);
+            //         // }
+            //     }
+            // }
         }
     }
 }

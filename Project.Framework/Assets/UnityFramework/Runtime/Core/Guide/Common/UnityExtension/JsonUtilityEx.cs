@@ -3,6 +3,26 @@ using System.Collections.Generic;
 using System;
 namespace UnityFramework
 {
+    /*
+    // Samples JsonUtilityEx
+
+    [Serializable]
+    private class TableRow
+    {
+        public string key;
+        public string[] translates;
+    }
+
+    // List<T> -> Json ( 例 : List<TableRow> )
+    string str = JsonUtilityEx.ToJson(table.ToList()); // 输出 : {"target":[{"key":"1","translates":["中文1","繁中1","日语1","英语1"]},{"key":"2","translates":["中文2","繁中2","日语2","英语2"]}]}
+    // Json-> List<T>
+    List<TextRow> enemies = JsonUtilityEx.FromJson<TextRow>(json.text).ToList();
+
+    // Dictionary<TKey,TValue> -> Json( 例 : Dictionary<string, TableRow> )
+    string str = JsonUtilityEx.ToJson(transformDatas); // 输出 : {"keys":[1,2],"values":[{"key":"1","translates":["中文1","繁中1","日语1","英语1"]},{"key":"2","translates":["中文2","繁中2","日语2","英语2"]}]}
+    // Json -> Dictionary<TKey,TValue>
+    Dictionary<string, TableRow> Datas = JsonUtilityEx.FromJson<string, TableRow>(json.text);
+     */
     /// <summary>
     /// 拓展List和Dictionary的序列化
     /// </summary>
@@ -59,6 +79,19 @@ namespace UnityFramework
             return wrapper.ToDictionary();
         }
     }
+
+    /*
+    // Samples Serialization
+    // List<T> -> Json ( 例 : List<Enemy> )
+    string str = JsonUtility.ToJson(new Serialization<Enemy>(enemies)); // 输出 : {"target":[{"name":"怪物1,"skills":["攻击"]},{"name":"怪物2","skills":["攻击","恢复"]}]}
+    // Json-> List<T>
+    List<Enemy> enemies = JsonUtility.FromJson<Serialization<Enemy>>(str).ToList();
+
+    // Dictionary<TKey,TValue> -> Json( 例 : Dictionary<int, Enemy> )
+    string str = JsonUtility.ToJson(new Serialization<int, Enemy>(enemies)); // 输出 : {"keys":[1000,2000],"values":[{"name":"怪物1","skills":["攻击"]},{"name":"怪物2","skills":["攻击","恢复"]}]}
+    // Json -> Dictionary<TKey,TValue>
+    Dictionary<int, Enemy> enemies = JsonUtility.FromJson<Serialization<int, Enemy>>(str).ToDictionary();
+    */
 
     // List<T>
     [Serializable]

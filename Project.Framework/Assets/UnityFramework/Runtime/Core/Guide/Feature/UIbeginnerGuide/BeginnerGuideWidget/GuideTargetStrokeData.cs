@@ -29,6 +29,11 @@ namespace UnityFramework
         public override string Serialize()
         {
             UpdateTransformData();
+            // if (targetType == TargetType.Target && targetGameObject != null )
+            // {
+            //     //Pos = transform.position - targetGameObject.transform.position;
+
+            // }
             string data = JsonUtility.ToJson(this);
             return data;
         }

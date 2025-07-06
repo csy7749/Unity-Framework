@@ -25,7 +25,7 @@ MonoBehaviour:
   - YooAsset.dll
   LogicMainDllName: GameLogic.dll
   AssemblyTextAssetExtension: .bytes
-  AssemblyTextAssetPath: AssetRaw/DLL
+  AssemblyTextAssetPath: AssetRaw/DefaultPackage/DLL
   UpdateStyle: 1
   UpdateNotice: 1
   EnableUpdateData: 1

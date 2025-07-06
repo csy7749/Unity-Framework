@@ -77,7 +77,7 @@ namespace UnityFramework
         /// <summary>
         /// 程序集文本资产资源目录
         /// </summary>
-        public string AssemblyTextAssetPath = "AssetRaw/DLL";
+        public string AssemblyTextAssetPath = "AssetRaw/DefaultPackage/DLL";
 
         [Header("更新设置")]
         public UpdateStyle UpdateStyle = UpdateStyle.Force;
@@ -88,7 +88,7 @@ namespace UnityFramework
         public bool EnableUpdateData = true;
 
         [SerializeField]
-        private string UpdateDataPath = "http://127.0.0.1:8080";
+        private string UpdateDataPath = "http://192.168.5.5:8080";
         
         [SerializeField]
         private string UpdateDataFileName = "UpdateData.json"; 
@@ -99,7 +99,7 @@ namespace UnityFramework
         }
 
         [SerializeField]
-        private string ServerStateDatePath = "http://127.0.0.1:8080";
+        private string ServerStateDatePath = "http://192.168.5.5:8080";
 
         [SerializeField]
         private string ServerStateDataFileName = "ServerStateData.json"; 
@@ -113,13 +113,13 @@ namespace UnityFramework
         /// 资源服务器地址。
         /// </summary>
         [SerializeField]
-        public string ResDownLoadPath = "http://127.0.0.1:8081";
+        public string ResDownLoadPath = "http://192.168.5.5:8081";
 
         /// <summary>
         /// 资源服务备用地址。
         /// </summary>
         [SerializeField]
-        public string FallbackResDownLoadPath = "http://127.0.0.1:8082";
+        public string FallbackResDownLoadPath = "http://192.168.5.5:8082";
 
         /// <summary>
         /// 获取资源下载路径。

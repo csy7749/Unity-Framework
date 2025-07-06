@@ -672,11 +672,20 @@ namespace UnityFramework
 
             T ret = handle.AssetObject as T;
 
-            assetObject = AssetObject.Create(assetObjectKey, handle.AssetObject, handle, this);
-            _assetPool.Register(assetObject, true);
 
-            return ret;
+            try
+            {
+                assetObject = AssetObject.Create(assetObjectKey, handle.AssetObject, handle, this);
+                _assetPool.Register(assetObject, true);
+                return ret;
+            }
+            catch (Exception e)
+            {
+                Log.Warning(nameof(LoadAsset), e);
+                return null;
+            }
         }
+
 
         public GameObject LoadGameObject(string location, Transform parent = null, string packageName = "")
         {

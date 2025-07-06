@@ -32,6 +32,20 @@ namespace UnityFramework
                 return assetObject;
             }
 
+            public static AssetObject TryCreate(string name, object target, object assetHandle, ResourceModule resourceModule)
+            {
+                if (assetHandle == null || resourceModule == null)
+                {
+                    return null;
+                }
+
+                AssetObject assetObject = MemoryPool.Acquire<AssetObject>();
+                assetObject.Initialize(name, target);
+                assetObject._assetHandle = (AssetHandle)assetHandle;
+                assetObject._resourceModule = resourceModule;
+                return assetObject;
+            }
+
             public override void Clear()
             {
                 base.Clear();

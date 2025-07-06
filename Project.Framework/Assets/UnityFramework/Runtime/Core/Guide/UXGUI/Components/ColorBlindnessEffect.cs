@@ -68,6 +68,10 @@ namespace UnityFramework
         public Shader colorAlterationShader;
         private Material mat = null;
 
+        public void OnEnable()
+        {
+        }
+
         public IEnumerator OnPostRender()
         {
             if (colorAlterationShader == null) yield break;
@@ -77,6 +81,8 @@ namespace UnityFramework
                 mat = null;
             }
 
+            // Wait until after everything else has happened, *including* rendering the
+            // GUI!
             yield return new WaitForEndOfFrame();
 
             if (!mat)
