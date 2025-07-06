@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using GameLogic;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -209,25 +211,37 @@ namespace UnityFramework.Editor.UI
                 case "Text":
                     componentName = "string";
                     varName = varName.Replace("Text", "");
+                    if (!string.IsNullOrEmpty(varName))
+                    {
+                        properties.Add(varName);
+                        strVar.Append("\t\tpublic " + componentName + " " + varName + "\n");
+                        strVar.Append("\t\t{\n");
+                        strVar.Append($"\t\t\tget => _{rootCamel}Model.{varName};\n");
+                        strVar.Append($"\t\t\tset\n");
+                        strVar.Append("\t\t\t{\n");
+                        strVar.Append($"\t\t\t\t_{rootCamel}Model.{varName} = value;\n");
+                        strVar.Append($"\t\t\t\tRaisePropertyChanged(nameof({varName}));\n");
+                        strVar.Append("\t\t\t}\n");
+                        strVar.Append("\t\t}\n");
+                    }
+                    break;
+                case "Button":
+                    componentName = "SimpleCommand";
+                    varName = varName.Replace("Btn", "");
+                    var iCommandName = "_" + string.Copy(varName).ToFirstCharLower();
+                    if (!string.IsNullOrEmpty(varName))
+                    {
+                        properties.Add(varName);
+                        strVar.Append("\t\tprivate " + componentName + " " + iCommandName  + "Command;" + "\n");
+                        strVar.Append("\t\tpublic " + "ICommand" + " " + varName + "Command" );
+                        strVar.Append($" => {iCommandName}Command;\n");
+                    }
                     break;
                 default:
                     Log.Warning($"暂未支持");
                     return;
             }
             
-            if (!string.IsNullOrEmpty(varName))
-            {
-                properties.Add(varName);
-                strVar.Append("\t\tpublic " + componentName + " " + varName + "\n");
-                strVar.Append("\t\t{\n");
-                strVar.Append($"\t\t\tget => _{rootCamel}Model.{varName};\n");
-                strVar.Append($"\t\t\tset\n");
-                strVar.Append("\t\t\t{\n");
-                strVar.Append($"\t\t\t\t_{rootCamel}Model.{varName} = value;\n");
-                strVar.Append($"\t\t\t\tRaisePropertyChanged(nameof({varName}));\n");
-                strVar.Append("\t\t\t}\n");
-                strVar.Append("\t\t}\n");
-            }
         }
 
 
