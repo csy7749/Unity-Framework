@@ -5,6 +5,7 @@ using UnityEditor;
 using System;
 using UnityEditorInternal;
 using System.Linq;
+using GameLogic.Guide;
 using UnityEngine.Events;
 
 namespace UnityFramework.Editor
@@ -134,12 +135,12 @@ namespace UnityFramework.Editor
                 if (templateProperty.intValue == 0)
                 {
                     prefabProperty.objectReferenceValue =
-                    AssetDatabase.LoadAssetAtPath<GameObject>($"{ThunderFireUIToolConfig.AssetsRootPath}UX-GUI-Feature/BeginnerGuide/Resources/BeginnerGuideTemplate/GuideTemplate_Gesture.prefab");
+                    AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/AssetRaw/DefaultPackage/UI/Guide/BeginnerGuideTemplate/GuideTemplate_Gesture.prefab");
                 }
                 else if (templateProperty.intValue == 1)
                 {
                     prefabProperty.objectReferenceValue =
-                    AssetDatabase.LoadAssetAtPath<GameObject>($"{ThunderFireUIToolConfig.AssetsRootPath}UX-GUI-Feature/BeginnerGuide/Resources/BeginnerGuideTemplate/GuideTemplate_GamePad.prefab");
+                    AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/AssetRaw/DefaultPackage/UI/Guide/BeginnerGuideTemplate/GuideTemplate_GamePad.prefab");
                 }
             }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using System.Collections.Generic;
+using GameLogic.Guide;
 
 namespace UnityFramework.Editor
 {
@@ -95,7 +96,7 @@ namespace UnityFramework.Editor
 			}
 			else
 			{
-				string message = typeof(ReorderableListAttribute).Name + " can be used only on arrays or lists";
+				string message = nameof(ReorderableListAttribute) + " can be used only on arrays or lists";
 				NaughtyEditorGUI.HelpBox_Layout(message, MessageType.Warning, context: property.serializedObject.targetObject);
 				EditorGUILayout.PropertyField(property, true);
 			}

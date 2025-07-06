@@ -1,4 +1,5 @@
 using System.Collections;
+using GameLogic.Guide;
 using UnityEngine;
 using UnityEditor;
 
@@ -83,7 +84,7 @@ namespace UnityFramework.Editor
 
             if (startPosControllerTrans == null || endPosControllerTrans == null)
             {
-                GameObject controllerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/UXTools/Res/UX-GUI-Feature/BeginnerGuide/Editor/Assets/Prefab/PosController.prefab");
+                GameObject controllerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/AssetRaw/DefaultPackage/UI/Guide/PosController.prefab");
 
                 dragStartPosController = Instantiate(controllerPrefab, data.transform);
                 dragEndPosController = Instantiate(controllerPrefab, data.transform);

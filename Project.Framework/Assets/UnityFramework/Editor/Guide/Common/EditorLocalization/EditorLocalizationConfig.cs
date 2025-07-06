@@ -8,7 +8,7 @@ namespace UnityFramework.Editor
     //UXTools中用到的本地化配置和常量
     public class EditorLocalizationConfig
     {
-        public static readonly string UXCommonPath = $"{ThunderFireUIToolConfig.AssetsRootPath}UX-GUI-Editor-Common/";
+        public static readonly string UXCommonPath = $"Assets/Guide/UXTools/Res/UX-GUI-Editor-Common/";
 
         #region Editor Localization
         //编辑器本地化路径

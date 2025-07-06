@@ -11,8 +11,8 @@ namespace UnityFramework.Editor
     //UXTools中的路径和常量
     public partial class ThunderFireUIToolConfig
     {
-        public static readonly string UXCommonPath = $"{AssetsRootPath}UX-GUI-Editor-Common/";
-        public static readonly string UXToolsPath = $"{AssetsRootPath}UX-GUI-Editor-Tools/";
+        public static readonly string UXCommonPath = $"Assets/Guide/UXTools/Res/UX-GUI-Editor-Common/";
+        public static readonly string UXToolsPath = $"Assets/Guide/UXTools/Res/UX-GUI-Editor-Tools/";
 
         #region Editor Res
         public static readonly string UIBuilderPath = UXToolsPath + "Assets/Editor/Window_uibuilder/";

@@ -18,6 +18,7 @@ using Image = UnityEngine.UI.Image;
 using Text = UnityEngine.UI.Text;
 using System.Reflection;
 using System.Threading.Tasks;
+using GameLogic.Guide;
 
 namespace UnityFramework.Editor
 {

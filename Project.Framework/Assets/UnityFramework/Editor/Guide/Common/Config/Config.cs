@@ -10,7 +10,6 @@ namespace UnityFramework.Editor
     //UXTools中的路径和常量
     public partial class ThunderFireUIToolConfig
     {
-        public static  string AssetsRootPath = Path.Combine(EditorLocalizationPath() + "/Res/");
         public static  string ToolsRootPath = Path.Combine(EditorLocalizationPath() + "/Editor/"); 
 
         public static string EditorLocalizationPath()

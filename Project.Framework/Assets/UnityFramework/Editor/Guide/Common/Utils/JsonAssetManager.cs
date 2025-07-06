@@ -17,7 +17,7 @@ namespace UnityFramework.Editor
         }
 
 
-        private static string metapath = ThunderFireUIToolConfig.AssetsRootPath + "JsonAssetManager.json";
+        private static string metapath = "Assets/UnityFramework/Editor/Guide/Common/Utils/JsonAssetManager.cs";
 
         [SerializeField] private static Dictionary<string, string> AssetPathDic = new Dictionary<string, string> { };
 

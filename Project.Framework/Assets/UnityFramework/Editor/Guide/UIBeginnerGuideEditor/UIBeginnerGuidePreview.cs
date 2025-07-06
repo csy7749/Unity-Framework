@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using GameLogic.Guide;
+using GameLogic.Guide.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
