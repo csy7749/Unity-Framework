@@ -135,7 +135,7 @@ namespace GameLogic.Guide
 
             if (type == GestureType.ThumbClick)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Assets/AssetRaw/DefaultPackage/UI/Guide/Gesture/clickPrefab_thumb"), transform);
+                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/clickPrefab_thumb"), transform);
             }
             else if (type == GestureType.ThumbDrag)
             {
