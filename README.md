@@ -14,13 +14,9 @@
 
 ### UnityFramework
 
-##### UnityFramework内核基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm模式的架构优化调整
-
-##### 使用起来方便易懂的unity-mvvm框架
+##### UnityFramework内核基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm和实体组件模式的架构进行优化调整
 
 ##### mvvm数据绑定已完整实现，TimeModule逻辑调整，事件模块增加mvvm模式的消息发布
-
-##### 资源模块、对象池模块、UI模块的使用可参考<a href="https://github.com/Alex-Rachel/TEngine/blob/main/Books/99-%E5%90%84%E5%B9%B3%E5%8F%B0%E8%BF%90%E8%A1%8CRunAble.md"><strong>TEngine使用文档</strong></a>
 
 ##### main分支集成了从雷火工具中拆出的红点和引导系统，目前还未深度改造
 
@@ -32,7 +28,7 @@
 
 ---
 
-#### 优质开源项目推荐
+#### 优质项目推荐
 
 ##### <strong><a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a> - TEngine是一个简单(新手友好开箱即用)且强大的Unity框架全平台解决方案,对于需要一套上手快、文档清晰、高性能且可拓展性极强的商业级解决方案的开发者或者团队来说是一个很好的选择。</strong>
 
@@ -41,3 +37,9 @@
 ##### <a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a> - 特性完整、零成本、高性能、低内存的近乎完美的Unity全平台原生c#热更方案
 
 ##### <a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a> - YooAsset是一套商业级经历百万DAU游戏验证的资源管理系统。
+
+##### <strong><a href="https://github.com/m969/EGamePlay"><strong>EGamePlay</strong></a></strong> - 基于Entity-Component模式设计的战斗系统。
+
+##### <strong><a href="https://github.com/crashkonijn/GOAP"><strong>GOAP</strong></a></strong> - A robust, multi-threaded Goal Oriented Action Planning (GOAP) system designed for Unity, empowering developers to create complex AI behaviors with ease.
+
+##### <strong><a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a></strong> - LoxodonFramework是一个轻量级的MVVM(Model-View-ViewModel)框架，它是专门为Unity3D游戏开发设计的，参考了WPF和Android的MVVM设计。
