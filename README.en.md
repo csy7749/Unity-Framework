@@ -50,6 +50,4 @@
 
 ##### <a href="https://github.com/m969/EGamePlay"><strong>EGamePlay</strong></a> - A battle system designed based on the Entity-Component pattern.
 
-##### <a href="https://github.com/crashkonijn/GOAP"><strong>GOAP</strong></a> - A robust, multithreaded Goal-Oriented Action Planning system for Unity, enabling developers to implement complex AI behavior with ease.
-
 ##### <a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a> - A lightweight MVVM framework tailored for Unity3D development, inspired by the MVVM patterns of WPF and Android.

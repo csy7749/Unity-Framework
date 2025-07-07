@@ -93,7 +93,7 @@ Material:
     - _Width: 354.9662
     - _ZWrite: 1
     m_Colors:
-    - _Center: {r: 584.7461, g: 35.010056, b: 0, a: 0}
+    - _Center: {r: 636.7761, g: 50.010056, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

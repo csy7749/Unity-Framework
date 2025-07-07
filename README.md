@@ -51,6 +51,4 @@
 
 ##### <strong><a href="https://github.com/m969/EGamePlay"><strong>EGamePlay</strong></a></strong> - 基于Entity-Component模式设计的战斗系统。
 
-##### <strong><a href="https://github.com/crashkonijn/GOAP"><strong>GOAP</strong></a></strong> - A robust, multi-threaded Goal Oriented Action Planning (GOAP) system designed for Unity, empowering developers to create complex AI behaviors with ease.
-
 ##### <strong><a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a></strong> - LoxodonFramework是一个轻量级的MVVM(Model-View-ViewModel)框架，它是专门为Unity3D游戏开发设计的，参考了WPF和Android的MVVM设计。
