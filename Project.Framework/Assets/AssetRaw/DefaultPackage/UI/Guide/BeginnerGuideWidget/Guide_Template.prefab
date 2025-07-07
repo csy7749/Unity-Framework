@@ -307,7 +307,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 111588443421038340}
-  - component: {fileID: 6195466320476363667}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -330,67 +329,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4142826567245113224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6195466320476363667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8674028431233492609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c86db303839937498cb335dbec0259c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guid: 61a94c08ea303a04ba079d1b9f4a8b8a
-  guideDataList:
-  - guideID: Guide(0)
-    guideFinishType: 0
-    guideFinishDuration: 0
-    guideTemplatePrefab: {fileID: 129291512494320572, guid: 14961014bd33abd4a818582f9c84ba81, type: 3}
-    guideHighLightData: 
-    highLightTarget: {fileID: 0}
-    guideTextPanelData: 
-    guideGesturePanelData: 
-    GestureObject: {fileID: 0}
-    selectedObject: {fileID: 0}
-    gamePadPanelData: 
-    targetStrokeData: 
-    strokeTarget: {fileID: 0}
-    guideArrowLineData: 
-    GuideSelfDefinedData: []
-    CustomTransformDatas: 
-    CustomTextFont: 
-    CustomTextDatas: 
-    CustomImagesprite: 
-    CustomImageDatas: 
-    UseOwnPrefab: 1
-    Template: 0
-    Click:
-      m_PersistentCalls:
-        m_Calls: []
-  - guideID: Guide(1)
-    guideFinishType: 0
-    guideFinishDuration: 0
-    guideTemplatePrefab: {fileID: 129291512494320572, guid: cb9dc182bed8c52428dfa0309bd9ccc1, type: 3}
-    guideHighLightData: 
-    highLightTarget: {fileID: 0}
-    guideTextPanelData: 
-    guideGesturePanelData: 
-    GestureObject: {fileID: 0}
-    selectedObject: {fileID: 0}
-    gamePadPanelData: 
-    targetStrokeData: 
-    strokeTarget: {fileID: 0}
-    guideArrowLineData: 
-    GuideSelfDefinedData: []
-    CustomTransformDatas: 
-    CustomTextFont: 
-    CustomTextDatas: 
-    CustomImagesprite: 
-    CustomImageDatas: 
-    UseOwnPrefab: 1
-    Template: 0
-    Click:
-      m_PersistentCalls:
-        m_Calls: []
