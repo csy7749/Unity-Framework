@@ -36,7 +36,7 @@ namespace Procedure
 
         private async UniTaskVoid CheckServerState(ProcedureOwner procedureOwner)
         {
-            var checkVersionUrl = Settings.UpdateSetting.GetServerStateDataPath();
+            var checkVersionUrl = Settings.UpdateSetting.GetServerStateDatePath();
             if (string.IsNullOrEmpty(checkVersionUrl))
             {
                 Log.Error("LoadMgr.RequestVersion, remote url is empty or null");

@@ -104,7 +104,7 @@ namespace UnityFramework
         [SerializeField]
         private string ServerStateDataFileName = "ServerStateData.json"; 
 
-        public string GetServerStateDataPath()
+        public string GetServerStateDatePath()
         {
             return Path.Combine(ServerStateDatePath, projectName,ServerStateDataFileName).Replace("\\", "/");
         }
