@@ -23,31 +23,31 @@ namespace GameLogic.Combat
     }
 
     /// <summary>
-    /// 赋给效果行动
+    /// ????Ч???ж?
     /// </summary>
     public class EffectAssignAction : Entity, IActionExecute
     {
-        /// 创建这个效果赋给行动的源能力
+        /// ???????Ч???????ж????????
         public Entity SourceAbility { get; set; }
-        /// 目标行动
+        /// ????ж?
         public IActionExecute TargetAction { get; set; }
         public AbilityEffect AbilityEffect { get; set; }
         public Effect EffectConfig => AbilityEffect.EffectConfig;
-        /// 行动能力
+        /// ?ж?????
         public Entity ActionAbility { get; set; }
-        /// 效果赋给行动源
+        /// Ч???????ж??
         public EffectAssignAction SourceAssignAction { get; set; }
-        /// 行动实体
+        /// ?ж????
         public CombatEntity Creator { get; set; }
-        /// 目标对象
+        /// ??????
         public Entity Target { get; set; }
-        /// 赋给目标
+        /// ???????
         public Entity AssignTarget { get; set; }
-        /// 触发上下文
+        /// ??????????
         public TriggerContext TriggerContext { get; set; }
 
 
-        /// 前置处理
+        /// ??????
         private void PreProcess()
         {
             if (Target == null)
@@ -75,7 +75,7 @@ namespace GameLogic.Combat
             FinishAction();
         }
 
-        /// 后置处理
+        /// ???????
         private void PostProcess()
         {
             Creator.TriggerActionPoint(ActionPointType.AssignEffect, this);
