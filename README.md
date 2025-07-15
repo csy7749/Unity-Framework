@@ -15,7 +15,7 @@
 
 ### UnityFramework
 
-
+**通读了多个框架的设计后就想着集成自己习惯的解决方案**
 
 #### ------------------------------------------------开发中----------------------------------------------------
 
@@ -25,9 +25,9 @@
 
 ##### mvvm数据绑定已完整实现，TimeModule逻辑调整，事件模块增加mvvm模式的消息发布
 
-##### main分支集成了从雷火工具中拆出的红点和引导系统，目前还未深度改造
+##### main分支集成了从雷火工具中拆出的红点和引导系统
 
-##### 不好夹带私货，就将EGamePlay的技能系统简单拿过来了改了一下，后面有空再深度改造
+##### 不好夹带私货，就先将EGamePlay的技能系统简单集成了过来，后面有空再深度改造
 
 ##### 已实现View模块和ViewModel模块的代码生成器，Hierarchy页面右键预制体选择Script Generator→GeneratorView/GeneratorViewModel（遵循自定义组件命名）
 
@@ -50,5 +50,3 @@
 ##### <a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a> - YooAsset是一套商业级经历百万DAU游戏验证的资源管理系统。
 
 ##### <strong><a href="https://github.com/m969/EGamePlay"><strong>EGamePlay</strong></a></strong> - 基于Entity-Component模式设计的战斗系统。
-
-##### <strong><a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a></strong> - LoxodonFramework是一个轻量级的MVVM(Model-View-ViewModel)框架，它是专门为Unity3D游戏开发设计的，参考了WPF和Android的MVVM设计。
