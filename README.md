@@ -41,12 +41,14 @@
 
 #### 优质项目推荐
 
-##### <strong><a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a> - TEngine是一个简单(新手友好开箱即用)且强大的Unity框架全平台解决方案,对于需要一套上手快、文档清晰、高性能且可拓展性极强的商业级解决方案的开发者或者团队来说是一个很好的选择。</strong>
+##### <strong><a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a> - TEngine是一个简单(新手友好开箱即用)且强大的Unity框架全平台解决方案。</strong>
 
-##### <a href="https://github.com/dotnet/wpf"><strong>WPF</strong></a> - 是一个用于构建 Windows 桌面应用程序的 UI 框架，WPF 支持广泛的应用程序开发功能，包括应用程序模型、资源、控件、图形、布局、数据绑定和文档。WPF 使用可扩展应用程序标记语言 (XAML) 为应用程序编程提供声明性模型。
+##### <a href="https://github.com/dotnet/wpf"><strong>WPF</strong></a> - 是一个用于构建 Windows 桌面应用程序的 UI 框架，使用可扩展应用程序标记语言 (XAML) 为应用程序编程提供声明性模型。
 
 ##### <a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a> - 特性完整、零成本、高性能、低内存的近乎完美的Unity全平台原生c#热更方案
 
 ##### <a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a> - YooAsset是一套商业级经历百万DAU游戏验证的资源管理系统。
 
 ##### <strong><a href="https://github.com/m969/EGamePlay"><strong>EGamePlay</strong></a></strong> - 基于Entity-Component模式设计的战斗系统。
+
+##### <strong><a href="https://github.com/vovgou/loxodon-framework"><strong>Loxodon Framework</strong></a></strong> - LoxodonFramework是一个轻量级的MVVM(Model-View-ViewModel)框架。
