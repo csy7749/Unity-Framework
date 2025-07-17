@@ -3,42 +3,42 @@ using UnityEditor;
 
 public static class UnityFrameworkEGamePlaySettingsProvider
 {
-    [MenuItem("UnityFramework/Settings/UnityFramework EGamePlaySetting", priority = -1)]
-    public static void OpenSettings() => SettingsService.OpenProjectSettings("Project/UnityFramework/EGamePlaySetting");
+    [MenuItem("UnityFramework/Settings/UnityFramework EGamePlaySettings", priority = -1)]
+    public static void OpenSettings() => SettingsService.OpenProjectSettings("Project/UnityFramework/EGamePlaySettings");
     
-    private const string SettingsPath = "Project/UnityFramework/EGamePlaySetting";  
+    private const string SettingsPath = "Project/UnityFramework/EGamePlaySettings";  
     
     [SettingsProvider]  
     public static SettingsProvider CreateMySettingsProvider()  
     {  
         return new SettingsProvider(SettingsPath, SettingsScope.Project)  
         {  
-            label = "UnityFramework/UpdateSettings",  
-            guiHandler = (searchContext) =>  
-            {  
-                var settings = Settings.UpdateSetting;  
-                var serializedObject = new SerializedObject(settings);  
-
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("projectName"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("HotUpdateAssemblies"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("AOTMetaAssemblies"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("LogicMainDllName"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("AssemblyTextAssetExtension"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("AssemblyTextAssetPath"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateStyle"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("EnableUpdateData"));
-                if (settings.EnableUpdateData)
-                {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ServerStateDatePath"));  
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ServerStateDataFileName"));  
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateDataPath"));  
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateDataFileName"));  
-                }
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("ResDownLoadPath"));  
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("FallbackResDownLoadPath"));  
-                serializedObject.ApplyModifiedProperties();  
-            },  
-            keywords = new[] { "UnityFramework", "Settings", "Custom" }  
+            label = "UnityFramework/EGamePlaySettings",  
+            // guiHandler = (searchContext) =>  
+            // {  
+            //     var settings = Settings.UpdateSetting;  
+            //     var serializedObject = new SerializedObject(settings);  
+            //
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("projectName"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("HotUpdateAssemblies"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("AOTMetaAssemblies"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("LogicMainDllName"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("AssemblyTextAssetExtension"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("AssemblyTextAssetPath"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateStyle"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("EnableUpdateData"));
+            //     if (settings.EnableUpdateData)
+            //     {
+            //         EditorGUILayout.PropertyField(serializedObject.FindProperty("ServerStateDatePath"));  
+            //         EditorGUILayout.PropertyField(serializedObject.FindProperty("ServerStateDataFileName"));  
+            //         EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateDataPath"));  
+            //         EditorGUILayout.PropertyField(serializedObject.FindProperty("UpdateDataFileName"));  
+            //     }
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("ResDownLoadPath"));  
+            //     EditorGUILayout.PropertyField(serializedObject.FindProperty("FallbackResDownLoadPath"));  
+            //     serializedObject.ApplyModifiedProperties();  
+            // },  
+            // keywords = new[] { "UnityFramework", "Settings", "Custom" }  
         };  
     }
 }
