@@ -23,7 +23,7 @@ namespace UnityFramework.Editor.Combat
 		private AttributeConfigObject attributeConfigObject;
 
 		[LabelText("属性配置")]
-        [ListDrawerSettings(Expanded = true, DraggableItems = false)]
+        [ListDrawerSettings(DefaultExpandedState = true, DraggableItems = false)]
 		public List<AttributeConfig> AttributeConfigs;
 		//[Button("+")]
 		//private void AddAttributeConfig()
@@ -32,9 +32,9 @@ namespace UnityFramework.Editor.Combat
 		//	AttributeConfigs.Add(new AttributeConfig() { Guid = string.Concat(arr) });
 		//}
 
-		[OnInspectorGUI(AppendMethodName = "DrawStateList"/*, AppendMethodName = "EndDrawStateMatrix"*/)]
+		[OnInspectorGUI(Append = "DrawStateList"/*, AppendMethodName = "EndDrawStateMatrix"*/)]
 		[LabelText("状态配置")]
-        [ListDrawerSettings(Expanded = true, DraggableItems = false)]
+        [ListDrawerSettings(DefaultExpandedState = true, DraggableItems = false)]
 		public List<StateConfig> StateConfigs;
         //[Button("+")]
         //private void AddStateConfig()
@@ -166,7 +166,7 @@ namespace UnityFramework.Editor.Combat
 			//window.position = GUIHelper.GetEditorWindowRect().AlignCenter(700, 700);
 		}
 
-		bool isDraging = false;
+		// bool isDraging = false;
 		Vector2 pos;
 		Texture boxTex;
 		Timeline timeline;
@@ -320,7 +320,7 @@ namespace UnityFramework.Editor.Combat
 		float currentAnimDuration;
 		float normalizedTime;
 
-		bool play = false;
+		// bool play = false;
 
 		public void DrawTimeLine()
 		{

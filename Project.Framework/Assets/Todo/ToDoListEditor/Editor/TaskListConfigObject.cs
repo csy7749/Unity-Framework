@@ -35,7 +35,7 @@ namespace ToDoListEditor
     {
         [LabelText("·")]
         //[HideLabel]
-        [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowItemCount = false)]
+        [ListDrawerSettings(DefaultExpandedState = true, DraggableItems = false, ShowItemCount = false)]
         public List<TaskConfig> TaskConfigs = new List<TaskConfig>();
     }
 

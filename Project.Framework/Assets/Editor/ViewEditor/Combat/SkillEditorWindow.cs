@@ -32,7 +32,7 @@ public class SkillEditorWindow : OdinMenuEditorWindow
 
     AbilityConfigCategory SkillConfigCategory;
 
-    int totalCount = 0;
+    // int totalCount = 0;
     protected override OdinMenuTree BuildMenuTree()
     {
         var tree = new OdinMenuTree(true);

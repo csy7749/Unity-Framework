@@ -84,7 +84,7 @@ namespace UnityFramework.Editor
             }
             catch (Exception e)
             {
-                Log.Error($"component view error: {obj.GetType().FullName}");
+                Log.Error($"component view error: {obj.GetType().FullName},e:{e.Message}");
             }
         }
     }

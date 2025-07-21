@@ -154,7 +154,7 @@ namespace YooAsset
 
             if (assetInfo.IsInvalid)
             {
-                YooLogger.Warning($"Failed to load asset ! {assetInfo.Error}");
+                YooLogger.Error($"Failed to load asset ! {assetInfo.Error}");
                 CompletedProvider completedProvider = new CompletedProvider(this, assetInfo);
                 completedProvider.SetCompletedWithError(assetInfo.Error);
                 return completedProvider.CreateHandle<AssetHandle>();
