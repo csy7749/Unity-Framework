@@ -9,333 +9,342 @@ using ShortcutExtensions = DG.Tweening.ShortcutExtensions;
 
 namespace GameLogic
 {
-public sealed class Hero : MonoBehaviour
-{
-    private ETCancellationToken _token;
-    public CombatEntity CombatEntity;
-    public AnimationComponent AnimationComponent;
-    public float MoveSpeed = 1f;
-    public float AnimTime = 0.05f;
-    public GameTimer AnimTimer = new GameTimer(0.1f);
-    public GameObject AttackPrefab;
-    public GameObject SkillEffectPrefab;
-    public GameObject HitEffectPrefab;
-    public Transform InventoryPanelTrm;
-    public Transform EquipmentPanelTrm;
-    public Transform SkillSlotsTrm;
-    public GameObject ItemPrefab;
-    public Text DamageText;
-    public Text CureText;
-    public UnityEngine.UI.Image HealthBarImage;
-    public Transform CanvasTrm;
-
-    private Tweener MoveTweener { get; set; }
-    private Tweener LookAtTweener { get; set; }
-
-    public static Hero Instance { get; set; }
-    public Vector3 Position { get; set; }
-    public Vector3 Rotation { get; set; }
-    public bool SkillPlaying { get; set; }
-    
-    // Start is called before the first frame update
-    void Start()
+    public sealed class Hero : MonoBehaviour
     {
-        CombatEntity = CombatContext.Instance.AddChild<CombatEntity>();
-        CombatContext.Instance.Object2Entities.Add(gameObject, CombatEntity);
-        CombatEntity.HeroObject = gameObject;
-        CombatEntity.ModelTrans = gameObject.transform.GetChild(0);
-        CombatEntity.IsHero = true;
-        CombatEntity.CampType = CampType.Player;
-        
-        PointSelectManager.Instance.HeroObj = gameObject;
-        DirectRectSelectManager.Instance.HeroObj = gameObject;
-        if (TargetSelectManager.Instance != null)
-        {
-            CombatEntity.AddComponent<SpellPreviewComponent>();
-        }
-        //CombatEntity.AddComponent<EquipmentComponent>();
-        CombatEntity.ListenActionPoint(ActionPointType.PreSpell, OnPreSpell);
-        CombatEntity.ListenActionPoint(ActionPointType.PostSpell, OnPostSpell);
-        CombatEntity.ListenActionPoint(ActionPointType.PostReceiveDamage, OnReceiveDamage);
-        CombatEntity.ListenActionPoint(ActionPointType.PostReceiveCure, OnReceiveCure);
-        CombatEntity.ListenActionPoint(ActionPointType.PostReceiveStatus, OnReceiveStatus);
-        CombatEntity.Subscribe<RemoveStatusEvent>(OnRemoveStatus);
-        CombatEntity.Subscribe<AnimationClip>(OnPlayAnimation);
-        CombatEntity.CurrentHealth.Minus(30000);
+        private ETCancellationToken _token;
+        public CombatEntity CombatEntity;
+        public AnimationComponent AnimationComponent;
+        public float MoveSpeed = 1f;
+        public float AnimTime = 0.05f;
+        public GameTimer AnimTimer = new GameTimer(0.1f);
+        public GameObject AttackPrefab;
+        public GameObject SkillEffectPrefab;
+        public GameObject HitEffectPrefab;
+        public Transform InventoryPanelTrm;
+        public Transform EquipmentPanelTrm;
+        public Transform SkillSlotsTrm;
+        public GameObject ItemPrefab;
+        public Text DamageText;
+        public Text CureText;
+        public UnityEngine.UI.Image HealthBarImage;
+        public Transform CanvasTrm;
 
-        var allConfigs = ConfigHelper.GetAll<AbilityConfig>().Values.ToArray();
-        for (int i = 0; i < allConfigs.Length; i++)
+        private Tweener MoveTweener { get; set; }
+        private Tweener LookAtTweener { get; set; }
+
+        public static Hero Instance { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3 Rotation { get; set; }
+        public bool SkillPlaying { get; set; }
+
+        // Start is called before the first frame update
+        void Start()
         {
-            var config = allConfigs[i];
-            if (config.Type != "Skill")
+            CombatEntity = CombatContext.Instance.AddChild<CombatEntity>();
+            CombatContext.Instance.Object2Entities.Add(gameObject, CombatEntity);
+            CombatEntity.HeroObject = gameObject;
+            CombatEntity.ModelTrans = gameObject.transform.GetChild(0);
+            CombatEntity.IsHero = true;
+            CombatEntity.CampType = CampType.Player;
+
+            PointSelectManager.Instance.HeroObj = gameObject;
+            DirectRectSelectManager.Instance.HeroObj = gameObject;
+            if (TargetSelectManager.Instance != null)
             {
-                continue;
+                CombatEntity.AddComponent<SpellPreviewComponent>();
             }
-            var skilld = config.Id;
-            if (skilld == 3001)
+
+            //CombatEntity.AddComponent<EquipmentComponent>();
+            CombatEntity.ListenActionPoint(ActionPointType.PreSpell, OnPreSpell);
+            CombatEntity.ListenActionPoint(ActionPointType.PostSpell, OnPostSpell);
+            CombatEntity.ListenActionPoint(ActionPointType.PostReceiveDamage, OnReceiveDamage);
+            CombatEntity.ListenActionPoint(ActionPointType.PostReceiveCure, OnReceiveCure);
+            CombatEntity.ListenActionPoint(ActionPointType.PostReceiveStatus, OnReceiveStatus);
+            CombatEntity.Subscribe<RemoveStatusEvent>(OnRemoveStatus);
+            CombatEntity.Subscribe<AnimationClip>(OnPlayAnimation);
+            CombatEntity.CurrentHealth.Minus(30000);
+
+            var allConfigs = ConfigHelper.GetAll<AbilityConfig>().Values.ToArray();
+            for (int i = 0; i < allConfigs.Length; i++)
             {
-                continue;
+                var config = allConfigs[i];
+                if (config.Type != "Skill")
+                {
+                    continue;
+                }
+
+                var skilld = config.Id;
+                if (skilld == 3001)
+                {
+                    continue;
+                }
+
+                //if (skilld != 1001)
+                //{
+                //    continue;
+                //}
+                // var configObj = GameLogic.AssetUtils.LoadObject<AbilityConfigObject>($"{AbilityManagerObject.SkillResFolder}/Skill_{skilld}");
+                var configObj = GameModule.Resource.LoadAsset<AbilityConfigObject>($"Skill_{skilld}");
+                var ability = CombatEntity.GetComponent<SkillComponent>().AttachSkill(configObj);
+                if (skilld == 1001) CombatEntity.BindSkillInput(ability, KeyCode.Q);
+                if (skilld == 1002) CombatEntity.BindSkillInput(ability, KeyCode.W);
+                if (skilld == 1003) CombatEntity.BindSkillInput(ability, KeyCode.Y);
+                if (skilld == 1004) CombatEntity.BindSkillInput(ability, KeyCode.E);
+                if (skilld == 1005) CombatEntity.BindSkillInput(ability, KeyCode.R);
+                if (skilld == 1006)
+                {
+                    CombatEntity.BindSkillInput(ability, KeyCode.T);
+                    ability.AddComponent<Skill1006Component>();
+                }
+
+                if (skilld == 1008) CombatEntity.BindSkillInput(ability, KeyCode.A);
+                if (skilld == 2001) CombatEntity.BindSkillInput(ability, KeyCode.S);
             }
-            //if (skilld != 1001)
-            //{
-            //    continue;
-            //}
-            // var configObj = GameLogic.AssetUtils.LoadObject<AbilityConfigObject>($"{AbilityManagerObject.SkillResFolder}/Skill_{skilld}");
-            var configObj = GameModule.Resource.LoadAsset<AbilityConfigObject>($"Skill_{skilld}");
-            var ability = CombatEntity.GetComponent<SkillComponent>().AttachSkill(configObj);
-            if (skilld == 1001) CombatEntity.BindSkillInput(ability, KeyCode.Q);
-            if (skilld == 1002) CombatEntity.BindSkillInput(ability, KeyCode.W);
-            if (skilld == 1003) CombatEntity.BindSkillInput(ability, KeyCode.Y);
-            if (skilld == 1004) CombatEntity.BindSkillInput(ability, KeyCode.E);
-            if (skilld == 1005) CombatEntity.BindSkillInput(ability, KeyCode.R);
-            if (skilld == 1006)
-            {
-                CombatEntity.BindSkillInput(ability, KeyCode.T);
-                ability.AddComponent<Skill1006Component>();
-            }
-            if (skilld == 1008) CombatEntity.BindSkillInput(ability, KeyCode.A);
-            if (skilld == 2001) CombatEntity.BindSkillInput(ability, KeyCode.S);
-        }
 //#endif
 
-        CombatEntity.GetComponent<SpellComponent>().LoadExecutionObjects();
+            CombatEntity.GetComponent<SpellComponent>().LoadExecutionObjects();
 
-        HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
-        AnimTimer.MaxTime = AnimTime;
-        //InitInventory();
+            HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
+            AnimTimer.MaxTime = AnimTime;
+            //InitInventory();
 
-        var ExecutionLinkPanelObj = GameObject.Find("ExecutionLinkPanel");
-        if (ExecutionLinkPanelObj != null)
-        {
-            ExecutionLinkPanelObj.GetComponent<ExecutionLinkPanel>().HeroEntity = CombatEntity;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        CombatEntity.Position = transform.position;
-        CombatEntity.Rotation = transform.GetChild(0).localRotation;
-
-        if (CombatEntity.SpellingExecution != null && CombatEntity.SpellingExecution.ActionOccupy)
-            return;
-
-        if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
-        {
-            if (RaycastHelper.CastMapPoint(out var point))
+            var ExecutionLinkPanelObj = GameObject.Find("ExecutionLinkPanel");
+            if (ExecutionLinkPanelObj != null)
             {
-                var time = Vector3.Distance(transform.position, point) * MoveSpeed * 0.5f;
-                StopMove();
-                MoveTweener = ShortcutExtensions.DOMove(transform, point, time).SetEase(Ease.Linear).OnComplete(() => { AnimationComponent.PlayFade(AnimationComponent.IdleAnimation); });
-                LookAtTweener = ShortcutExtensions.DOLookAt(transform.GetChild(0), point, 0.2f);
-                AnimationComponent.PlayFade(AnimationComponent.RunAnimation);
+                ExecutionLinkPanelObj.GetComponent<ExecutionLinkPanel>().HeroEntity = CombatEntity;
             }
         }
-    }
 
-    private void OnPreSpell(Entity combatAction)
-    {
-        var spellAction = combatAction as SpellAction;
-        if (spellAction.InputTarget != null)
+        // Update is called once per frame
+        void Update()
         {
-            CombatEntity.ModelTrans.localRotation = Quaternion.LookRotation(spellAction.InputTarget.Position - CombatEntity.ModelTrans.position);
-        }
-        else
-        {
-            CombatEntity.ModelTrans.localRotation = Quaternion.LookRotation(spellAction.InputPoint - CombatEntity.ModelTrans.position);
-        }
-        DisableMove();
-
-        if (spellAction.SkillExecution != null)
-        {
-            if (spellAction.SkillAbility.HasComponent<Skill1006Component>())
-            {
-                return;
-            }
-
-            if (spellAction.SkillExecution.InputTarget != null)
-                transform.GetChild(0).LookAt(spellAction.SkillExecution.InputTarget.Position);
-            else if (spellAction.SkillExecution.InputPoint != null)
-                transform.GetChild(0).LookAt(spellAction.SkillExecution.InputPoint);
-            else
-                transform.GetChild(0).localEulerAngles = new Vector3(0, spellAction.SkillExecution.InputRadian, 0);
-
             CombatEntity.Position = transform.position;
             CombatEntity.Rotation = transform.GetChild(0).localRotation;
+
+            if (CombatEntity.SpellingExecution != null && CombatEntity.SpellingExecution.ActionOccupy)
+                return;
+
+            if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
+            {
+                if (RaycastHelper.CastMapPoint(out var point))
+                {
+                    var time = Vector3.Distance(transform.position, point) * MoveSpeed * 0.5f;
+                    StopMove();
+                    MoveTweener = ShortcutExtensions.DOMove(transform, point, time).SetEase(Ease.Linear)
+                        .OnComplete(() => { AnimationComponent.PlayFade(AnimationComponent.IdleAnimation); });
+                    LookAtTweener = ShortcutExtensions.DOLookAt(transform.GetChild(0), point, 0.2f);
+                    AnimationComponent.PlayFade(AnimationComponent.RunAnimation);
+                }
+            }
         }
-    }
 
-    private void OnPostSpell(Entity combatAction)
-    {
-        var spellAction = combatAction as SpellAction;
-        if (spellAction.SkillExecution != null)
+        private void OnPreSpell(Entity combatAction)
         {
-            AnimationComponent.PlayFade(AnimationComponent.IdleAnimation);
+            var spellAction = combatAction as SpellAction;
+            if (spellAction.InputTarget != null)
+            {
+                CombatEntity.ModelTrans.localRotation =
+                    Quaternion.LookRotation(spellAction.InputTarget.Position - CombatEntity.ModelTrans.position);
+            }
+            else
+            {
+                CombatEntity.ModelTrans.localRotation =
+                    Quaternion.LookRotation(spellAction.InputPoint - CombatEntity.ModelTrans.position);
+            }
+
+            DisableMove();
+
+            if (spellAction.SkillExecution != null)
+            {
+                if (spellAction.SkillAbility.HasComponent<Skill1006Component>())
+                {
+                    return;
+                }
+
+                if (spellAction.SkillExecution.InputTarget != null)
+                    transform.GetChild(0).LookAt(spellAction.SkillExecution.InputTarget.Position);
+                else if (spellAction.SkillExecution.InputPoint != null)
+                    transform.GetChild(0).LookAt(spellAction.SkillExecution.InputPoint);
+                else
+                    transform.GetChild(0).localEulerAngles = new Vector3(0, spellAction.SkillExecution.InputRadian, 0);
+
+                CombatEntity.Position = transform.position;
+                CombatEntity.Rotation = transform.GetChild(0).localRotation;
+            }
         }
-    }
 
-    private void OnReceiveDamage(Entity combatAction)
-    {
-        var damageAction = combatAction as DamageAction;
-        HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
-        var damageText = GameObject.Instantiate(DamageText, CanvasTrm, true);
-        damageText.transform.localPosition = Vector3.up * 120;
-        damageText.transform.localScale = Vector3.one;
-        damageText.transform.localEulerAngles = Vector3.zero;
-        damageText.text = $"-{damageAction.DamageValue}";
-        // damageText.GetComponent<DOTweenAnimation>().DORestart();
-        GameObject.Destroy(damageText.gameObject, 0.5f);
-    }
-
-    private void OnReceiveCure(Entity combatAction)
-    {
-        var cureAction = combatAction as CureAction;
-        HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
-        var cureText = GameObject.Instantiate(CureText, CanvasTrm, true);
-        cureText.transform.localPosition = Vector3.up * 120;
-        cureText.transform.localScale = Vector3.one;
-        cureText.transform.localEulerAngles = Vector3.zero;
-        cureText.text = $"+{cureAction.CureValue}";
-        // var temp = cureText.GetComponent<DOTweenAnimation>();
-        // cureText.GetComponent<DOTweenAnimation>().DORestart();
-        GameObject.Destroy(cureText.gameObject, 0.5f);
-    }
-
-    private void OnReceiveStatus(Entity combatAction)
-    {
-        if (combatAction is not AddStatusAction action) return;
-        var addStatusEffect = action.AddStatusEffect;
-        var statusConfig = addStatusEffect.AddStatus;
-
-        // if (name == "Monster")
-        // {
-        //     var obj = GameObject.Instantiate(StatusIconPrefab);
-        //     obj.transform.SetParent(StatusSlotsTrm);
-        //     obj.GetComponentInChildren<Text>().text = statusConfig.Name;
-        //     obj.name = action.Status.Id.ToString();
-        // }
-        //
-        // if (statusConfig.ID == "Vertigo")
-        // {
-        //     AnimationComponent.AnimancerComponent.Play(AnimationComponent.StunAnimation);
-        //     if (vertigoParticle == null)
-        //     {
-        //         vertigoParticle = GameObject.Instantiate(statusConfig.ParticleEffect);
-        //         vertigoParticle.transform.parent = transform;
-        //         vertigoParticle.transform.localPosition = new Vector3(0, 2, 0);
-        //     }
-        // }
-        // if (statusConfig.ID == "Weak")
-        // {
-        //     if (weakParticle == null)
-        //     {
-        //         weakParticle = GameObject.Instantiate(statusConfig.ParticleEffect);
-        //         weakParticle.transform.parent = transform;
-        //         weakParticle.transform.localPosition = new Vector3(0, 0, 0);
-        //     }
-        // }
-    }
-
-    private void OnRemoveStatus(RemoveStatusEvent eventData)
-    {
-        //if (name == "Monster")
-        //{
-        //    var trm = StatusSlotsTrm.Find(eventData.StatusId.ToString());
-        //    if (trm != null)
-        //    {
-        //        GameObject.Destroy(trm.gameObject);
-        //    }
-        //}
-
-        //var statusConfig = eventData.Status.StatusConfigObject;
-        //if (statusConfig.ID == "Vertigo")
-        //{
-        //    AnimationComponent.AnimancerComponent.Play(AnimationComponent.IdleAnimation);
-        //    if (vertigoParticle != null)
-        //    {
-        //        GameObject.Destroy(vertigoParticle);
-        //    }
-        //}
-        //if (statusConfig.ID == "Weak")
-        //{
-        //    if (weakParticle != null)
-        //    {
-        //        GameObject.Destroy(weakParticle);
-        //    }
-        //}
-    }
-
-    private void OnPlayAnimation(AnimationClip animationClip)
-    {
-        AnimationComponent.PlayFade(animationClip);
-    }
-
-    public void StopMove()
-    {
-        MoveTweener?.Kill();
-        LookAtTweener?.Kill();
-    }
-
-    public void DisableMove()
-    {
-        MoveTweener?.Kill();
-        LookAtTweener?.Kill();
-        CombatEntity.GetComponent<MotionComponent>().Enable = false;
-    }
-
-    private void SpawnLineEffect(GameObject lineEffectPrefab, Vector3 p1, Vector3 p2)
-    {
-        var attackEffect = GameObject.Instantiate(lineEffectPrefab);
-        attackEffect.transform.position = Vector3.up;
-        attackEffect.GetComponent<LineRenderer>().SetPosition(0, p1);
-        attackEffect.GetComponent<LineRenderer>().SetPosition(1, p2);
-        GameObject.Destroy(attackEffect, 0.05f);
-    }
-
-    private void SpawnHitEffect(Vector3 p1, Vector3 p2)
-    {
-        var vec = p1 - p2;
-        var hitPoint = p2 + vec.normalized * .6f;
-        hitPoint += Vector3.up;
-        var hitEffect = GameObject.Instantiate(HitEffectPrefab);
-        hitEffect.transform.position = hitPoint;
-        GameObject.Destroy(hitEffect, 0.2f);
-    }
-
-    public void Attack()
-    {
-        //PlayThenIdleAsync(AnimationComponent.AttackAnimation).Coroutine();
-
-        if (CombatEntity.AttackSpellAbility.TryMakeAction(out var action))
+        private void OnPostSpell(Entity combatAction)
         {
-            var monster = GameObject.Find("Monster");
-            SpawnLineEffect(AttackPrefab, transform.position, monster.transform.position);
-            SpawnHitEffect(transform.position, monster.transform.position);
-
-            CombatEntity.GetComponent<AttributeComponent>().Attack.SetBase(GameLogic.RandomHelper.RandomNumber(600, 999));
-
-            action.Target = monster.GetComponent<Monster>().CombatEntity;
-            action.ApplyAttack();
-            //Entity.Destroy(action);
+            var spellAction = combatAction as SpellAction;
+            if (spellAction.SkillExecution != null)
+            {
+                AnimationComponent.PlayFade(AnimationComponent.IdleAnimation);
+            }
         }
-    }
 
-    public async ETTask PlayThenIdleAsync(AnimationClip animation)
-    {
-        AnimationComponent.Play(AnimationComponent.IdleAnimation);
-        AnimationComponent.PlayFade(animation);
-        if (_token != null)
+        private void OnReceiveDamage(Entity combatAction)
         {
-            _token.Cancel();
+            var damageAction = combatAction as DamageAction;
+            HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
+            var damageText = GameObject.Instantiate(DamageText, CanvasTrm, true);
+            damageText.transform.localPosition = Vector3.up * 120;
+            damageText.transform.localScale = Vector3.one;
+            damageText.transform.localEulerAngles = Vector3.zero;
+            damageText.text = $"-{damageAction.DamageValue}";
+            // damageText.GetComponent<DOTweenAnimation>().DORestart();
+            GameObject.Destroy(damageText.gameObject, 0.5f);
         }
-        _token = new ETCancellationToken();
-        var isTimeout = await TimerManager.Instance.WaitAsync((int)(animation.length * 1000), _token);
-        if (isTimeout)
+
+        private void OnReceiveCure(Entity combatAction)
         {
-            _token = null;
-            AnimationComponent.PlayFade(AnimationComponent.IdleAnimation);
+            var cureAction = combatAction as CureAction;
+            HealthBarImage.fillAmount = CombatEntity.CurrentHealth.ToPercent();
+            var cureText = GameObject.Instantiate(CureText, CanvasTrm, true);
+            cureText.transform.localPosition = Vector3.up * 120;
+            cureText.transform.localScale = Vector3.one;
+            cureText.transform.localEulerAngles = Vector3.zero;
+            cureText.text = $"+{cureAction.CureValue}";
+            // var temp = cureText.GetComponent<DOTweenAnimation>();
+            // cureText.GetComponent<DOTweenAnimation>().DORestart();
+            GameObject.Destroy(cureText.gameObject, 0.5f);
+        }
+
+        private void OnReceiveStatus(Entity combatAction)
+        {
+            if (combatAction is not AddStatusAction action) return;
+            var addStatusEffect = action.AddStatusEffect;
+            var statusConfig = addStatusEffect.AddStatus;
+
+            // if (name == "Monster")
+            // {
+            //     var obj = GameObject.Instantiate(StatusIconPrefab);
+            //     obj.transform.SetParent(StatusSlotsTrm);
+            //     obj.GetComponentInChildren<Text>().text = statusConfig.Name;
+            //     obj.name = action.Status.Id.ToString();
+            // }
+            //
+            // if (statusConfig.ID == "Vertigo")
+            // {
+            //     AnimationComponent.AnimancerComponent.Play(AnimationComponent.StunAnimation);
+            //     if (vertigoParticle == null)
+            //     {
+            //         vertigoParticle = GameObject.Instantiate(statusConfig.ParticleEffect);
+            //         vertigoParticle.transform.parent = transform;
+            //         vertigoParticle.transform.localPosition = new Vector3(0, 2, 0);
+            //     }
+            // }
+            // if (statusConfig.ID == "Weak")
+            // {
+            //     if (weakParticle == null)
+            //     {
+            //         weakParticle = GameObject.Instantiate(statusConfig.ParticleEffect);
+            //         weakParticle.transform.parent = transform;
+            //         weakParticle.transform.localPosition = new Vector3(0, 0, 0);
+            //     }
+            // }
+        }
+
+        private void OnRemoveStatus(RemoveStatusEvent eventData)
+        {
+            //if (name == "Monster")
+            //{
+            //    var trm = StatusSlotsTrm.Find(eventData.StatusId.ToString());
+            //    if (trm != null)
+            //    {
+            //        GameObject.Destroy(trm.gameObject);
+            //    }
+            //}
+
+            //var statusConfig = eventData.Status.StatusConfigObject;
+            //if (statusConfig.ID == "Vertigo")
+            //{
+            //    AnimationComponent.AnimancerComponent.Play(AnimationComponent.IdleAnimation);
+            //    if (vertigoParticle != null)
+            //    {
+            //        GameObject.Destroy(vertigoParticle);
+            //    }
+            //}
+            //if (statusConfig.ID == "Weak")
+            //{
+            //    if (weakParticle != null)
+            //    {
+            //        GameObject.Destroy(weakParticle);
+            //    }
+            //}
+        }
+
+        private void OnPlayAnimation(AnimationClip animationClip)
+        {
+            AnimationComponent.PlayFade(animationClip);
+        }
+
+        public void StopMove()
+        {
+            MoveTweener?.Kill();
+            LookAtTweener?.Kill();
+        }
+
+        public void DisableMove()
+        {
+            MoveTweener?.Kill();
+            LookAtTweener?.Kill();
+            CombatEntity.GetComponent<MotionComponent>().Enable = false;
+        }
+
+        private void SpawnLineEffect(GameObject lineEffectPrefab, Vector3 p1, Vector3 p2)
+        {
+            var attackEffect = GameObject.Instantiate(lineEffectPrefab);
+            attackEffect.transform.position = Vector3.up;
+            attackEffect.GetComponent<LineRenderer>().SetPosition(0, p1);
+            attackEffect.GetComponent<LineRenderer>().SetPosition(1, p2);
+            GameObject.Destroy(attackEffect, 0.05f);
+        }
+
+        private void SpawnHitEffect(Vector3 p1, Vector3 p2)
+        {
+            var vec = p1 - p2;
+            var hitPoint = p2 + vec.normalized * .6f;
+            hitPoint += Vector3.up;
+            var hitEffect = GameObject.Instantiate(HitEffectPrefab);
+            hitEffect.transform.position = hitPoint;
+            GameObject.Destroy(hitEffect, 0.2f);
+        }
+
+        public void Attack()
+        {
+            //PlayThenIdleAsync(AnimationComponent.AttackAnimation).Coroutine();
+
+            if (CombatEntity.AttackSpellAbility.TryMakeAction(out var action))
+            {
+                var monster = GameObject.Find("Monster");
+                SpawnLineEffect(AttackPrefab, transform.position, monster.transform.position);
+                SpawnHitEffect(transform.position, monster.transform.position);
+
+                CombatEntity.GetComponent<AttributeComponent>().Attack
+                    .SetBase(GameLogic.RandomHelper.RandomNumber(600, 999));
+
+                action.Target = monster.GetComponent<Monster>().CombatEntity;
+                action.ApplyAttack();
+                //Entity.Destroy(action);
+            }
+        }
+
+        public async ETTask PlayThenIdleAsync(AnimationClip animation)
+        {
+            AnimationComponent.Play(AnimationComponent.IdleAnimation);
+            AnimationComponent.PlayFade(animation);
+            if (_token != null)
+            {
+                _token.Cancel();
+            }
+
+            _token = new ETCancellationToken();
+            var isTimeout = await TimerManager.Instance.WaitAsync((int)(animation.length * 1000), _token);
+            if (isTimeout)
+            {
+                _token = null;
+                AnimationComponent.PlayFade(AnimationComponent.IdleAnimation);
+            }
         }
     }
 }
-}
-

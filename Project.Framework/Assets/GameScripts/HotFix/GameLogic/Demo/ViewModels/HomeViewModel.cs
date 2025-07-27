@@ -18,12 +18,15 @@ namespace GameLogic
         public ICommand GoRpgAbilityDemoCommand => _goRpgAbilityDemoCommand;
         private SimpleCommand _goRpgCharacterDemoCommand;
         public ICommand GoRpgCharacterDemoCommand => _goRpgCharacterDemoCommand;
+        private SimpleCommand _goXGDemoCommand;
+        public ICommand GoXGDemoCommand => _goXGDemoCommand;
         public HomeViewModel()
         {
             _goAircraftBattleDemoCommand = new SimpleCommand(UniTask.UnityAction(GoAircraftBattleDemo));
             _goTurnBaseDemoCommand = new SimpleCommand(GoTurnBaseDemo);
             _goRpgAbilityDemoCommand = new SimpleCommand(GoRpgAbilityDemo);
             _goRpgCharacterDemoCommand = new SimpleCommand(GoRpgCharacterDemo);
+            _goXGDemoCommand = new SimpleCommand(GoXGDemo);
         }
 
         private async UniTaskVoid GoAircraftBattleDemo()
@@ -54,6 +57,14 @@ namespace GameLogic
         private void GoRpgCharacterDemo()
         {
             GameModule.Scene.LoadSceneAsync("scene_rpgCC");
+            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.UI.CloseUI<GameOverTipWindow>();
+            HomeSystem.Instance.DestroyHome();
+        }
+        
+        private void GoXGDemo()
+        {
+            GameModule.Scene.LoadSceneAsync("scene_battle_xiaogong");
             GameModule.Scene.UnloadAsync("scene_home");
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
