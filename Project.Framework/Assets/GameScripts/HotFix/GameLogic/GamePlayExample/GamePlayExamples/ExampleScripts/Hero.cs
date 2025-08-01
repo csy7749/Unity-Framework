@@ -51,6 +51,7 @@ namespace GameLogic
             DirectRectSelectManager.Instance.HeroObj = gameObject;
             if (TargetSelectManager.Instance != null)
             {
+                TargetSelectManager.Instance.HeroObj = gameObject;
                 CombatEntity.AddComponent<SpellPreviewComponent>();
             }
 
