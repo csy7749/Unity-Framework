@@ -40,8 +40,6 @@ namespace GameLogic
             bindingSet.Bind(testRedNodeChild1).From(v => v.Path).To(vm => vm.TestRedNodeChild1Path).TwoWay();
             bindingSet.Bind(testRedNodeChild2).From(v => v.Path).To(vm => vm.TestRedNodeChild2Path).TwoWay();
             bindingSet.Build();
-            _battleViewModel.OnRedNodeChild1Clicked += (isOn) => ReddotManager.SetRedDotData(isOn, testRedNodeChild1.Path);
-            _battleViewModel.OnRedNodeChild2Clicked += (isOn) => ReddotManager.SetRedDotData(isOn, testRedNodeChild2.Path);
         }
     }
 }

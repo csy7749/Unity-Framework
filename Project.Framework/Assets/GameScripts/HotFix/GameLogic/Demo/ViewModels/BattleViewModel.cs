@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using GameLogic.Commands;
 using GameLogic.Model;
+using GameLogic.RedNote;
 using GameLogic.ViewModel;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,11 +12,8 @@ namespace GameLogic
 {
     class BattleViewModel : ViewModelBase
     {
-
-        private bool _firstIsShow = false;
-        private bool _secondIsShow = false;
-        public Action<bool> OnRedNodeChild1Clicked;
-        public Action<bool> OnRedNodeChild2Clicked;
+        private bool _firstRedNodeIsOn = false;
+        private bool _secondRedNodeIsOn = false;
         
         private BattleModel _battleModel;
 
@@ -80,14 +78,14 @@ namespace GameLogic
         
         private void TestRedNodeChild2()
         {
-            _secondIsShow = !_secondIsShow;
-            OnRedNodeChild2Clicked?.Invoke(_secondIsShow);
+            _secondRedNodeIsOn = !_secondRedNodeIsOn;
+            ReddotManager.SetRedDotData(_secondRedNodeIsOn, _battleModel.TestRedNodeChild2Path);
         }
 
         private void TestRedNodeChild1()
         {
-            _firstIsShow = !_firstIsShow;
-            OnRedNodeChild1Clicked?.Invoke(_firstIsShow);
+            _firstRedNodeIsOn = !_firstRedNodeIsOn;
+            ReddotManager.SetRedDotData(_firstRedNodeIsOn, _battleModel.TestRedNodeChild1Path);
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)

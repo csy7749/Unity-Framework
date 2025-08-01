@@ -33,39 +33,39 @@ namespace GameLogic
         {
             await GameModule.Scene.LoadSceneAsync("scene_battle");
             BattleSystem.Instance.LoadRoom().Forget();
-            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
         }
         
         private void GoTurnBaseDemo()
         {
-            GameModule.Scene.LoadSceneAsync("scene_turn-base");
-            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.Scene.LoadSceneAsync("scene_turn-base").Forget();
+            GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
         }
         
         private void GoRpgAbilityDemo()
         {
-            GameModule.Scene.LoadSceneAsync("scene_rpg");
-            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.Scene.LoadSceneAsync("scene_rpg").Forget();
+            GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
         }
         
         private void GoRpgCharacterDemo()
         {
-            GameModule.Scene.LoadSceneAsync("scene_rpgCC");
-            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.Scene.LoadSceneAsync("scene_rpgCC").Forget();
+            GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
         }
         
         private void GoXGDemo()
         {
-            GameModule.Scene.LoadSceneAsync("scene_battle_xiaogong");
-            GameModule.Scene.UnloadAsync("scene_home");
+            GameModule.Scene.LoadSceneAsync("scene_battle_xiaogong").Forget();
+            GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
             HomeSystem.Instance.DestroyHome();
         }
