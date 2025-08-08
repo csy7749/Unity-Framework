@@ -165,7 +165,10 @@ namespace GameLogic.Combat
 
         public ActionPoint GetActionPoint(ActionPointType actionPointType)
         {
-            if (ActionPoints.TryGetValue(actionPointType, out var actionPoint)) ;
+            if (ActionPoints.TryGetValue(actionPointType, out var actionPoint))
+            {
+            }
+
             return actionPoint;
         }
 

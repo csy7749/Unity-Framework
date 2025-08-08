@@ -24,6 +24,7 @@ namespace GameLogic.Combat
             ItemTriggerType.BeginTrigger => "片段开始执行",
             ItemTriggerType.CollisionTrigger => "碰撞执行",
             ItemTriggerType.TimeStateTrigger => "计时状态执行",
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         [ToggleGroup("Enabled", "$Label")]

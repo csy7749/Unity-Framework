@@ -40,6 +40,7 @@ namespace GameLogic
         // Start is called before the first frame update
         void Start()
         {
+            Instance = this;
             CombatEntity = CombatContext.Instance.AddChild<CombatEntity>();
             CombatContext.Instance.Object2Entities.Add(gameObject, CombatEntity);
             CombatEntity.HeroObject = gameObject;

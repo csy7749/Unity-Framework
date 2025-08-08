@@ -101,8 +101,9 @@ namespace GameLogic.Guide
 
         private string GetCustomKeyNameByActionName(string actionName)
         {
-            string joystickKey = null, joystickCtrlKey = null;
+            string joystickKey = null;
 #if USE_InputSystem
+        string joystickCtrlKey = null;
         InputAction action = inputActionAsset.FindAction(actionName);
 
         foreach (var binding in action.bindings)
