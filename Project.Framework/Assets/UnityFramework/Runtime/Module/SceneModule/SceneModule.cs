@@ -9,368 +9,319 @@ namespace UnityFramework
     internal class SceneModule : Module, ISceneModule
     {
         private string _currentMainSceneName = string.Empty;
-
         private SceneHandle _currentMainScene;
-
         private readonly Dictionary<string, SceneHandle> _subScenes = new Dictionary<string, SceneHandle>();
-        
         private readonly HashSet<string> _handlingScene = new HashSet<string>();
 
-        /// <summary>
-        /// 当前主场景名称。
-        /// </summary>
         public string CurrentMainSceneName => _currentMainSceneName;
 
         public override void OnInit()
         {
             _currentMainScene = null;
-            _currentMainSceneName = SceneManager.GetSceneByBuildIndex(0).name;
+            // 用激活场景更稳（可能并非 BuildIndex 0 启动）
+            _currentMainSceneName = SceneManager.GetActiveScene().name;
         }
 
         public override void Shutdown()
         {
-            var iter = _subScenes.Values.GetEnumerator();
-            while (iter.MoveNext())
+            // 非阻塞卸载（如需可等待版本，可额外提供 ShutdownAsync）
+            foreach (var kv in _subScenes)
             {
-                SceneHandle subScene = iter.Current;
-                if (subScene != null)
-                {
-                    subScene.UnloadAsync();
-                }
+                kv.Value?.UnloadAsync();
             }
 
-            iter.Dispose();
             _subScenes.Clear();
             _handlingScene.Clear();
+
+            _currentMainScene?.Release();
+            _currentMainScene = null;
             _currentMainSceneName = string.Empty;
         }
 
         /// <summary>
-        /// 加载场景。
+        /// 异步加载场景
         /// </summary>
-        /// <param name="location">场景的定位地址</param>
-        /// <param name="sceneMode">场景加载模式</param>
-        /// <param name="suspendLoad">加载完毕时是否主动挂起</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="gcCollect">加载主场景是否回收垃圾。</param>
-        /// <param name="progressCallBack">加载进度回调。</param>
-        public async UniTask<Scene> LoadSceneAsync(string location, LoadSceneMode sceneMode = LoadSceneMode.Single, bool suspendLoad = false, uint priority = 100, bool gcCollect = true, Action<float> progressCallBack = null)
+        public async UniTask<Scene> LoadSceneAsync(
+            string location,
+            LoadSceneMode sceneMode = LoadSceneMode.Single,
+            bool suspendLoad = false,
+            uint priority = 100,
+            bool gcCollect = true,
+            Action<float> progressCallBack = null)
         {
             if (!_handlingScene.Add(location))
             {
-                Log.Error($"Could not load scene while loading. Scene: {location}");
+                Log.Error($"Could not load scene while handling: {location}");
                 return default;
             }
 
-            if (sceneMode == LoadSceneMode.Additive)
+            try
             {
-                if (_subScenes.TryGetValue(location, out SceneHandle subScene))
+                if (sceneMode == LoadSceneMode.Additive)
                 {
-                    throw new Exception($"Could not load subScene while already loaded. Scene: {location}");
-                }
-
-                subScene = YooAssets.LoadSceneAsync(location, sceneMode, LocalPhysicsMode.None, suspendLoad, priority);
-
-                if (progressCallBack != null)
-                {
-                    while (!subScene.IsDone && subScene.IsValid)
+                    if (_subScenes.TryGetValue(location, out var existed))
                     {
-                        progressCallBack.Invoke(subScene.Progress);
-                        await UniTask.Yield();
+                        Log.Warning($"SubScene already loaded: {location}");
+                        return existed.SceneObject;
                     }
+
+                    var handle = YooAssets.LoadSceneAsync(location, LoadSceneMode.Additive, LocalPhysicsMode.None, suspendLoad, priority);
+
+                    if (progressCallBack != null)
+                        await TrackLoadProgress(handle, progressCallBack);
+                    else
+                        await handle.ToUniTask();
+
+                    if (handle.Status != EOperationStatus.Succeed)
+                    {
+                        Log.Error($"Load additive scene failed: {location}, {handle.LastError}");
+                        return default;
+                    }
+
+                    _subScenes[location] = handle;
+                    return handle.SceneObject;
                 }
                 else
                 {
-                    await subScene.ToUniTask();
+                    // 主场景加载中的并发保护
+                    if (_currentMainScene is { IsDone: false })
+                        throw new Exception($"Could not load MainScene while loading. CurrentMainScene: {_currentMainSceneName}.");
+
+                    var oldHandle = _currentMainScene;
+                    var oldName = _currentMainSceneName;
+
+                    // 先创建句柄，以便期间可以调用 Activate/IsMainScene 等
+                    var handle = YooAssets.LoadSceneAsync(location, LoadSceneMode.Single, LocalPhysicsMode.None, suspendLoad, priority);
+                    _currentMainScene = handle;
+
+                    if (progressCallBack != null)
+                        await TrackLoadProgress(handle, progressCallBack);
+                    else
+                        await handle.ToUniTask();
+
+                    if (handle.Status != EOperationStatus.Succeed)
+                    {
+                        // 失败回滚
+                        _currentMainScene = oldHandle;
+                        _currentMainSceneName = oldName;
+                        Log.Error($"Load main scene failed: {location}, {handle.LastError}");
+                        return default;
+                    }
+
+                    // 成功后再更新主场景名，并释放旧句柄
+                    _currentMainSceneName = location;
+                    oldHandle?.Release();
+
+                    // 回收在完成后进行，避免中途回收导致卡顿/黑屏
+                    SafeForceUnloadUnusedAssets(gcCollect);
+
+                    return handle.SceneObject;
                 }
-                
-                _subScenes.Add(location, subScene);
-                
-                _handlingScene.Remove(location);
-                
-                return subScene.SceneObject;
             }
-            else
+            finally
             {
-                if (_currentMainScene is { IsDone: false })
-                {
-                    throw new Exception($"Could not load MainScene while loading. CurrentMainScene: {_currentMainSceneName}.");
-                }
-
-                _currentMainSceneName = location;
-
-                _currentMainScene = YooAssets.LoadSceneAsync(location, sceneMode, LocalPhysicsMode.None, suspendLoad, priority);
-                
-                if (progressCallBack != null)
-                {
-                    while (!_currentMainScene.IsDone && _currentMainScene.IsValid)
-                    {
-                        progressCallBack.Invoke(_currentMainScene.Progress);
-                        await UniTask.Yield();
-                    }
-                }
-                else
-                {
-                    await _currentMainScene.ToUniTask();
-                }
-                
-                ModuleSystem.GetModule<IResourceModule>().ForceUnloadUnusedAssets(gcCollect);
-                
                 _handlingScene.Remove(location);
-                
-                return _currentMainScene.SceneObject;
             }
         }
 
         /// <summary>
-        /// 加载场景。
+        /// 回调式加载场景
         /// </summary>
-        /// <param name="location">场景的定位地址</param>
-        /// <param name="sceneMode">场景加载模式</param>
-        /// <param name="suspendLoad">加载完毕时是否主动挂起</param>
-        /// <param name="priority">优先级</param>
-        /// <param name="callBack">加载回调。</param>
-        /// <param name="gcCollect">加载主场景是否回收垃圾。</param>
-        /// <param name="progressCallBack">加载进度回调。</param>
-        public void LoadScene(string location, LoadSceneMode sceneMode = LoadSceneMode.Single, bool suspendLoad = false, uint priority = 100,
+        public void LoadScene(
+            string location,
+            LoadSceneMode sceneMode = LoadSceneMode.Single,
+            bool suspendLoad = false,
+            uint priority = 100,
             Action<Scene> callBack = null,
-            bool gcCollect = true, Action<float> progressCallBack = null)
+            bool gcCollect = true,
+            Action<float> progressCallBack = null)
         {
-            
             if (!_handlingScene.Add(location))
             {
-                Log.Error($"Could not load scene while loading. Scene: {location}");
-                return;
-            }
-            
-            if (sceneMode == LoadSceneMode.Additive)
-            {
-                if (_subScenes.TryGetValue(location, out SceneHandle subScene))
-                {
-                    Log.Warning($"Could not load subScene while already loaded. Scene: {location}");
-                    return;
-                }
-
-                subScene = YooAssets.LoadSceneAsync(location, sceneMode, LocalPhysicsMode.None, suspendLoad, priority);
-
-                subScene.Completed += handle =>
-                {
-                    _handlingScene.Remove(location);
-                    callBack?.Invoke(handle.SceneObject);
-                };
-
-                if (progressCallBack != null)
-                {
-                    InvokeProgress(subScene, progressCallBack).Forget();
-                }
-
-                _subScenes.Add(location, subScene);
-            }
-            else
-            {
-                if (_currentMainScene is { IsDone: false })
-                {
-                    Log.Warning($"Could not load MainScene while loading. CurrentMainScene: {_currentMainSceneName}.");
-                    return;
-                }
-
-                _currentMainSceneName = location;
-
-                _currentMainScene = YooAssets.LoadSceneAsync(location, sceneMode, LocalPhysicsMode.None, suspendLoad, priority);
-
-                _currentMainScene.Completed += handle =>
-                {
-                    _handlingScene.Remove(location);
-                    callBack?.Invoke(handle.SceneObject);
-                };
-
-                if (progressCallBack != null)
-                {
-                    InvokeProgress(_currentMainScene, progressCallBack).Forget();
-                }
-
-                ModuleSystem.GetModule<IResourceModule>().ForceUnloadUnusedAssets(gcCollect);
-            }
-        }
-
-        private async UniTaskVoid InvokeProgress(SceneHandle sceneHandle, Action<float> progress)
-        {
-            if (sceneHandle == null)
-            {
+                Log.Error($"Could not load scene while handling: {location}");
                 return;
             }
 
-            while (!sceneHandle.IsDone && sceneHandle.IsValid)
+            try
             {
-                await UniTask.Yield();
-
-                progress?.Invoke(sceneHandle.Progress);
-            }
-        }
-
-        /// <summary>
-        /// 激活场景（当同时存在多个场景时用于切换激活场景）。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <returns>是否操作成功。</returns>
-        public bool ActivateScene(string location)
-        {
-            if (_currentMainSceneName.Equals(location))
-            {
-                if (_currentMainScene != null)
+                if (sceneMode == LoadSceneMode.Additive)
                 {
-                    return _currentMainScene.ActivateScene();
-                }
-
-                return false;
-            }
-
-            _subScenes.TryGetValue(location, out SceneHandle subScene);
-            if (subScene != null)
-            {
-                return subScene.ActivateScene();
-            }
-
-            Log.Warning($"IsMainScene invalid location:{location}");
-            return false;
-        }
-
-        /// <summary>
-        /// 解除场景加载挂起操作。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <returns>是否操作成功。</returns>
-        public bool UnSuspend(string location)
-        {
-            if (_currentMainSceneName.Equals(location))
-            {
-                if (_currentMainScene != null)
-                {
-                    return _currentMainScene.UnSuspend();
-                }
-
-                return false;
-            }
-
-            _subScenes.TryGetValue(location, out SceneHandle subScene);
-            if (subScene != null)
-            {
-                return subScene.UnSuspend();
-            }
-
-            Log.Warning($"IsMainScene invalid location:{location}");
-            return false;
-        }
-
-        /// <summary>
-        /// 是否为主场景。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <returns>是否主场景。</returns>
-        public bool IsMainScene(string location)
-        {
-            // 获取当前激活的场景  
-            Scene currentScene = SceneManager.GetActiveScene();  
-            
-            if (_currentMainSceneName.Equals(location))
-            {
-                if (_currentMainScene == null)
-                {
-                    return false;
-                }
-                // 判断当前场景是否是主场景  
-                if (currentScene.name == _currentMainScene.SceneName)
-                {
-                    return true;
-                }
-                    
-                return _currentMainScene.SceneName == currentScene.name;
-
-            }
-
-            // 判断当前场景是否是主场景  
-            if (currentScene.name == _currentMainScene?.SceneName)
-            {
-                return true;
-            }
-
-            Log.Warning($"IsMainScene invalid location:{location}");
-            return false;
-        }
-
-        /// <summary>
-        /// 异步卸载子场景。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <param name="progressCallBack">进度回调。</param>
-        public async UniTask<bool> UnloadAsync(string location, Action<float> progressCallBack = null)
-        {
-            _subScenes.TryGetValue(location, out SceneHandle subScene);
-            if (subScene != null)
-            {
-                if (subScene.SceneObject == default)
-                {
-                    Log.Error($"Could not unload Scene while not loaded. Scene: {location}");
-                    return false;
-                }
-
-                if (!_handlingScene.Add(location))
-                {
-                    Log.Warning($"Could not unload Scene while loading. Scene: {location}");
-                    return false;
-                }
-
-                var unloadOperation = subScene.UnloadAsync();
-
-                if (progressCallBack != null)
-                {
-                    while (!unloadOperation.IsDone && unloadOperation.Status != EOperationStatus.Failed)
+                    if (_subScenes.TryGetValue(location, out var existed))
                     {
-                        progressCallBack.Invoke(unloadOperation.Progress);
-                        await UniTask.Yield();
+                        Log.Warning($"SubScene already loaded: {location}");
+                        callBack?.Invoke(existed.SceneObject);
+                        return;
                     }
+
+                    var handle = YooAssets.LoadSceneAsync(location, LoadSceneMode.Additive, LocalPhysicsMode.None, suspendLoad, priority);
+
+                    // 仅在完成且成功后，登记到字典
+                    handle.Completed += h =>
+                    {
+                        _handlingScene.Remove(location);
+
+                        if (h.Status == EOperationStatus.Succeed)
+                            _subScenes[location] = h;
+                        else
+                            Log.Error($"Load additive scene failed: {location}, {h.LastError}");
+
+                        callBack?.Invoke(h.SceneObject);
+                    };
+
+                    if (progressCallBack != null)
+                        TrackLoadProgress(handle, progressCallBack).Forget();
                 }
                 else
                 {
-                    await unloadOperation.ToUniTask();
-                }
-                
-                _subScenes.Remove(location);
-                
-                _handlingScene.Remove(location);
+                    if (_currentMainScene is { IsDone: false })
+                    {
+                        Log.Warning($"Could not load MainScene while loading. CurrentMainScene: {_currentMainSceneName}.");
+                        _handlingScene.Remove(location);
+                        return;
+                    }
 
-                return true;
+                    var oldHandle = _currentMainScene;
+                    var oldName = _currentMainSceneName;
+
+                    var handle = YooAssets.LoadSceneAsync(location, LoadSceneMode.Single, LocalPhysicsMode.None, suspendLoad, priority);
+                    _currentMainScene = handle; // 先记录，避免期间空引用
+
+                    handle.Completed += h =>
+                    {
+                        if (h.Status == EOperationStatus.Succeed)
+                        {
+                            _currentMainSceneName = location;
+                            oldHandle?.Release();
+                            SafeForceUnloadUnusedAssets(gcCollect);
+                        }
+                        else
+                        {
+                            // 失败回滚
+                            _currentMainScene = oldHandle;
+                            _currentMainSceneName = oldName;
+                            Log.Error($"Load main scene failed: {location}, {h.LastError}");
+                        }
+
+                        _handlingScene.Remove(location);
+                        callBack?.Invoke(h.SceneObject);
+                    };
+
+                    if (progressCallBack != null)
+                        TrackLoadProgress(handle, progressCallBack).Forget();
+                }
+            }
+            catch (Exception e)
+            {
+                _handlingScene.Remove(location);
+                Log.Error(e.ToString());
+            }
+        }
+
+        public bool ActivateScene(string location)
+        {
+            if (string.Equals(_currentMainSceneName, location, StringComparison.Ordinal))
+            {
+                if (_currentMainScene != null)
+                    return _currentMainScene.ActivateScene();
+
+                Log.Warning($"ActivateScene failed, main handle is null. location: {location}");
+                return false;
             }
 
-            Log.Warning($"UnloadAsync invalid location:{location}");
+            if (_subScenes.TryGetValue(location, out var sub) && sub != null)
+                return sub.ActivateScene();
+
+            Log.Warning($"ActivateScene invalid location: {location}");
             return false;
         }
 
-        /// <summary>
-        /// 异步卸载子场景。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <param name="callBack">卸载完成回调。</param>
-        /// <param name="progressCallBack">进度回调。</param>
+        public bool UnSuspend(string location)
+        {
+            if (string.Equals(_currentMainSceneName, location, StringComparison.Ordinal))
+            {
+                if (_currentMainScene != null)
+                    return _currentMainScene.UnSuspend();
+
+                Log.Warning($"UnSuspend failed, main handle is null. location: {location}");
+                return false;
+            }
+
+            if (_subScenes.TryGetValue(location, out var sub) && sub != null)
+                return sub.UnSuspend();
+
+            Log.Warning($"UnSuspend invalid location: {location}");
+            return false;
+        }
+
+        public bool IsMainScene(string location)
+        {
+            // 仅判断“传入 location 是否为当前主场景”
+            return string.Equals(_currentMainSceneName, location, StringComparison.Ordinal);
+        }
+
+        public async UniTask<bool> UnloadAsync(string location, Action<float> progressCallBack = null)
+        {
+            if (!_subScenes.TryGetValue(location, out var subScene) || subScene == null)
+            {
+                Log.Warning($"UnloadAsync invalid location: {location}");
+                return false;
+            }
+
+            if (subScene.SceneObject == default)
+            {
+                Log.Error($"Could not unload Scene while not loaded. Scene: {location}");
+                return false;
+            }
+
+            if (!_handlingScene.Add(location))
+            {
+                Log.Warning($"Could not unload Scene while handling: {location}");
+                return false;
+            }
+
+            try
+            {
+                var op = subScene.UnloadAsync();
+
+                if (progressCallBack != null)
+                    await TrackUnloadProgress(op, progressCallBack);
+                else
+                    await op.ToUniTask();
+
+                _subScenes.Remove(location);
+                return op.Status == EOperationStatus.Succeed;
+            }
+            finally
+            {
+                _handlingScene.Remove(location);
+            }
+        }
+
         public void Unload(string location, Action callBack = null, Action<float> progressCallBack = null)
         {
-            _subScenes.TryGetValue(location, out SceneHandle subScene);
-            if (subScene != null)
+            if (!_subScenes.TryGetValue(location, out var subScene) || subScene == null)
             {
-                if (subScene.SceneObject == default)
-                {
-                    Log.Error($"Could not unload Scene while not loaded. Scene: {location}");
-                    return;
-                }
-                
-                if (!_handlingScene.Add(location))
-                {
-                    Log.Warning($"Could not unload Scene while loading. Scene: {location}");
-                    return;
-                }
+                Log.Warning($"Unload invalid location: {location}");
+                return;
+            }
 
-                subScene.UnloadAsync();
-                subScene.UnloadAsync().Completed += @base =>
+            if (subScene.SceneObject == default)
+            {
+                Log.Error($"Could not unload Scene while not loaded. Scene: {location}");
+                return;
+            }
+
+            if (!_handlingScene.Add(location))
+            {
+                Log.Warning($"Could not unload Scene while handling: {location}");
+                return;
+            }
+
+            try
+            {
+                var op = subScene.UnloadAsync();
+
+                op.Completed += _ =>
                 {
                     _subScenes.Remove(location);
                     _handlingScene.Remove(location);
@@ -378,29 +329,95 @@ namespace UnityFramework
                 };
 
                 if (progressCallBack != null)
-                {
-                    InvokeProgress(subScene, progressCallBack).Forget();
-                }
-                
-                return;
+                    TrackUnloadProgress(op, progressCallBack).Forget();
             }
-
-            Log.Warning($"UnloadAsync invalid location:{location}");
+            catch (Exception e)
+            {
+                _handlingScene.Remove(location);
+                Log.Error(e.ToString());
+            }
         }
 
-        /// <summary>
-        /// 是否包含场景。
-        /// </summary>
-        /// <param name="location">场景资源定位地址。</param>
-        /// <returns>是否包含场景。</returns>
         public bool IsContainScene(string location)
         {
-            if (_currentMainSceneName.Equals(location))
-            {
+            if (string.Equals(_currentMainSceneName, location, StringComparison.Ordinal))
                 return true;
-            }
 
-            return _subScenes.TryGetValue(location, out var _);
+            return _subScenes.ContainsKey(location);
+        }
+
+        // -------- Helpers --------
+
+        private async UniTask TrackLoadProgress(SceneHandle handle, Action<float> progress)
+        {
+            try
+            {
+                if (handle == null) return;
+
+                while (!handle.IsDone && handle.IsValid)
+                {
+                    progress?.Invoke(handle.Progress);
+                    await UniTask.Yield();
+                }
+
+                // 收尾，确保回调到 1
+                progress?.Invoke(1f);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
+        }
+
+        private async UniTask TrackUnloadProgress(UnloadSceneOperation op, Action<float> progress)
+        {
+            try
+            {
+                if (op == null) return;
+
+                while (!op.IsDone && op.Status != EOperationStatus.Failed)
+                {
+                    progress?.Invoke(op.Progress);
+                    await UniTask.Yield();
+                }
+
+                progress?.Invoke(op.Status == EOperationStatus.Succeed ? 1f : op.Progress);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
+        }
+
+        private void SafeForceUnloadUnusedAssets(bool gcCollect)
+        {
+            try
+            {
+                ModuleSystem.GetModule<IResourceModule>()?.ForceUnloadUnusedAssets(gcCollect);
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"ForceUnloadUnusedAssets exception: {e}");
+            }
+        }
+
+        //供外部需要“可等待关闭”时使用
+        public async UniTask ShutdownAsync()
+        {
+            var tasks = new List<UniTask>();
+            foreach (var kv in _subScenes)
+            {
+                var op = kv.Value?.UnloadAsync();
+                if (op != null) tasks.Add(op.ToUniTask());
+            }
+            await UniTask.WhenAll(tasks);
+
+            _subScenes.Clear();
+            _handlingScene.Clear();
+
+            _currentMainScene?.Release();
+            _currentMainScene = null;
+            _currentMainSceneName = string.Empty;
         }
     }
 }

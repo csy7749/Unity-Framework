@@ -32,6 +32,10 @@ namespace GameLogic
         private async UniTaskVoid GoAircraftBattleDemo()
         {
             await GameModule.Scene.LoadSceneAsync("scene_battle");
+            GameModule.Scene.IsMainScene("scene_battle");
+            
+            
+            
             BattleSystem.Instance.LoadRoom().Forget();
             GameModule.Scene.UnloadAsync("scene_home").Forget();
             GameModule.UI.CloseUI<GameOverTipWindow>();
