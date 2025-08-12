@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace NaughtyBezierCurves
 {
-    [System.Serializable]
+    [Serializable]
     public class BezierPoint3D
     {
         public enum HandleType
@@ -11,172 +13,99 @@ namespace NaughtyBezierCurves
             Broken
         }
 
-        // Serializable Fields
-        //[SerializeField]
-        [HideInInspector, JsonIgnore]
-        [Tooltip("The curve that the point belongs to")]
-        private BezierCurve3D curve = null;
+        // —— 关键修复：不让 Unity 序列化对子曲线的回指 ——
+        [NonSerialized]
+        private BezierCurve3D _curve;
 
-        [SerializeField, JsonIgnore]
-        private HandleType handleType = HandleType.Connected;
-
-        [SerializeField, JsonIgnore]
-        private Vector3 leftHandleLocalPosition = new Vector3(-0.5f, 0f, 0f);
-
-        [SerializeField, JsonIgnore]
-        private Vector3 rightHandleLocalPosition = new Vector3(0.5f, 0f, 0f);
-
-        // Properties
-
-        /// <summary>
-        /// Gets or sets the curve that the point belongs to.
-        /// </summary>
-        [JsonIgnore]
+        // 你可以通过属性在运行时/反序列化后设置它
         public BezierCurve3D Curve
         {
-            get
-            {
-                return this.curve;
-            }
-            set
-            {
-                this.curve = value;
-            }
-        }
-        [JsonIgnore]
-        public Vector3 CurvePosition
-        {
-            get
-            {
-                if (curve == null) return Vector3.zero;
-                return this.curve.OriginPosition;
-            }
+            get => _curve;
+            set => _curve = value;
         }
 
-        /// <summary>
-        /// Gets or sets the type/style of the handle.
-        /// </summary>
+        [SerializeField]
+        private HandleType handleType = HandleType.Connected;
+
+        [SerializeField]
+        private Vector3 leftHandleLocalPosition = new(-0.5f, 0f, 0f);
+
+        [SerializeField]
+        private Vector3 rightHandleLocalPosition = new(0.5f, 0f, 0f);
+
+        public Vector3 CurvePosition => _curve?.OriginPosition ?? Vector3.zero;
+
         public HandleType HandleStyle
         {
-            get
-            {
-                return this.handleType;
-            }
-            set
-            {
-                this.handleType = value;
-            }
+            get => handleType;
+            set => handleType = value;
         }
 
-        /// <summary>
-        /// Gets or sets the position of the transform.
-        /// </summary>
-        [JsonIgnore]
         public Vector3 Position
         {
-            get
-            {
-                return CurvePosition + LocalPosition;
-            }
-            set
-            {
-                LocalPosition = value - CurvePosition;
-            }
+            get => CurvePosition + LocalPosition;
+            set => LocalPosition = value - CurvePosition;
         }
 
         /// <summary>
-        /// Gets or sets the position of the transform.
+        /// 点的局部位置（相对曲线 OriginPosition）。
         /// </summary>
         public Vector3 LocalPosition;
-        //{
-        //    get
-        //    {
-        //        return this.transform.localPosition;
-        //    }
-        //    set
-        //    {
-        //        this.transform.localPosition = value;
-        //    }
-        //}
 
-        /// <summary>
-        /// Gets or sets the local position of the left handle.
-        /// If the HandleStyle is Connected, the local position of the right handle is automaticaly set.
-        /// </summary>
         public Vector3 LeftHandleLocalPosition
         {
-            get
-            {
-                return this.leftHandleLocalPosition;
-            }
+            get => leftHandleLocalPosition;
             set
             {
                 this.leftHandleLocalPosition = value;
-                if (this.handleType == HandleType.Connected)
+                if (handleType == HandleType.Connected)
                 {
-                    this.rightHandleLocalPosition = -value;
+                    rightHandleLocalPosition = -value;
                 }
             }
         }
-        [JsonIgnore]
-        public Vector3 InTangent { get => LeftHandleLocalPosition; set => LeftHandleLocalPosition = value; }
 
-        /// <summary>
-        /// Gets or sets the local position of the right handle.
-        /// If the HandleType is Connected, the local position of the left handle is automaticaly set.
-        /// </summary>
+        public Vector3 InTangent
+        {
+            get => LeftHandleLocalPosition;
+            set => LeftHandleLocalPosition = value;
+        }
+
         public Vector3 RightHandleLocalPosition
         {
-            get
-            {
-                return this.rightHandleLocalPosition;
-            }
+            get => rightHandleLocalPosition;
             set
             {
-                this.rightHandleLocalPosition = value;
-                if (this.handleType == HandleType.Connected)
+                rightHandleLocalPosition = value;
+                if (handleType == HandleType.Connected)
                 {
-                    this.leftHandleLocalPosition = -value;
+                    leftHandleLocalPosition = -value;
                 }
             }
         }
-        [JsonIgnore]
-        public Vector3 OutTangent { get => RightHandleLocalPosition; set => RightHandleLocalPosition = value; }
 
-        /// <summary>
-        /// Gets or sets the position of the left handle.
-        /// If the HandleStyle is Connected, the position of the right handle is automaticaly set.
-        /// </summary>
-        [JsonIgnore]
+        public Vector3 OutTangent
+        {
+            get => RightHandleLocalPosition;
+            set => RightHandleLocalPosition = value;
+        }
+
         public Vector3 LeftHandlePosition
         {
             get
             {
-                if (this.handleType == HandleType.Broken) return Position;
-                return Position + (this.LeftHandleLocalPosition);
+                if (handleType == HandleType.Broken) return Position;
+                return Position + LeftHandleLocalPosition;
             }
-            //set
-            //{
-            //    this.LeftHandleLocalPosition = (value) - Position;
-            //}
         }
 
-        /// <summary>
-        /// Gets or sets the position of the right handle.
-        /// If the HandleType is Connected, the position of the left handle is automaticaly set.
-        /// </summary>
-        [JsonIgnore]
         public Vector3 RightHandlePosition
         {
             get
             {
-                if (this.handleType == HandleType.Broken) return Position;
-                return Position + (this.RightHandleLocalPosition);
+                if (handleType == HandleType.Broken) return Position;
+                return Position + RightHandleLocalPosition;
             }
-            //set
-            //{
-            //    this.RightHandleLocalPosition = (value) - Position;
-            //}
         }
     }
 }

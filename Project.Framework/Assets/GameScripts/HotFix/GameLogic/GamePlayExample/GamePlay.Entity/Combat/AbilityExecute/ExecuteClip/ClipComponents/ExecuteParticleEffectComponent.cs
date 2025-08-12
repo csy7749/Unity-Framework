@@ -23,7 +23,7 @@ namespace GameLogic.Combat
         public void OnTriggerStart(Entity entity)
         {
             ParticleEffectObj = GameObject.Instantiate(ParticleEffectPrefab, Entity.GetParent<AbilityExecution>().OwnerEntity.Position, Entity.GetParent<AbilityExecution>().OwnerEntity.Rotation);
-#endif
+
         }
 
         public void OnTriggerEnd(Entity entity)
@@ -32,3 +32,4 @@ namespace GameLogic.Combat
         }
     }
 }
+#endif

@@ -38,5 +38,5 @@ public class GamePlayInit : SerializedMonoBehaviour
     {
         ECSNode.Destroy();
     }
-#endif
 }
+#endif

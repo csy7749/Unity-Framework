@@ -3,6 +3,8 @@
 // サンプル
 // 2014/03/13 N.Kobyasahi
 //
+
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -67,6 +69,7 @@ namespace UnityChan
 	
 	
 		// 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
+		[Obsolete("Obsolete")]
 		void FixedUpdate ()
 		{
 			float h = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義

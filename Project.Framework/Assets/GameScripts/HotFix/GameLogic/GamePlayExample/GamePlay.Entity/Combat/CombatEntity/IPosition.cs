@@ -31,7 +31,7 @@ public static class RotationExtension
 
     public static Quaternion GetRotation(this Vector3 right)
     {
-        var up = math.cross(Vector3.forward, right);
+        var up = math.Cross(Vector3.forward, right);
         return Quaternion.LookRotation(Vector3.forward, up);
     }
 #endif

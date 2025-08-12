@@ -72,8 +72,8 @@ namespace GameLogic.Combat
                     var x = v.x;
                     var y = v.y;
 
-                    var x1 = x * math.cos(a) - y * math.sin(a);
-                    var y1 = (y * math.cos(a) + x * math.sin(a));
+                    var x1 = x * math.Cos(a) - y * math.Sin(a);
+                    var y1 = (y * math.Cos(a) + x * math.Sin(a));
 
                     v = new float3(x1, y1, v.z);
                     //Log.Console($"PositionEntity.Position={PositionEntity.Position}, v.y={v.y}, v={v}");
@@ -84,14 +84,14 @@ namespace GameLogic.Combat
             }
 
             var duration = Duration;
-            var length = math.distance(pathPoints[0], abilityItem.LocalPosition);
+            var length = math.Distance(pathPoints[0], abilityItem.LocalPosition);
             for (int i = 0; i < pathPoints.Length; i++)
             {
                 if (i == pathPoints.Length - 1)
                 {
                     break;
                 }
-                var dist = math.distance(pathPoints[i + 1], pathPoints[i]);
+                var dist = math.Distance(pathPoints[i + 1], pathPoints[i]);
                 length += dist;
             }
             var speed = length / duration;
@@ -118,7 +118,7 @@ namespace GameLogic.Combat
             var endValue = OriginPoint + localPos;
             var startPos = PositionEntity.Position;
 #if UNITY
-            var duration = math.distance(endValue, startPos) / Speed;
+            var duration = math.Distance(endValue, startPos) / Speed;
             DOTween.To(() => startPos, (x) => PositionEntity.Position = x, endValue, duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(DOMoveNext);
 #else
                     //EventSystem.Instance.Publish()
@@ -136,7 +136,7 @@ namespace GameLogic.Combat
             var endValue = BezierCurve.GetPoint(Progress);
             var startPos = PositionEntity.Position;
 #if UNITY
-            var duration = math.distance(endValue, startPos) / Speed;
+            var duration = math.Distance(endValue, startPos) / Speed;
             DOTween.To(() => startPos, (x) => PositionEntity.Position = x, endValue, duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(DOMoveNext);
 #endif
         }
