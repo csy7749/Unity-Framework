@@ -22,12 +22,12 @@ namespace GameLogic
         public BezierCurve3D BezierCurve { get => CollisionExecuteData.BezierCurve; }
         public ItemExecute CollisionExecuteData;
 
-        //这两个画Beizer线段的时候要用
+        //绘制Bezier曲线的时候要用
         private Vector3 lastPosition;
         private Vector3 lastOutTangent;
-        //正在操作哪个控制点
+        //用于捕捉哪个控制点
         int pickedIndex = -1;
-        //正在操作控制点的哪一部分
+        //用于捕捉控制点的哪一个部分
         enum CtrlPointPickedType
         {
             position,
@@ -107,7 +107,7 @@ namespace GameLogic
         //                {
         //                    return r[1] - r[0];
         //                }
-        //                //其他阶导
+        //                //更高阶导
         //                else if (derivativeOrder > 3)
         //                {
         //                    return Vector3.zero;
@@ -127,7 +127,7 @@ namespace GameLogic
             }
             for (int i = 0; i < bezierComponent.ctrlPoints.Count; i++)
             {
-                //一个个地把控制点渲染出来
+                //一组数据把控制点渲染出来
                 var ctrlPoint = bezierComponent.ctrlPoints[i];
                 var type = ctrlPoint.HandleStyle;
                 var position = ctrlPoint.Position;
@@ -139,13 +139,13 @@ namespace GameLogic
                     outTangentPoint = position;
                 }
 #if UNITY_EDITOR
-                //从第二个控制点开始画Bezier线段
+                //从第二个控制点开始画Bezier曲线
                 if (i > 0)
                 {
                     Handles.DrawBezier(lastPosition, position, lastOutTangent, inTangentPoint, Color.green, null, 2f);
                 }
 #endif
-                //所以每次先暂存下控制点位置和OutTangent，留给下一个控制点画线用
+                //更新每一个数据后控制点位置和OutTangent，为下一个控制点画曲线
                 lastPosition = position;
                 lastOutTangent = outTangentPoint;
             }
