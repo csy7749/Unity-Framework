@@ -3,63 +3,45 @@
 namespace UnityFramework
 {
     /// <summary>
-    /// 音频数据。
+    /// 音频数据（持有 YooAsset 句柄）。
     /// </summary>
     public class AudioData : MemoryObject
     {
-        /// <summary>
-        /// 资源句柄。
-        /// </summary>
         public AssetHandle AssetHandle { private set; get; }
+        public bool InPool             { private set; get; } = false;
+
+        public override void InitFromPool() { }
 
         /// <summary>
-        /// 是否使用对象池。
-        /// </summary>
-        public bool InPool { private set; get; } = false;
-
-        public override void InitFromPool()
-        {
-        }
-
-        /// <summary>
-        /// 回收到对象池。
+        /// 回收到对象池：
+        /// - 非池化播放：Dispose 句柄（引用计数-1）
+        /// - 清空引用，避免悬挂
         /// </summary>
         public override void RecycleToPool()
         {
             if (!InPool)
-            {
-                AssetHandle.Dispose();
-            }
+                AssetHandle?.Dispose();
 
             InPool = false;
             AssetHandle = null;
         }
 
-        /// <summary>
-        /// 生成音频数据。
-        /// </summary>
-        /// <param name="assetHandle">资源操作句柄。</param>
-        /// <param name="inPool">是否使用对象池。</param>
-        /// <returns>音频数据。</returns>
         internal static AudioData Alloc(AssetHandle assetHandle, bool inPool)
         {
-            AudioData ret = MemoryPool.Acquire<AudioData>();
+            var ret = MemoryPool.Acquire<AudioData>();
             ret.AssetHandle = assetHandle;
             ret.InPool = inPool;
             ret.InitFromPool();
             return ret;
         }
 
-        /// <summary>
-        /// 回收音频数据。
-        /// </summary>
-        /// <param name="audioData"></param>
         internal static void DeAlloc(AudioData audioData)
         {
             if (audioData != null)
             {
-                MemoryPool.Release(audioData);
+                // ★ 先回收（内部会处置非池化句柄），再归还对象池，避免二次释放
                 audioData.RecycleToPool();
+                MemoryPool.Release(audioData);
             }
         }
     }
