@@ -17,15 +17,13 @@
 
 #### ------------------------------------------------开发中----------------------------------------------------
 
+##### UnityFramework基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm和实体组件模式的架构进行优化调整的客户端解决方案，对底层实现进行优化，对于上层使用无感
 
+##### mvvm数据绑定已完整实现
 
-##### UnityFramework基于<a href="https://github.com/Alex-Rachel/TEngine"><strong>TEngine</strong></a>（集成了<a href="https://github.com/focus-creative-games/hybridclr"><strong>HybridCLR</strong></a>和<a href="https://github.com/tuyoogame/YooAsset"><strong>YooAsset</strong></a>的优秀轻量级Unity框架），参考[WPF](https://github.com/dotnet/wpf)的设计进行基于mvvm和实体组件模式的架构进行优化调整的客户端解决方案，目前底层流程变得不多
+##### 集成了红点和引导系统
 
-##### mvvm数据绑定已完整实现，TimeModule逻辑调整，事件模块增加mvvm模式的消息发布
-
-##### main分支集成了从雷火工具中拆出的红点和引导系统
-
-##### 不好夹带私货，就先将EGamePlay的技能系统简单集成了过来，后面有空再深度改造
+##### 先将EGamePlay的技能系统简单集成了过来，后面有空再深度改造
 
 ##### 已实现View模块和ViewModel模块的代码生成器，Hierarchy页面右键预制体选择Script Generator→GeneratorView/GeneratorViewModel（遵循自定义组件命名）
 
