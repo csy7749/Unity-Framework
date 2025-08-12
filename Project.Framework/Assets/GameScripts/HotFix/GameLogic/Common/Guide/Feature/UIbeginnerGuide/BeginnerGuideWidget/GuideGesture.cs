@@ -135,75 +135,75 @@ namespace GameLogic.Guide
 
             if (type == GestureType.ThumbClick)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/clickPrefab_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("clickPrefab_thumb",transform);
             }
             else if (type == GestureType.ThumbDrag)
             {
-                GestureAnimation = Instantiate(GameModule.Resource.LoadGameObject("Gesture/dragPrefab_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("dragPrefab_thumb", transform);
             }
             else if (type == GestureType.ThumbLongPress)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/longclickPrefab_thumb"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("longclickPrefab_thumb",
                     transform);
             }
             else if (type == GestureType.ThumbRotate)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/rotate_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("rotate_thumb", transform);
             }
             else if (type == GestureType.ThumbSlideDown)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideDown_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideDown_thumb", transform);
             }
             else if (type == GestureType.ThumbSlideUp)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideUp_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideUp_thumb", transform);
             }
             else if (type == GestureType.ThumbSlideLeft)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideLeft_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideLeft_thumb", transform);
             }
             else if (type == GestureType.ThumbSlideRight)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideRight_thumb"), transform);
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideRight_thumb", transform);
             }
             else if (type == GestureType.ForeFingerClick)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/clickPrefab_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("clickPrefab_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerDrag)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/dragPrefab_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("dragPrefab_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerLongPress)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/longclickPrefab_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("longclickPrefab_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerRotate)
             {
                 GestureAnimation =
-                    Instantiate(ResourceManager.Load<GameObject>("Gesture/rotate_forefinger"), transform);
+                    GameModule.Resource.LoadGameObject("rotate_forefinger", transform);
             }
             else if (type == GestureType.ForeFingerSlideDown)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideDown_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideDown_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerSlideUp)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideUp_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideUp_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerSlideLeft)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideLeft_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideLeft_forefinger",
                     transform);
             }
             else if (type == GestureType.ForeFingerSlideRight)
             {
-                GestureAnimation = Instantiate(ResourceManager.Load<GameObject>("Gesture/slideRight_forefinger"),
+                GestureAnimation = GameModule.Resource.LoadGameObject("slideRight_forefinger",
                     transform);
             }
 
