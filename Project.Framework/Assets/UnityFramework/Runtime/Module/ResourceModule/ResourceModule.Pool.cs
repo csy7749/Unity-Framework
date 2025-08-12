@@ -3,9 +3,9 @@
     internal partial class ResourceModule
     {
         private IObjectPool<AssetObject> _assetPool;
-        
+
         /// <summary>
-        /// 获取或设置资源对象池自动释放可释放对象的间隔秒数。
+        /// 资源对象池：自动释放间隔（秒）。
         /// </summary>
         public float AssetAutoReleaseInterval
         {
@@ -14,7 +14,7 @@
         }
 
         /// <summary>
-        /// 获取或设置资源对象池的容量。
+        /// 资源对象池：容量（对象数量上限）。
         /// </summary>
         public int AssetCapacity
         {
@@ -23,7 +23,7 @@
         }
 
         /// <summary>
-        /// 获取或设置资源对象池对象过期秒数。
+        /// 资源对象池：对象过期时间（秒）。
         /// </summary>
         public float AssetExpireTime
         {
@@ -32,36 +32,30 @@
         }
 
         /// <summary>
-        /// 获取或设置资源对象池的优先级。
+        /// 资源对象池：优先级（影响释放策略）。
         /// </summary>
         public int AssetPriority
         {
             get => _assetPool.Priority;
             set => _assetPool.Priority = value;
         }
-        
+
         /// <summary>
-        /// 卸载资源。
+        /// 卸载资源实例（将对象返还对象池；真正释放由对象池与 AssetObject.Release 控制）。
         /// </summary>
-        /// <param name="asset">要卸载的资源。</param>
         public void UnloadAsset(object asset)
         {
             if (_assetPool != null)
-            {
                 _assetPool.Unspawn(asset);
-            }
         }
-        
+
         /// <summary>
-        /// 设置对象池管理器。
+        /// 设置对象池模块并创建本模块使用的多实例对象池。
         /// </summary>
-        /// <param name="objectPoolModule">对象池管理器。</param>
         public void SetObjectPoolModule(IObjectPoolModule objectPoolModule)
         {
             if (objectPoolModule == null)
-            {
                 throw new GameFrameworkException("Object pool manager is invalid.");
-            }
             _assetPool = objectPoolModule.CreateMultiSpawnObjectPool<AssetObject>("Asset Pool");
         }
     }
