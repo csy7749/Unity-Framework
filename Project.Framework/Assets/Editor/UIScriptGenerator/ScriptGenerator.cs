@@ -18,13 +18,15 @@ namespace UnityFramework.Editor.UI
         [MenuItem("GameObject/ScriptGenerator/GeneratorView", priority = 30)]
         public static void MemberView()
         {
-            MvvmGenerateView();
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
         
         [MenuItem("GameObject/ScriptGenerator/GeneratorViewModel", priority = 31)]
         public static void MemberViewModel()
         {
-            MvvmGenerateViewModel();
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
         // [MenuItem("GameObject/ScriptGenerator/GeneratorModel", priority = 32)]
         // public static void MemberModel()
@@ -490,25 +492,29 @@ namespace UnityFramework.Editor.UI
         [MenuItem("GameObject/ScriptGenerator/UIProperty", priority = 41)]
         public static void MemberProperty()
         {
-            Generate(false);
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
 
         [MenuItem("GameObject/ScriptGenerator/UIProperty - UniTask", priority = 43)]
         public static void MemberPropertyUniTask()
         {
-            Generate(false, true);
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
 
         [MenuItem("GameObject/ScriptGenerator/UIPropertyAndListener", priority = 42)]
         public static void MemberPropertyAndListener()
         {
-            Generate(true);
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
 
         [MenuItem("GameObject/ScriptGenerator/UIPropertyAndListener - UniTask", priority = 44)]
         public static void MemberPropertyAndListenerUniTask()
         {
-            Generate(true, true);
+            Debug.LogWarning("ScriptGenerator legacy entry redirected to UIControlData workflow.");
+            UIAutoGenerateMenu.GenerateByUIControlData();
         }
 
         private static void Generate(bool includeListener, bool isUniTask = false)
