@@ -1,38 +1,38 @@
 ## ADDED Requirements
 
 ### Requirement: UnityFramework SHALL host UXTools editor entrypoints
-系统 MUST 在 `UnityFramework` 菜单域提供 UXTools Editor 能力入口，以统一工具访问路径。
+系统 MUST 在 `UnityFramework` 菜单域提供 UXTools Editor 入口，统一访问路径。
 
 #### Scenario: Component library entry is available
-- **WHEN** 用户在 Unity Editor 打开菜单 `UnityFramework/UXTools`
-- **THEN** 系统 MUST 提供“组件库”入口并可打开对应窗口
+- **WHEN** 用户打开 `UnityFramework/UXTools`
+- **THEN** 系统 MUST 提供组件库入口并可打开窗口
 
 #### Scenario: Recent opened prefabs entry is available
-- **WHEN** 用户在 Unity Editor 打开菜单 `UnityFramework/UXTools`
-- **THEN** 系统 MUST 提供“最近打开模板”入口并可打开对应窗口
+- **WHEN** 用户打开 `UnityFramework/UXTools`
+- **THEN** 系统 MUST 提供最近打开模板入口并可打开窗口
 
 #### Scenario: Recent selected files entry is available
-- **WHEN** 用户在 Unity Editor 打开菜单 `UnityFramework/UXTools`
-- **THEN** 系统 MUST 提供“最近选中文件”入口并可打开对应窗口
+- **WHEN** 用户打开 `UnityFramework/UXTools`
+- **THEN** 系统 MUST 提供最近选中文件入口并可打开窗口
 
-### Requirement: Editor-only UXTools code SHALL remain outside runtime assemblies
-系统 MUST 保证仅编辑器功能不进入运行时程序集编译路径。
+### Requirement: Editor migration SHALL be function-complete per batch
+系统 MUST 以“功能闭包”作为迁移批次单位，避免只迁移入口不迁移依赖。
 
-#### Scenario: Editor assembly boundary is enforced
-- **WHEN** 项目进行非 Editor 目标编译
-- **THEN** 仅 Editor 功能代码 MUST NOT 被运行时程序集直接引用
+#### Scenario: Batch includes dependency closure
+- **WHEN** 迁移任一 Editor 功能
+- **THEN** 该批次 MUST 包含窗口、设置、数据、工具和资源常量等直接依赖
 
-#### Scenario: Editor namespace usage is isolated
-- **WHEN** 运行时程序集存在 `UnityEditor` API 调用需求
-- **THEN** 相关代码 MUST 通过 `#if UNITY_EDITOR` 或 Editor 文件隔离
+#### Scenario: Batch validation is recorded
+- **WHEN** 迁移批次完成
+- **THEN** 变更记录 MUST 包含编译结果与功能回归结果
 
-### Requirement: Editor feature migration SHALL be function-based and traceable
-系统 MUST 按功能包进行拆分迁移，并保留可追踪迁移状态。
+### Requirement: Editor-only code SHALL remain isolated from runtime assemblies
+系统 MUST 保证 Editor-only 代码不泄漏到运行时程序集。
 
-#### Scenario: Migration unit is defined by feature
-- **WHEN** 执行 UXTools Editor 迁移
-- **THEN** 迁移批次 MUST 以“组件库/最近打开/最近选中/检查器工具”等功能包为单位
+#### Scenario: Player target compile does not include editor-only code
+- **WHEN** 执行非 Editor 目标编译
+- **THEN** 运行时程序集 MUST NOT 直接依赖 Editor-only 代码
 
-#### Scenario: Migration progress is verifiable
-- **WHEN** 任一功能包完成迁移
-- **THEN** 变更记录 MUST 包含受影响文件范围、程序集边界和验收结果
+#### Scenario: Editor APIs are isolated
+- **WHEN** 代码使用 `UnityEditor` API
+- **THEN** 相关代码 MUST 位于 Editor 程序集或由 `UNITY_EDITOR` 条件隔离

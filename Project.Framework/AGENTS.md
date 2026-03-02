@@ -28,6 +28,7 @@
 
 ## Coding Style & Naming Conventions
 - Use C# conventions already present in the project: 4-space indentation, braces on new lines, UTF-8 text.
+- Generated or modified text files must be encoded as UTF-8 without BOM.
 - `PascalCase` for types/methods/properties; `camelCase` for locals/parameters; private fields use `_camelCase`.
 - Keep runtime/editor code separated (`Runtime` vs `Editor` folders and asmdefs).
 - Prefer small, focused classes and keep module boundaries explicit via asmdef dependencies.

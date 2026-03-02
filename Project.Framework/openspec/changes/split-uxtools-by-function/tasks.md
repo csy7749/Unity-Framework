@@ -1,29 +1,29 @@
-## 1. Baseline and boundary inventory
+## 1. 基线核对与拆分清单
 
-- [ ] 1.1 Output full UXTools feature inventory (Editor vs Runtime vs shared utility) and mark target owner (`UnityFramework.Editor` or `GameLogic`).
-- [ ] 1.2 Build dependency graph for UXTools-related asmdef files and identify illegal dependency directions.
-- [ ] 1.3 Define migration batch list (component library, recent-opened, recent-selected, UI generator integration, runtime UGUI controls).
+- [ ] 1.1 输出 UXTools 全量功能清单（Editor / Runtime / Shared）并标记归属目标。
+- [x] 1.2 识别 Editor 第一批迁移闭包依赖（组件库、最近打开、最近选中）。
+- [ ] 1.3 标注当前版本约束：不包含 super 系列扩展，不创建相关迁移任务。
 
-## 2. Editor feature hosting in UnityFramework
+## 2. Editor 第一批迁移（优先）
 
-- [ ] 2.1 Add UnityFramework-level menu entrypoints for component library / recent opened prefabs / recent selected files.
-- [ ] 2.2 Move or re-home Editor-only feature modules into UnityFramework-owned editor structure by migration batches.
-- [ ] 2.3 Ensure Editor tools compile only under Editor assemblies and keep behavior parity after migration.
+- [x] 2.1 将第一批窗口与依赖迁移到 `UnityFramework.Editor` 目录结构。
+- [x] 2.2 调整命名空间、程序集引用、入口调用，保证新入口可达。
+- [ ] 2.3 处理重复菜单与冲突定义，确保迁移后行为一致。
 
-## 3. Hotfix UGUI runtime integration in GameLogic
+## 3. Editor 验证与收敛
 
-- [ ] 3.1 Establish GameLogic-to-UX runtime assembly integration and verify hotfix compilation path.
-- [ ] 3.2 Extend UI script generator mapping to support `m_ux*` prefixes for UX controls without breaking legacy mappings.
-- [ ] 3.3 Extend MVVM proxy registrations for UX-specific controls that are not covered by existing UGUI inheritance mappings.
+- [ ] 3.1 执行 Editor 编译验证并修复迁移引入的编译错误。
+- [ ] 3.2 验证三个功能路径：组件库、最近打开、最近选中。
+- [ ] 3.3 记录并清理第一批遗留的过渡代码与无效引用。
 
-## 4. Runtime boundary hardening
+## 4. Runtime 迁移准备（不含 super 扩展）
 
-- [ ] 4.1 Refactor runtime files so `UnityEditor` references are isolated by `#if UNITY_EDITOR` or Editor-only files.
-- [ ] 4.2 Validate Runtime/Editor assembly boundaries by running Editor compile and Player-target compile checks.
-- [ ] 4.3 Remove or isolate obsolete cross-boundary compatibility paths discovered during migration.
+- [ ] 4.1 基于当前版本能力梳理可迁移的 UGUI 运行时代码。
+- [ ] 4.2 定义 GameLogic 接入边界与禁止项（不引入 `Super*` 扩展）。
+- [ ] 4.3 制定下一批运行时迁移任务与验收标准。
 
-## 5. Full split completion and verification
+## 5. 交付与文档一致性
 
-- [ ] 5.1 Complete all planned functional migration batches and update inventory status to 100%.
-- [ ] 5.2 Verify critical paths: UnityFramework editor entry usability, GameLogic hotfix UI binding and runtime behavior.
-- [ ] 5.3 Produce final migration report (moved features, remaining risks, rollback points) and mark change ready for `/opsx:apply`.
+- [ ] 5.1 输出迁移批次结果（已迁移、待迁移、风险、回滚点）。
+- [ ] 5.2 确认 OpenSpec 文档与仓库当前版本一致。
+- [ ] 5.3 标记 change 可进入 `/opsx:apply` 实施阶段。
