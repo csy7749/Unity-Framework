@@ -26,7 +26,7 @@ namespace ThunderFireUITool
         public static void Create()
         {
             EditorLocalizationSettings settings = JsonAssetManager.CreateAssets<EditorLocalizationSettings>(EditorLocalizationConfig.LocalizationSettingsFullPath);
-            settings.LocalType = EditorLocalName.English;
+            settings.LocalType = EditorLocalName.Chinese;
             JsonAssetManager.SaveAssets<EditorLocalizationSettings>(settings);
         }
 
@@ -34,9 +34,10 @@ namespace ThunderFireUITool
 
         public void ChangeLocalValue(EditorLocalName Type)
         {
-            if (Type != LocalType)
+            var targetType = EditorLocalName.Chinese;
+            if (LocalType != targetType)
             {
-                LocalType = Type;
+                LocalType = targetType;
                 JsonAssetManager.SaveAssets<EditorLocalizationSettings>(this);
                 EditorLocalization.Clear();
                 EditorLocalization.RefreshDict();

@@ -25,39 +25,39 @@ namespace ThunderFireUITool
     }
     public static class AlignLogic
     {
-        public static long GetStringKeyByAlignType(AlignType type)
+        public static string GetStringKeyByAlignType(AlignType type)
         {
             switch (type)
             {
                 case AlignType.Bottom:
-                    return EditorLocalizationStorage.Def_下对齐;
+                    return "下对齐";
                 case AlignType.Top:
-                    return EditorLocalizationStorage.Def_上对齐;
+                    return "上对齐";
                 case AlignType.Left:
-                    return EditorLocalizationStorage.Def_左对齐;
+                    return "左对齐";
                 case AlignType.Right:
-                    return EditorLocalizationStorage.Def_右对齐;
+                    return "右对齐";
                 case AlignType.Vertical:
-                    return EditorLocalizationStorage.Def_垂直居中对齐;
+                    return "垂直居中对齐";
                 case AlignType.Horizontal:
-                    return EditorLocalizationStorage.Def_水平居中对齐;
+                    return "水平居中对齐";
                 default:
-                    return EditorLocalizationStorage.Def_测试;
+                    return "测试";
             }
         }
 
-        public static long GetStringKeyByGridType(GridType type)
+        public static string GetStringKeyByGridType(GridType type)
         {
             switch (type)
             {
                 case GridType.Vertical:
-                    return EditorLocalizationStorage.Def_竖向分布;
+                    return "竖向分布";
                 case GridType.Horizontal:
-                    return EditorLocalizationStorage.Def_横向分布;
+                    return "横向分布";
                 case GridType.Ring:
-                    return EditorLocalizationStorage.Def_环形分布;
+                    return "环形分布";
                 default:
-                    return EditorLocalizationStorage.Def_测试;
+                    return "测试";
             }
         }
 

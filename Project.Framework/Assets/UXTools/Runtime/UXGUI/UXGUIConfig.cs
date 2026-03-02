@@ -25,6 +25,8 @@ public enum LocalizationTypeDef
 
 public class UXGUIConfig : ScriptableObject
 {
+    private const int ChineseSimplifiedLanguageIndex = 0;
+
     public static readonly string RootPath = "Assets/UXTools/Res/";
     public static readonly string GUIPath = RootPath + "UX-GUI/";
 
@@ -49,8 +51,29 @@ public class UXGUIConfig : ScriptableObject
         get
         {
             var uxConfig = ResourceManager.Load<UXGUIConfig>("UXGUIConfig");
+            EnsureChineseOnlyLanguage(uxConfig);
             return uxConfig.m_AvailableLanguages;
         }
+    }
+
+    private static void EnsureChineseOnlyLanguage(UXGUIConfig uxConfig)
+    {
+        if (uxConfig.m_AvailableLanguages == null)
+        {
+            uxConfig.m_AvailableLanguages = new List<int>();
+        }
+
+        if (uxConfig.m_AvailableLanguages.Count == 1 && uxConfig.m_AvailableLanguages[0] == ChineseSimplifiedLanguageIndex)
+        {
+            return;
+        }
+
+        uxConfig.m_AvailableLanguages.Clear();
+        uxConfig.m_AvailableLanguages.Add(ChineseSimplifiedLanguageIndex);
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(uxConfig);
+        AssetDatabase.SaveAssets();
+#endif
     }
     [SerializeField]
     private string m_LocalizationFolder;

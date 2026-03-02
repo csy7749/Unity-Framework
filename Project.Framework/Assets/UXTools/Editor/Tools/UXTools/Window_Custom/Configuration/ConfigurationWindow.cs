@@ -94,7 +94,7 @@ namespace ThunderFireUITool
             c_window.minSize = new Vector2(width, height);
             c_window.maxSize = new Vector2(width, height);
             c_window.position = new Rect((Screen.currentResolution.width - width) / 2, (Screen.currentResolution.height - height) / 2, width, height);
-            c_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_设置);
+            c_window.titleContent.text = "设置";
         }
 
         public static void CloseWindow()
@@ -133,7 +133,6 @@ namespace ThunderFireUITool
         private ConfigurationOption StorageOption;
         private ConfigurationOption SwitchOption;
 
-        private EditorLocalName LanguageType;
         private WidgetInstantiateMode PrefabDragMode;
         // private string prefabPath;
         // private string componentPath;
@@ -142,10 +141,6 @@ namespace ThunderFireUITool
 
         private void InitWindowData()
         {
-            EditorLocalizationSettings localizationSetting = JsonAssetManager.GetAssets<EditorLocalizationSettings>();
-
-            LanguageType = localizationSetting.LocalType;
-
             int max = Enum.GetValues(typeof(SwitchSetting.SwitchType)).Cast<int>().Max();
             switchToggles = new Toggle[max + 1];
             for (int i = 0; i < switchToggles.Length; i++)
@@ -172,15 +167,15 @@ namespace ThunderFireUITool
             rightContainer = Root.Q<VisualElement>("RightContainer");
 
             Label nameLabel = Root.Q<Label>("Title");
-            nameLabel.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_设置);
+            nameLabel.text = "设置";
 
             Button confirmBtn = Root.Q<Button>("ConfirmBtn");
             confirmBtn.clicked += ConfirmOnClick;
-            confirmBtn.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_确定);
+            confirmBtn.text = "确定";
 
             Button cancelBtn = Root.Q<Button>("CancelBtn");
             cancelBtn.clicked += CloseWindow;
-            cancelBtn.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_取消);
+            cancelBtn.text = "取消";
 
             leftContainerRefresh();
             GeneralOnClick();
@@ -214,7 +209,7 @@ namespace ThunderFireUITool
         {
             TextElement generalTitleLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_通用),
+                text = "通用",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -227,7 +222,7 @@ namespace ThunderFireUITool
 
             TextElement nameLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_语言),
+                text = "语言",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -240,21 +235,18 @@ namespace ThunderFireUITool
 
             var list = new List<string>();
             list.Add("简体中文");
-            list.Add("繁體中文");
-            list.Add("English");
-            list.Add("日本語");
-            list.Add("한국어");
-            LanguageEnumField = new PopupField<string>(list, ((int)LanguageType));
+            LanguageEnumField = new PopupField<string>(list, 0);
             LanguageEnumField.style.position = Position.Absolute;
             LanguageEnumField.style.width = 137;
             LanguageEnumField.style.height = 25;
             LanguageEnumField.style.right = 0;
             LanguageEnumField.style.top = 40;
+            LanguageEnumField.SetEnabled(false);
             container.Add(LanguageEnumField);
 
             TextElement projectNameLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自定义项目名称),
+                text = "自定义项目名称",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -289,7 +281,7 @@ namespace ThunderFireUITool
         {
             TextElement limitTitleLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_面板设置),
+                text = "面板设置",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -302,7 +294,7 @@ namespace ThunderFireUITool
 
             TextElement maxPrefabsLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开模板数上限),
+                text = "最近打开模板数上限",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -328,7 +320,7 @@ namespace ThunderFireUITool
             container.Add(maxPrefabsField);
             errorPrefabLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示上限必须大于0),
+                text = "显示上限必须大于0",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -346,7 +338,7 @@ namespace ThunderFireUITool
 
             TextElement maxFilesLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近选中文件数上限),
+                text = "最近选中文件数上限",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -373,7 +365,7 @@ namespace ThunderFireUITool
 
             errorLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
             {
-                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示上限必须大于0),
+                text = "显示上限必须大于0",
                 style = new UXStyle()
                 {
                     position = Position.Absolute,
@@ -393,15 +385,15 @@ namespace ThunderFireUITool
         {
             leftContainer.Clear();
 
-            GeneralOption = new ConfigurationOption(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_通用), GeneralOnClick);
+            GeneralOption = new ConfigurationOption("通用", GeneralOnClick);
             GeneralOption.style.top = 0;
             leftContainer.Add(GeneralOption);
 
-            //StorageOption = new ConfigurationOption(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_组件), StorageOnClick);
+            //StorageOption = new ConfigurationOption("组件", StorageOnClick);
             //StorageOption.style.top = 40;
             //leftContainer.Add(StorageOption);
 
-            SwitchOption = new ConfigurationOption(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_功能开关), SwitchOnClick);
+            SwitchOption = new ConfigurationOption("功能开关", SwitchOnClick);
             SwitchOption.style.top = 40;
             leftContainer.Add(SwitchOption);
         }
@@ -413,22 +405,22 @@ namespace ThunderFireUITool
             return new Dictionary<string, List<(string, int)>>()
             {
                 { "基础common", new List<(string , int)> {
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_对齐吸附), 1),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_右键选择列表), 2),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_快速复制), 3),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_移动快捷键), 4)
+                    ("对齐吸附", 1),
+                    ("右键选择列表", 2),
+                    ("快速复制", 3),
+                    ("移动快捷键", 4)
                 }},
                 { "操作记录", new List<(string , int)> {
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开面板记录), 0),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近选中面板记录), 11)
+                    ("最近打开面板记录", 0),
+                    ("最近选中面板记录", 11)
                 }},
                 { "其他", new List<(string , int)> {
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab多开), 5),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Scene中分辨率调整), 6),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab资源检查), 7),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_参考背景图片), 8),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自动将Texture转为Sprite), 9),
-                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_手柄引导开关), 10)
+                    ("Prefab多开", 5),
+                    ("Scene中分辨率调整", 6),
+                    ("Prefab资源检查", 7),
+                    ("参考背景图片", 8),
+                    ("自动将Texture转为Sprite", 9),
+                    ("手柄引导开关", 10)
                 }}
             };
         }
@@ -485,7 +477,7 @@ namespace ThunderFireUITool
         private void ConfirmOnClick()
         {
             var LocalizationSettings = JsonAssetManager.GetAssets<EditorLocalizationSettings>();
-            LocalizationSettings.ChangeLocalValue((EditorLocalName)LanguageEnumField.index);
+            LocalizationSettings.ChangeLocalValue(EditorLocalName.Chinese);
 
             Selection.activeGameObject = null;
 

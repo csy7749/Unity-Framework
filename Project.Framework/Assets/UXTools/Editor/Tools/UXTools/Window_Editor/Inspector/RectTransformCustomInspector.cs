@@ -56,7 +56,7 @@ namespace ThunderFireUITool
                 {
                     string name = "UI_Align_" + alignType.ToString();
                     VisualElement button = BarFromUXML.Q<VisualElement>(name);
-                    button.tooltip = EditorLocalization.GetLocalization(AlignLogic.GetStringKeyByAlignType(alignType));
+                    button.tooltip = AlignLogic.GetStringKeyByAlignType(alignType);
                     button.SetEnabled(canAlign);
                     if (!canAlign)
                     {
@@ -76,7 +76,7 @@ namespace ThunderFireUITool
                 {
                     string name = "UI_Grid_" + gridType.ToString();
                     VisualElement button = BarFromUXML.Q<VisualElement>(name);
-                    button.tooltip = EditorLocalization.GetLocalization(AlignLogic.GetStringKeyByGridType(gridType));
+                    button.tooltip = AlignLogic.GetStringKeyByGridType(gridType);
                     button.SetEnabled(canGrid);
                     if (!canGrid)
                     {
@@ -400,7 +400,7 @@ namespace ThunderFireUITool
             foreach (AlignType alignType in AlignType.GetValues(typeof(AlignType)))
             {
                 string name = "UI_Align_" + alignType.ToString();
-                EditorUIUtil.CreateUIEButton(BarFromUXML.Q<VisualElement>(name), () => { AlignLogic.Align(alignType); }, EditorLocalization.GetLocalization(AlignLogic.GetStringKeyByAlignType(alignType)), name, name + "_S");
+                EditorUIUtil.CreateUIEButton(BarFromUXML.Q<VisualElement>(name), () => { AlignLogic.Align(alignType); }, AlignLogic.GetStringKeyByAlignType(alignType), name, name + "_S");
                 BarFromUXML.Q<VisualElement>(name).SetEnabled(canAlign);
                 index++;
             }
@@ -410,7 +410,7 @@ namespace ThunderFireUITool
             foreach (GridType gridType in GridType.GetValues(typeof(GridType)))
             {
                 string name = "UI_Grid_" + gridType.ToString();
-                EditorUIUtil.CreateUIEButton(BarFromUXML.Q<VisualElement>(name), () => { AlignLogic.Grid(gridType); }, EditorLocalization.GetLocalization(AlignLogic.GetStringKeyByGridType(gridType)), name, name + "_S");
+                EditorUIUtil.CreateUIEButton(BarFromUXML.Q<VisualElement>(name), () => { AlignLogic.Grid(gridType); }, AlignLogic.GetStringKeyByGridType(gridType), name, name + "_S");
                 BarFromUXML.Q<VisualElement>(name).SetEnabled(canGrid);
                 index++;
             }

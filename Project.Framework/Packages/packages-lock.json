@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "cn.lys.aibridge": {
+      "version": "https://github.com/liyingsong99/AIBridge.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "6d776e459caa824b6f4aceabada460597c0ace83"
+    },
     "com.code-philosophy.hybridclr": {
       "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,

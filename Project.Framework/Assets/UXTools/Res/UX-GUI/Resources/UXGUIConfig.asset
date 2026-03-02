@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43894677900eeee4b9fcda553ae08d5b, type: 3}
   m_Name: UXGUIConfig
   m_EditorClassIdentifier: 
-  m_AvailableLanguages: 00000000010000000200000003000000
+  m_AvailableLanguages: 00000000
   m_LocalizationFolder: Assets/Resources/
   m_PreviewTablePath: 
   m_RuntimeTablePath: 
