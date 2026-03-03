@@ -88,17 +88,26 @@ namespace UnityFramework
 
             _timers[t.Id] = t;
             _timerBuckets[options.Unscaled].Add(t);
+            TimerDebugBridge.RecordAdd(t.Id, t.Options, t.Remaining, t.IsRunning);
             return t.Id;
         }
 
         public void Pause(int id)
         {
-            if (_timers.TryGetValue(id, out var t)) t.IsRunning = false;
+            if (_timers.TryGetValue(id, out var t))
+            {
+                t.IsRunning = false;
+                TimerDebugBridge.RecordState(id, t.Remaining, false);
+            }
         }
 
         public void Resume(int id)
         {
-            if (_timers.TryGetValue(id, out var t)) t.IsRunning = true;
+            if (_timers.TryGetValue(id, out var t))
+            {
+                t.IsRunning = true;
+                TimerDebugBridge.RecordState(id, t.Remaining, true);
+            }
         }
 
         public bool IsRunning(int id)
@@ -110,7 +119,10 @@ namespace UnityFramework
         public void Restart(int id)
         {
             if (_timers.TryGetValue(id, out var t))
+            {
                 t.Remaining = t.Options.Delay;
+                TimerDebugBridge.RecordState(id, t.Remaining, t.IsRunning);
+            }
         }
 
         public void ResetTimer(int id, TimerHandler callback, float time, bool isLoop = false, bool isUnscaled = false)
@@ -130,6 +142,7 @@ namespace UnityFramework
                 t.Options = opt;
                 t.Remaining = opt.Delay;
                 t.IsRunning = true;
+                TimerDebugBridge.RecordOptions(id, t.Options, t.Remaining, t.IsRunning);
 
                 if (changingScale)
                     _timerBuckets[opt.Unscaled].Add(t);
@@ -142,14 +155,21 @@ namespace UnityFramework
             {
                 _timerBuckets[t.Options.Unscaled].Remove(t);
                 _pool.Release(t);
+                TimerDebugBridge.RecordRemove(id);
             }
         }
 
         public void RemoveAllTimer()
         {
+            foreach (var timer in _timers.Values)
+                _pool.Release(timer);
+
+            _timers.Clear();
+
             foreach (var list in _timerBuckets.Values)
                 list.Clear();
-            _timers.Clear();
+
+            TimerDebugBridge.RecordClear();
         }
 
         public void Update(float elapseSeconds, float realElapseSeconds)
@@ -164,25 +184,44 @@ namespace UnityFramework
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 var t = list[i];
+                if (!IsTrackedTimer(t))
+                {
+                    list.RemoveAt(i);
+                    TimerDebugBridge.RecordRemove(t.Id);
+                    continue;
+                }
+
                 if (!t.IsRunning) continue;
 
                 t.Remaining -= delta;
-                if (t.Remaining > 0f) continue;
+                if (t.Remaining > 0f)
+                {
+                    TimerDebugBridge.RecordState(t.Id, t.Remaining, t.IsRunning);
+                    continue;
+                }
 
                 t.Handler?.Invoke(t.Options.Args);
+
+                if (!IsTrackedTimer(t))
+                    continue;
 
                 if (t.Options.Loop)
                 {
                     t.Remaining += t.Options.Delay;
+                    TimerDebugBridge.RecordState(t.Id, t.Remaining, t.IsRunning);
                 }
                 else
                 {
+                    list.RemoveAt(i);
                     _timers.Remove(t.Id);
-                    // list.RemoveAt(i);
                     _pool.Release(t);
+                    TimerDebugBridge.RecordRemove(t.Id);
                 }
             }
         }
+
+        private bool IsTrackedTimer(Timer timer)
+            => _timers.TryGetValue(timer.Id, out var tracked) && tracked == timer;
 
         public override void OnInit() { }
         public override void Shutdown()
