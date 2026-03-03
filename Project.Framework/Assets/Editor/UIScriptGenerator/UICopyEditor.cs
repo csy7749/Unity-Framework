@@ -213,56 +213,58 @@ namespace UnityFramework.Editor.UI
         private static void AppendBindStatement(StringBuilder builder, CtrlItemData ctrl)
         {
             var callback = GetEventCallback(ctrl);
-            if (string.IsNullOrEmpty(callback))
+            if (!string.IsNullOrEmpty(callback))
             {
-                return;
+                builder.AppendLine($"            {ctrl.name}.{callback};");
             }
 
-            builder.AppendLine($"            {ctrl.name}.{callback};");
+            AppendSpecialBindStatement(builder, ctrl);
         }
 
         private static void AppendRemoveStatement(StringBuilder builder, CtrlItemData ctrl)
         {
             var callback = GetRemoveCallback(ctrl);
-            if (string.IsNullOrEmpty(callback))
+            if (!string.IsNullOrEmpty(callback))
             {
-                return;
+                builder.AppendLine($"            {ctrl.name}.{callback};");
             }
 
-            builder.AppendLine($"            {ctrl.name}.{callback};");
+            AppendSpecialRemoveStatement(builder, ctrl);
         }
 
         private static void AppendEventMethod(StringBuilder builder, CtrlItemData ctrl)
         {
             var methodName = GetMethodName(ctrl.name);
-            switch (ctrl.type)
+            switch (GetEventKind(ctrl))
             {
-                case nameof(Button):
+                case ControlEventKind.Button:
                     builder.AppendLine($"        private void OnClick{methodName}()");
                     builder.AppendLine("        {");
                     builder.AppendLine("        }");
                     break;
-                case nameof(Toggle):
+                case ControlEventKind.Toggle:
                     builder.AppendLine($"        private void OnToggle{methodName}Changed(bool isOn)");
                     builder.AppendLine("        {");
                     builder.AppendLine("        }");
                     break;
-                case nameof(Slider):
+                case ControlEventKind.Slider:
                     builder.AppendLine($"        private void OnSlider{methodName}Changed(float value)");
                     builder.AppendLine("        {");
                     builder.AppendLine("        }");
                     break;
             }
+
+            AppendSpecialEventMethod(builder, ctrl, methodName);
         }
 
         private static string GetEventCallback(CtrlItemData ctrl)
         {
             var methodName = GetMethodName(ctrl.name);
-            return ctrl.type switch
+            return GetEventKind(ctrl) switch
             {
-                nameof(Button) => $"onClick.AddListener(OnClick{methodName})",
-                nameof(Toggle) => $"onValueChanged.AddListener(OnToggle{methodName}Changed)",
-                nameof(Slider) => $"onValueChanged.AddListener(OnSlider{methodName}Changed)",
+                ControlEventKind.Button => $"onClick.AddListener(OnClick{methodName})",
+                ControlEventKind.Toggle => $"onValueChanged.AddListener(OnToggle{methodName}Changed)",
+                ControlEventKind.Slider => $"onValueChanged.AddListener(OnSlider{methodName}Changed)",
                 _ => string.Empty,
             };
         }
@@ -270,13 +272,139 @@ namespace UnityFramework.Editor.UI
         private static string GetRemoveCallback(CtrlItemData ctrl)
         {
             var methodName = GetMethodName(ctrl.name);
-            return ctrl.type switch
+            return GetEventKind(ctrl) switch
             {
-                nameof(Button) => $"onClick.RemoveListener(OnClick{methodName})",
-                nameof(Toggle) => $"onValueChanged.RemoveListener(OnToggle{methodName}Changed)",
-                nameof(Slider) => $"onValueChanged.RemoveListener(OnSlider{methodName}Changed)",
+                ControlEventKind.Button => $"onClick.RemoveListener(OnClick{methodName})",
+                ControlEventKind.Toggle => $"onValueChanged.RemoveListener(OnToggle{methodName}Changed)",
+                ControlEventKind.Slider => $"onValueChanged.RemoveListener(OnSlider{methodName}Changed)",
                 _ => string.Empty,
             };
+        }
+
+        private static void AppendSpecialBindStatement(StringBuilder builder, CtrlItemData ctrl)
+        {
+            var methodName = GetMethodName(ctrl.name);
+            switch (ctrl.type)
+            {
+                case nameof(SuperText):
+                    if (ctrl.targets is { Length: > 0 } && ctrl.targets[0] is SuperText superText && !superText.ignoreLocalization)
+                    {
+                        builder.AppendLine($"            {ctrl.name}.SetLanguage();");
+                    }
+                    break;
+                case nameof(SuperToggle):
+                    builder.AppendLine($"            {ctrl.name}.SetOnToggleItemClick(On{methodName}ToggleItemClick);");
+                    break;
+                case nameof(SuperPageScrollView):
+                    builder.AppendLine($"            {ctrl.name}.InitList(On{methodName}CellValid, On{methodName}FocusCell, On{methodName}GetItem, this);");
+                    break;
+                case nameof(UILoopScroll):
+                case nameof(UILoopScrollAndToggle):
+                    builder.AppendLine($"            {ctrl.name}.InitListView(On{methodName}CellValid, On{methodName}GetItem, this);");
+                    break;
+                case nameof(UILoopScrollMul):
+                    builder.AppendLine($"            {ctrl.name}.InitListView(On{methodName}CellValid, On{methodName}GetItem, On{methodName}GetItemIdx, this);");
+                    break;
+            }
+        }
+
+        private static void AppendSpecialRemoveStatement(StringBuilder builder, CtrlItemData ctrl)
+        {
+            switch (ctrl.type)
+            {
+                case nameof(SuperToggle):
+                case nameof(SuperPageScrollView):
+                case nameof(UILoopScroll):
+                case nameof(UILoopScrollMul):
+                case nameof(UILoopScrollAndToggle):
+                    builder.AppendLine($"            {ctrl.name}.Clear();");
+                    break;
+            }
+        }
+
+        private static void AppendSpecialEventMethod(StringBuilder builder, CtrlItemData ctrl, string methodName)
+        {
+            switch (ctrl.type)
+            {
+                case nameof(SuperToggle):
+                    builder.AppendLine($"        private void On{methodName}ToggleItemClick(int index)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("        }");
+                    break;
+                case nameof(SuperPageScrollView):
+                    builder.AppendLine($"        private GameObject On{methodName}GetItem()");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("            return null;");
+                    builder.AppendLine("        }");
+                    builder.AppendLine($"        private void On{methodName}CellValid(int index, GameObject item)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("        }");
+                    builder.AppendLine($"        private void On{methodName}FocusCell(GameObject item, bool focus)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("        }");
+                    break;
+                case nameof(UILoopScroll):
+                case nameof(UILoopScrollAndToggle):
+                    builder.AppendLine($"        private GameObject On{methodName}GetItem()");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("            return null;");
+                    builder.AppendLine("        }");
+                    builder.AppendLine($"        private void On{methodName}CellValid(GameObject item, int index)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("        }");
+                    break;
+                case nameof(UILoopScrollMul):
+                    builder.AppendLine($"        private GameObject On{methodName}GetItem(int itemIdx)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("            return null;");
+                    builder.AppendLine("        }");
+                    builder.AppendLine($"        private int On{methodName}GetItemIdx(int index)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("            return index;");
+                    builder.AppendLine("        }");
+                    builder.AppendLine($"        private void On{methodName}CellValid(GameObject item, int index)");
+                    builder.AppendLine("        {");
+                    builder.AppendLine("        }");
+                    break;
+            }
+        }
+
+        private static ControlEventKind GetEventKind(CtrlItemData ctrl)
+        {
+            var resolvedType = UIControlTypeResolver.Resolve(ctrl.type);
+            if (resolvedType != null)
+            {
+                if (typeof(Button).IsAssignableFrom(resolvedType))
+                {
+                    return ControlEventKind.Button;
+                }
+
+                if (typeof(Toggle).IsAssignableFrom(resolvedType))
+                {
+                    return ControlEventKind.Toggle;
+                }
+
+                if (typeof(Slider).IsAssignableFrom(resolvedType))
+                {
+                    return ControlEventKind.Slider;
+                }
+            }
+
+            return ctrl.type switch
+            {
+                nameof(Button) => ControlEventKind.Button,
+                nameof(Toggle) => ControlEventKind.Toggle,
+                nameof(Slider) => ControlEventKind.Slider,
+                _ => ControlEventKind.None,
+            };
+        }
+
+        private enum ControlEventKind
+        {
+            None = 0,
+            Button = 1,
+            Toggle = 2,
+            Slider = 3,
         }
 
         private static string GetMethodName(string sourceName)
