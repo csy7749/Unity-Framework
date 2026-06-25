@@ -29,9 +29,9 @@ MonoBehaviour:
   UpdateStyle: 1
   UpdateNotice: 1
   EnableUpdateData: 1
-  UpdateDataPath: http://127.0.0.1/ABHotUpdate/UpdateData/
+  UpdateDataPath: https://jrxtest.hanzhigame.com/Test
   UpdateDataFileName: UpdateData.json
-  ServerStateDatePath: http://127.0.0.1/ABHotUpdate/UpdateData/
+  ServerStateDatePath: https://jrxtest.hanzhigame.com/Test
   ServerStateDataFileName: ServerStateData.json
-  ResDownLoadPath: http://127.0.0.1/ABHotUpdate/
+  ResDownLoadPath: https://jrxtest.hanzhigame.com/Test
   FallbackResDownLoadPath: http://127.0.0.1/ABHotUpdate/
